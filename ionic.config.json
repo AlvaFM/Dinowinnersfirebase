@@ -1,0 +1,7 @@
+{
+  "name": "Dinowinners",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
