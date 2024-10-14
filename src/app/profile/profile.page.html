@@ -1,0 +1,79 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Perfil</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()">Cerrar Sesión</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Agregar Producto</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="floating">Nombre del Producto</ion-label>
+        <ion-input [(ngModel)]="productName"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Descripción</ion-label>
+        <ion-input [(ngModel)]="productDescription"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Precio</ion-label>
+        <ion-input [(ngModel)]="productPrice" type="number"></ion-input>
+      </ion-item>
+
+      <ion-button expand="full" (click)="addProduct()">Agregar Producto</ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Productos Agregados</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let product of products">
+          {{ product.nombre }} - {{ product.precio | currency }}
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Agregar Ubicación</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="floating">Ciudad</ion-label>
+        <ion-input [(ngModel)]="city"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating">Dirección</ion-label>
+        <ion-input [(ngModel)]="address"></ion-input>
+      </ion-item>
+
+      <ion-button expand="full" (click)="addLocation()">Agregar Ubicación</ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Ubicaciones Agregadas</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let location of locations">
+          {{ location.ciudad }} - {{ location.direccion }}
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
