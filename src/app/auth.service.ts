@@ -30,14 +30,14 @@ export class AuthService {
     
     const user = userCredential.user;
     if (user) {
-      // Guardar el usuario en Firestore
+      
       await this.firestore.collection('usuarios').doc(user.uid).set({
         email: user.email,
         nombre: nombre,
         uid: user.uid,
-        // Agrega más campos si es necesario
+        
       });
     }
-    return user; // Puedes devolver el usuario registrado si es necesario
+    return user; 
   }
 }
