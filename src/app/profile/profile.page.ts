@@ -89,6 +89,6 @@ export class ProfilePage {
   async logout() {
     await this.authService.logout();
     console.log('Sesión cerrada');
-    this.router.navigate(['/login']);
+    this.router.navigate(['/home']);
   }
 }

@@ -9,7 +9,7 @@ import { AuthService } from './auth.service';
 export class DatabaseService {
   constructor(
     private firestore: AngularFirestore,
-    private authService: AuthService  // La "A" debe ser minúscula
+    private authService: AuthService  
   ) {}
 
   addProduct(product: any): Promise<any> {
