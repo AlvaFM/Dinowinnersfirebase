@@ -40,4 +40,9 @@ export class AuthService {
     }
     return user; 
   }
+
+  async getUserData(uid: string): Promise<any> {
+    const userDoc = await this.firestore.collection('usuarios').doc(uid).get().toPromise();
+    return userDoc?.exists? userDoc.data() : null;
+  }
 }

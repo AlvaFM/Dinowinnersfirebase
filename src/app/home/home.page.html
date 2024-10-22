@@ -10,6 +10,9 @@
 </ion-header>
 
 <ion-content>
+  <div *ngIf="nombreUsuario" style="padding: 16px; font-weight: bold;">
+    Bienvenido, {{ nombreUsuario }}!
+  </div>
   <ion-list>
     <ion-card *ngFor="let usuario of usuarios">
       <ion-card-header>
