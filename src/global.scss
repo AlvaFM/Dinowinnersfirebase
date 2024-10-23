@@ -41,7 +41,30 @@
     font-weight: weight;
     font-style: normal;
   }
-  
---ion-header{
-    background-color: #fab371;
+
+ion-toolbar {
+    --background: linear-gradient(90deg, #fab371, #fa7171); 
+    color:#ffffff;
   }
+
+ion-button{
+  --background: #fab371;
+  --border-radius: 20%;
+  border-radius: 10px;
+}
+
+ion-buttons{
+  --background: #fab371;
+  --border-radius: 20%;
+}
+
+button-inner{
+  --background: #fab371;
+  --border-radius: 20%;
+}
+
+button:active {
+  background-color: #fa7171; 
+  color: white;              
+}
+
