@@ -17,7 +17,7 @@ export class LoginPage {
     try {
       await this.authService.login(this.email, this.password);
       console.log('Login exitoso');
-      this.router.navigate(['/profile']);
+      this.router.navigate(['/home']);
       this.email ='';
       this.password = ''; 
     } catch (error) {

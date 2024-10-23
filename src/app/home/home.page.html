@@ -1,10 +1,18 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Usuarios y Productos</ion-title>
-    <ion-buttons slot="end">
-      <ion-button routerLink="/login">
-        login
+    <ion-title>Inicio (Feed)</ion-title>
+    <ion-buttons slot="start">
+      <ion-button routerLink="/profile" *ngIf="nombreUsuario">
+        Perfil
       </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end" *ngIf="nombreUsuario === ''">
+      <ion-button routerLink="/login">
+        Login
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end" *ngIf="nombreUsuario">
+      <ion-button (click)="logout()">Cerrar Sesión</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -13,38 +21,74 @@
   <div *ngIf="nombreUsuario" style="padding: 16px; font-weight: bold;">
     Bienvenido, {{ nombreUsuario }}!
   </div>
-  <ion-list>
-    <ion-card *ngFor="let usuario of usuarios">
-      <ion-card-header>
-        <ion-card-title style="font-weight: bold;">{{ usuario.nombre }}</ion-card-title>
-      </ion-card-header>
 
-      <ion-card-content>
-        <ion-list-header>
-          <ion-label>Productos</ion-label>
-        </ion-list-header>
-        <ion-list *ngFor="let producto of productosPorUsuario[usuario.uid]">
-          <ion-item>
-            <ion-label>
-              <h3>Nombre: {{ producto.nombre }}</h3>
-              <p>Descripción: {{ producto.descripcion }}</p>
-              <p>Precio: ${{ producto.precio }}</p>
-            </ion-label>
-          </ion-item>
-        </ion-list>
+  <!-- Sección del Foro -->
+  <section style="padding: 16px;">
+    <b><h5>FORO DINOWINNERS</h5></b>
+    <b><h5>____________________________________________________________________</h5></b>
+    <ion-list>
+      <ion-card *ngFor="let comentario of comentariosForo">
+        <ion-card-header>
+          <ion-card-title>
+            <strong>{{ comentario.Usuario }}</strong> comentó:
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          {{ comentario.Comentario }}
+        </ion-card-content>
+      </ion-card>
+    </ion-list>
 
-        <ion-list-header>
-          <ion-label>Ubicaciones</ion-label>
-        </ion-list-header>
-        <ion-list *ngFor="let ubicacion of ubicacionesPorUsuario[usuario.uid]">
-          <ion-item>
-            <ion-label>
-              <h3>Ciudad: {{ ubicacion.ciudad }}</h3>
-              <p>Dirección: {{ ubicacion.direccion }}</p>
-            </ion-label>
-          </ion-item>
-        </ion-list>
-      </ion-card-content>
-    </ion-card>
-  </ion-list>
+    <!-- Sección para agregar comentarios al foro -->
+    <div style="padding: 16px;" *ngIf="nombreUsuario">
+      <ion-item>
+        <ion-label position="floating">Escribe tu comentario</ion-label>
+        <ion-textarea [(ngModel)]="comentarioForo" rows="3"></ion-textarea>
+      </ion-item>
+      <ion-button expand="full" (click)="ComentarForo()">Comentar</ion-button>
+    </div>
+  </section>
+
+  <b><h5>__________________________________________________________________________</h5></b>
+          <b><h5>PRODUCTOS DE USUARIO:</h5></b>
+  <b><h5>__________________________________________________________________________</h5></b>
+
+  <section style="padding: 16px;">
+    <ion-list>
+      <ion-card *ngFor="let usuario of usuarios">
+        <ion-card-header>
+          <ion-card-title style="font-weight: bold;">{{ usuario.nombre }}</ion-card-title>
+        </ion-card-header>
+        
+        <ion-card-content>
+        
+          <ion-list-header>
+            <ion-label>Productos</ion-label>
+          </ion-list-header>
+          <ion-list *ngFor="let producto of productosPorUsuario[usuario.uid]">
+            <ion-item>
+              <ion-label>
+                <h3>Nombre: {{ producto.nombre }}</h3>
+                <p>Descripción: {{ producto.descripcion }}</p>
+                <p>Precio: ${{ producto.precio }}</p>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+
+          <ion-list-header>
+            <ion-label>Ubicaciones</ion-label>
+          </ion-list-header>
+          <ion-list *ngFor="let ubicacion of ubicacionesPorUsuario[usuario.uid]">
+            <ion-item>
+              <ion-label>
+                <h3>Ciudad: {{ ubicacion.ciudad }}</h3>
+                <p>Dirección: {{ ubicacion.direccion }}</p>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+
+        </ion-card-content>
+      </ion-card>
+    </ion-list>
+  </section>
 </ion-content>

@@ -19,6 +19,12 @@ export class DatabaseService {
   addLocation(location: any): Promise<any> {
     return this.firestore.collection('ubicaciones').add(location);
   }
+  addCommentForo(CommentForo: any): Promise<any> {
+    return this.firestore.collection('Foro').add(CommentForo);
+  }
+  getAllCommentsForo(): Observable<any[]> {
+    return this.firestore.collection('Foro').valueChanges();
+  }
 
   getProductsByUser(uid: string): Observable<any[]> {
     return this.firestore.collection('productos', (ref) => ref.where('uid', '==', uid)).valueChanges();
