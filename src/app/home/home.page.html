@@ -1,5 +1,5 @@
-<ion-header>
-  <ion-toolbar>
+<ion-header class="ion-header">
+  <ion-toolbar class="ion-toolbar">
     <ion-title>Inicio (Feed)</ion-title>
     <ion-buttons slot="start">
       <ion-button routerLink="/profile" *ngIf="nombreUsuario">
@@ -19,7 +19,7 @@
 
 <ion-content>
   <div *ngIf="nombreUsuario" style="padding: 16px; font-weight: bold;">
-    Bienvenido, {{ nombreUsuario }}!
+    ¡Bienvenido, {{ nombreUsuario }}!
   </div>
 
   <!-- Sección del Foro -->
