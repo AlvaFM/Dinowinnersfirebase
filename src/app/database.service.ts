@@ -16,6 +16,17 @@ export class DatabaseService {
     return this.firestore.collection('productos').add(product);
   }
 
+  addCurso(Curso: any): Promise<any> {
+    return this.firestore.collection('Curso').add(Curso);
+  }
+ 
+
+  getCursoByUser(uid: string): Observable<any[]> {
+    return this.firestore.collection('Curso', (ref) => ref.where('uid', '==', uid)).valueChanges();
+  }
+
+
+
   addLocation(location: any): Promise<any> {
     return this.firestore.collection('ubicaciones').add(location);
   }

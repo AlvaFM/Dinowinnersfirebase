@@ -15,6 +15,21 @@
 </ion-header>
 
 <ion-content>
+ 
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Productos Agregados</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let product of products">
+          {{ product.nombre }} - {{ product.precio | currency }}
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
   <ion-card>
     <ion-card-header>
       <ion-card-title>Agregar Producto</ion-card-title>
@@ -39,19 +54,20 @@
     </ion-card-content>
   </ion-card>
 
+  
+
   <ion-card>
     <ion-card-header>
-      <ion-card-title>Productos Agregados</ion-card-title>
+      <ion-card-title>Ubicaciones Agregadas</ion-card-title>
     </ion-card-header>
     <ion-card-content>
       <ion-list>
-        <ion-item *ngFor="let product of products">
-          {{ product.nombre }} - {{ product.precio | currency }}
+        <ion-item *ngFor="let location of locations">
+          {{ location.ciudad }} - {{ location.direccion }}
         </ion-item>
       </ion-list>
     </ion-card-content>
   </ion-card>
-
   <ion-card>
     <ion-card-header>
       <ion-card-title>Agregar Ubicación</ion-card-title>
@@ -73,14 +89,26 @@
 
   <ion-card>
     <ion-card-header>
-      <ion-card-title>Ubicaciones Agregadas</ion-card-title>
+      <ion-card-title>Agregar Curso</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <ion-list>
-        <ion-item *ngFor="let location of locations">
-          {{ location.ciudad }} - {{ location.direccion }}
-        </ion-item>
-      </ion-list>
+      <ion-item>
+        <ion-label position="floating">Nombre del Curso</ion-label>
+        <ion-input [(ngModel)]="CursoNombre"></ion-input>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label position="floating">Descripción</ion-label>
+        <ion-input [(ngModel)]="DescripcionCurso"></ion-input>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label position="floating">Cupos Disponibles</ion-label>
+        <ion-input [(ngModel)]="CuposCurso" type="number"></ion-input>
+      </ion-item>
+  
+      <ion-button expand="full" (click)="addCurso(); ComentarForo()">Publicar en foro</ion-button>
     </ion-card-content>
   </ion-card>
+  
 </ion-content>
