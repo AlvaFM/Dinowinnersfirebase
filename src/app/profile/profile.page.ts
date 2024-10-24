@@ -80,9 +80,12 @@ export class ProfilePage {
   async ComentarForo() {
     const ComentarioForo = {
       Usuario: `******El usuario ${this.nombreUsuario}`,  
-      Comentario: `ha subido un curso de capacitación. Descripción: 
-      ${this.DescripcionCurso}. 
-      Cupos disponibles: ${this.CuposCurso}`  
+      Comentario: `
+      ha subido un curso de capacitación.
+      nombre : ${this.CursoNombre}
+      Descripción: ${this.DescripcionCurso}. 
+      Cupos disponibles: ${this.CuposCurso}`
+        
     };
   
     try {

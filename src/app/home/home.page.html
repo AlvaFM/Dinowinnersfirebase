@@ -3,7 +3,7 @@
     <ion-title>Inicio (Feed)</ion-title>
     <ion-buttons slot="start">
       <ion-button routerLink="/profile" *ngIf="nombreUsuario">
-        Perfil
+       {{ nombreUsuario }}
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end" *ngIf="nombreUsuario === ''">
