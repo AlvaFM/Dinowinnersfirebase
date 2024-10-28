@@ -19,10 +19,21 @@ export class DatabaseService {
   addCurso(Curso: any): Promise<any> {
     return this.firestore.collection('Curso').add(Curso);
   }
+  getCursosAgregados(userId: string) {
+    return this.firestore.collection('Curso', ref => ref.where('uid', '==', userId)).valueChanges();
+  }
+
+  
+  getCursosSuscritos(userId: string) {
+    return this.firestore.collection('suscripciones', ref => ref.where('idUsuarioSub', '==', userId)).valueChanges();
+  }
  
 
   getCursoByUser(uid: string): Observable<any[]> {
     return this.firestore.collection('Curso', (ref) => ref.where('uid', '==', uid)).valueChanges();
+  }
+  addsubscription(subscription: any): Promise<any> {
+    return this.firestore.collection('suscripciones').add(subscription);
   }
 
 
@@ -30,6 +41,7 @@ export class DatabaseService {
   addLocation(location: any): Promise<any> {
     return this.firestore.collection('ubicaciones').add(location);
   }
+  
   addCommentForo(CommentForo: any): Promise<any> {
     return this.firestore.collection('Foro').add(CommentForo);
   }

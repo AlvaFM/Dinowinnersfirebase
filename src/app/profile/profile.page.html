@@ -86,6 +86,32 @@
       <ion-button expand="full" (click)="addLocation()">Agregar Ubicación</ion-button>
     </ion-card-content>
   </ion-card>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Cursos que he agregado</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let curso of cursosAgregados">
+          {{ curso.NombreCurso }} - Cupos: {{ curso.Cupos }}
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Cursos a los que estoy suscrito</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let curso of cursosSuscritos">
+          {{ curso.nombreCursoSub }} - Autor: {{ curso.nameAutor }}
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  
 
   <ion-card>
     <ion-card-header>
@@ -99,13 +125,20 @@
   
       <ion-item>
         <ion-label position="floating">Descripción</ion-label>
-        <ion-input [(ngModel)]="DescripcionCurso"></ion-input>
+        <ion-textarea [(ngModel)]="DescripcionCurso" auto-grow="true"></ion-textarea>
+      </ion-item>
+      
+
+      <ion-item>
+        <ion-label position="floating">Contenido</ion-label>
+        <ion-textarea [(ngModel)]="contenidoCurso" auto-grow="true"></ion-textarea>
       </ion-item>
   
       <ion-item>
         <ion-label position="floating">Cupos Disponibles</ion-label>
-        <ion-input [(ngModel)]="CuposCurso" type="number"></ion-input>
+        <ion-input [(ngModel)]="CuposCurso" type="number" min="0" step="1"></ion-input>
       </ion-item>
+      
   
       <ion-button expand="full" (click)="addCurso(); ComentarForo()">Publicar en foro</ion-button>
     </ion-card-content>

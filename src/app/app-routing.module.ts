@@ -23,6 +23,16 @@ const routes: Routes = [
     path: 'register',
     loadChildren: () => import('./register/register.module').then( m => m.RegisterPageModule)
   },
+  {
+    path: 'curso',
+    loadChildren: () => import('./curso/curso.module').then( m => m.CursoPageModule)
+  },
+  {
+    path: 'suscripcion/:id/:name/:autor',
+    loadChildren: () => import('./suscripcion/suscripcion.module').then(m => m.SuscripcionPageModule)
+  }
+  
+
 
 ];
 

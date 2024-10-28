@@ -3,7 +3,7 @@
     <ion-title>Inicio (Feed)</ion-title>
     <ion-buttons slot="start">
       <ion-button routerLink="/profile" *ngIf="nombreUsuario">
-       {{ nombreUsuario }}
+        {{ nombreUsuario }}
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end" *ngIf="nombreUsuario === ''">
@@ -30,16 +30,22 @@
       <ion-card *ngFor="let comentario of comentariosForo">
         <ion-card-header>
           <ion-card-title>
-            <strong>{{ comentario.Usuario }}</strong> publicó :
+            <strong>{{ comentario.Usuario ?? comentario.Autor }}</strong> publicó :
           </ion-card-title>
         </ion-card-header>
         <ion-card-content>
           {{ comentario.Comentario }}
         </ion-card-content>
+        
+        <ion-button *ngIf="comentario.Tipo === 'CursoCapacitacion' && nombreUsuario" 
+        (click)="irASuscripcion(comentario.uidCursoForo,comentario.NameCursoForo,comentario.Autor)">
+        Subscribirse
+        </ion-button>
+
       </ion-card>
     </ion-list>
 
-    <!-- Sección para agregar comentarios al foro -->
+    
     <div style="padding: 16px;" *ngIf="nombreUsuario">
       <ion-item>
         <ion-label position="floating">Escribe tu comentario</ion-label>
@@ -50,7 +56,7 @@
   </section>
 
   <b><h5>__________________________________________________________________________</h5></b>
-          <b><h5>PRODUCTOS DE USUARIO:</h5></b>
+  <b><h5>PRODUCTOS DE USUARIO:</h5></b>
   <b><h5>__________________________________________________________________________</h5></b>
 
   <section style="padding: 16px;">
@@ -59,9 +65,8 @@
         <ion-card-header>
           <ion-card-title style="font-weight: bold;">{{ usuario.nombre }}</ion-card-title>
         </ion-card-header>
-        
+
         <ion-card-content>
-        
           <ion-list-header>
             <ion-label>Productos</ion-label>
           </ion-list-header>
