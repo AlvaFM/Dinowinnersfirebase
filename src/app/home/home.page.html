@@ -1,6 +1,6 @@
 <ion-header class="ion-header">
   <ion-toolbar class="ion-toolbar">
-    <ion-title>Inicio (Feed)</ion-title>
+    <ion-title>Inicio</ion-title>
     <ion-buttons slot="start">
       <ion-button routerLink="/profile" *ngIf="nombreUsuario">
         {{ nombreUsuario }}
@@ -25,7 +25,6 @@
   <!-- Sección del Foro -->
   <section style="padding: 16px;">
     <b><h5>FORO DINOWINNERS</h5></b>
-    <b><h5>____________________________________________________________________</h5></b>
     <ion-list>
       <ion-card *ngFor="let comentario of comentariosForo">
         <ion-card-header>
@@ -55,9 +54,8 @@
     </div>
   </section>
 
-  <b><h5>__________________________________________________________________________</h5></b>
+  
   <b><h5>PRODUCTOS DE USUARIO:</h5></b>
-  <b><h5>__________________________________________________________________________</h5></b>
 
   <section style="padding: 16px;">
     <ion-list>

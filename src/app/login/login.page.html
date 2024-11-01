@@ -1,15 +1,13 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button routerLink="/home">
-        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
-      </ion-button>
-    </ion-buttons>
     <ion-title>Iniciar Sesión</ion-title>
   </ion-toolbar>
 </ion-header>
 
+<app-loading-screen [isLoading]="(isLoading$ | async)"></app-loading-screen>
+
 <ion-content>
+  <img id="logo" src="./assets/icon/Dinowinners-logo.png" alt="">
   <form (ngSubmit)="login()" #loginForm="ngForm">
     <ion-item>
       <ion-label position="floating">Correo Electrónico</ion-label>
@@ -24,5 +22,9 @@
     <ion-button expand="full" type="submit" [disabled]="!loginForm.valid">Iniciar Sesión</ion-button>
     
     <ion-button expand="full" routerLink="/register" fill="clear">Registrarse</ion-button>
+
+    <ion-button id="arrow-back" routerLink="/home">
+      <ion-icon slot="icon-only" name="arrow-back"></ion-icon> Regresar
+    </ion-button>
   </form>
 </ion-content>
