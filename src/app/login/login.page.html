@@ -4,6 +4,10 @@
   </ion-toolbar>
 </ion-header>
 
+<div *ngIf="loading" class="loading-container">
+  <img src="./assets/icon/dino-loading.gif" alt="Cargando...">
+</div>
+
 <ion-content>
   <img id="logo" src="./assets/icon/Dinowinners-logo.png" alt="">
   <form (ngSubmit)="login()" #loginForm="ngForm">
