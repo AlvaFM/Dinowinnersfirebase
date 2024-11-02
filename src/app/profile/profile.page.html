@@ -1,147 +1,170 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>Perfil</ion-title>
+  <ion-toolbar class="ion-toolbar">
+    <ion-title>perfil</ion-title>
 
-    <ion-buttons slot="start">
-      <ion-button routerLink="/home">
-        Inicio
-      </ion-button>
-    </ion-buttons>
-    
-    <ion-buttons slot="end">
-      <ion-button (click)="logout()">Cerrar Sesión</ion-button>
-    </ion-buttons>
+    <div *ngIf="nombreUsuario" slot="start">
+      <span>{{nombreUsuario}}</span>
+    </div>
+
+    <div slot="end" *ngIf="nombreUsuario">
+      <span (click)="logout()" style="cursor: pointer;">Cerrar Sesión</span>
+    </div>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
- 
+  <!-- Sección de productos -->
+  <section *ngIf="selectedTab === 'productos'" style="padding: 16px;">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Tus productos:</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list>
+          <ion-item *ngFor="let product of products">
+            {{ product.nombre }} - {{ product.precio | currency }}
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
 
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Tus productos :</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-list>
-        <ion-item *ngFor="let product of products">
-          {{ product.nombre }} - {{ product.precio | currency }}
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Agregar Producto</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-label position="floating">Nombre del Producto</ion-label>
+          <ion-input [(ngModel)]="productName"></ion-input>
         </ion-item>
-      </ion-list>
-    </ion-card-content>
-  </ion-card>
 
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Agregar Producto</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-item>
-        <ion-label position="floating">Nombre del Producto</ion-label>
-        <ion-input [(ngModel)]="productName"></ion-input>
-      </ion-item>
-
-      <ion-item>
-        <ion-label position="floating">Descripción</ion-label>
-        <ion-input [(ngModel)]="productDescription"></ion-input>
-      </ion-item>
-
-      <ion-item>
-        <ion-label position="floating">Precio</ion-label>
-        <ion-input [(ngModel)]="productPrice" type="number"></ion-input>
-      </ion-item>
-
-      <ion-button expand="full" (click)="addProduct()">Agregar Producto</ion-button>
-    </ion-card-content>
-  </ion-card>
-
-  
-
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Tus ubicaciones : </ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-list>
-        <ion-item *ngFor="let location of locations">
-          {{ location.ciudad }} - {{ location.direccion }}
+        <ion-item>
+          <ion-label position="floating">Descripción</ion-label>
+          <ion-input [(ngModel)]="productDescription"></ion-input>
         </ion-item>
-      </ion-list>
-    </ion-card-content>
-  </ion-card>
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Agregar Ubicación</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-item>
-        <ion-label position="floating">Ciudad</ion-label>
-        <ion-input [(ngModel)]="city"></ion-input>
-      </ion-item>
 
-      <ion-item>
-        <ion-label position="floating">Dirección</ion-label>
-        <ion-input [(ngModel)]="address"></ion-input>
-      </ion-item>
-
-      <ion-button expand="full" (click)="addLocation()">Agregar Ubicación</ion-button>
-    </ion-card-content>
-  </ion-card>
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Cursos que he agregado</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-list>
-        <ion-item *ngFor="let curso of cursosAgregados">
-          {{ curso.NombreCurso }} - Cupos: {{ curso.Cupos }}
+        <ion-item>
+          <ion-label position="floating">Precio</ion-label>
+          <ion-input [(ngModel)]="productPrice" type="number"></ion-input>
         </ion-item>
-      </ion-list>
-    </ion-card-content>
-  </ion-card>
-  
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Cursos a los que estoy suscrito</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-list>
-        <ion-item *ngFor="let curso of cursosSuscritos">
-          {{ curso.nombreCursoSub }} - Autor: {{ curso.nameAutor }}
+
+        <ion-button expand="full" (click)="addProduct()">Agregar Producto</ion-button>
+      </ion-card-content>
+    </ion-card>
+  </section>
+
+  <!-- Sección de ubicaciones -->
+  <section *ngIf="selectedTab === 'ubicaciones'" style="padding: 16px;">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Tus ubicaciones:</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list>
+          <ion-item *ngFor="let location of locations">
+            {{ location.ciudad }} - {{ location.direccion }}
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Agregar Ubicación</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-label position="floating">Ciudad</ion-label>
+          <ion-input [(ngModel)]="city"></ion-input>
         </ion-item>
-      </ion-list>
-    </ion-card-content>
-  </ion-card>
-  
 
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Agregar Curso</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-item>
-        <ion-label position="floating">Nombre del Curso</ion-label>
-        <ion-input [(ngModel)]="CursoNombre"></ion-input>
-      </ion-item>
-  
-      <ion-item>
-        <ion-label position="floating">Descripción</ion-label>
-        <ion-textarea [(ngModel)]="DescripcionCurso" auto-grow="true"></ion-textarea>
-      </ion-item>
-      
+        <ion-item>
+          <ion-label position="floating">Dirección</ion-label>
+          <ion-input [(ngModel)]="address"></ion-input>
+        </ion-item>
 
-      <ion-item>
-        <ion-label position="floating">Contenido</ion-label>
-        <ion-textarea [(ngModel)]="contenidoCurso" auto-grow="true"></ion-textarea>
-      </ion-item>
-  
-      <ion-item>
-        <ion-label position="floating">Cupos Disponibles</ion-label>
-        <ion-input [(ngModel)]="CuposCurso" type="number" min="0" step="1"></ion-input>
-      </ion-item>
-      
-  
-      <ion-button expand="full" (click)="addCurso(); ComentarForo()">Publicar en foro</ion-button>
-    </ion-card-content>
-  </ion-card>
-  
+        <ion-button expand="full" (click)="addLocation()">Agregar Ubicación</ion-button>
+      </ion-card-content>
+    </ion-card>
+  </section>
+
+  <!-- Sección de cursos -->
+  <section *ngIf="selectedTab === 'cursos'" style="padding: 16px;">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Cursos que he agregado</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list>
+          <ion-item *ngFor="let curso of cursosAgregados">
+            {{ curso.NombreCurso }} - Cupos: {{ curso.Cupos }}
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Cursos a los que estoy suscrito</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list>
+          <ion-item *ngFor="let curso of cursosSuscritos">
+            {{ curso.nombreCursoSub }} - Autor: {{ curso.nameAutor }}
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Agregar Curso</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item>
+          <ion-label position="floating">Nombre del Curso</ion-label>
+          <ion-input [(ngModel)]="CursoNombre"></ion-input>
+        </ion-item>
+    
+        <ion-item>
+          <ion-label position="floating">Descripción</ion-label>
+          <ion-textarea [(ngModel)]="DescripcionCurso" auto-grow="true"></ion-textarea>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Contenido</ion-label>
+          <ion-textarea [(ngModel)]="contenidoCurso" auto-grow="true"></ion-textarea>
+        </ion-item>
+    
+        <ion-item>
+          <ion-label position="floating">Cupos Disponibles</ion-label>
+          <ion-input [(ngModel)]="CuposCurso" type="number" min="0" step="1"></ion-input>
+        </ion-item>
+    
+        <ion-button expand="full" (click)="addCurso()">Publicar en foro</ion-button>
+      </ion-card-content>
+    </ion-card>
+  </section>
 </ion-content>
+
+<!-- Tab Bar en el footer -->
+<ion-footer>
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button routerLink="/home" (click)="selectedTab = 'productos'">
+      <ion-icon name="home"></ion-icon>
+      <ion-label>Inicio</ion-label>
+    </ion-tab-button>
+    <ion-tab-button (click)="selectedTab = 'productos'">
+      <ion-icon name="cart"></ion-icon>
+      <ion-label>Mis Productos</ion-label>
+    </ion-tab-button>
+    <ion-tab-button (click)="selectedTab = 'ubicaciones'">
+      <ion-icon name="pin"></ion-icon>
+      <ion-label>Mis Ubicaciones</ion-label>
+    </ion-tab-button>
+    <ion-tab-button (click)="selectedTab = 'cursos'">
+      <ion-icon name="school"></ion-icon>
+      <ion-label>Cursos</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-footer>

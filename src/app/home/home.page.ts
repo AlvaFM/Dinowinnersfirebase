@@ -2,6 +2,7 @@
   import { AuthService } from '../services/auth.service'; 
   import { DatabaseService } from '../services/database.service';
   import { Router } from '@angular/router';
+ 
 
   @Component({
     selector: 'app-home',
@@ -17,6 +18,7 @@
     productosPorUsuario: { [key: string]: any[] } = {};
     ubicacionesPorUsuario: { [key: string]: any[] } = {};
     nombreUsuario: string = '';
+    selectedTab: string = 'productos';
   
     constructor(private dbService: DatabaseService, private authService: AuthService, private router : Router) {}
 
@@ -25,6 +27,12 @@
       this.verificarUsuarioAutenticado();
       this.obtenerComentariosForo();
     }
+
+    changeTab(tab: string) {
+      this.selectedTab = tab;
+    }
+
+
     
 
     obtenerUsuariosYDatos() {

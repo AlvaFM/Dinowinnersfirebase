@@ -1,73 +1,54 @@
 <ion-header class="ion-header">
   <ion-toolbar class="ion-toolbar">
     <ion-title>Inicio</ion-title>
-    <ion-buttons slot="start">
-      <ion-button routerLink="/profile" *ngIf="nombreUsuario">
-        {{ nombreUsuario }}
-      </ion-button>
-    </ion-buttons>
-    <ion-buttons slot="end" *ngIf="nombreUsuario === ''">
-      <ion-button routerLink="/login">
-        Login
-      </ion-button>
-    </ion-buttons>
-    <ion-buttons slot="end" *ngIf="nombreUsuario">
-      <ion-button (click)="logout()">Cerrar Sesión</ion-button>
-    </ion-buttons>
+
+    <div *ngIf="nombreUsuario" slot="start">
+      <span>{{nombreUsuario}}</span>
+    </div>
+
+    <div slot="end" *ngIf="nombreUsuario">
+      <span (click)="logout()" style="cursor: pointer;">Cerrar Sesión</span>
+    </div>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <div *ngIf="nombreUsuario" style="padding: 16px; font-weight: bold;">
-    ¡Bienvenido, {{ nombreUsuario }}!
-  </div>
 
-  <!-- Sección del Foro -->
-  <section style="padding: 16px;">
-    <b><h5>FORO DINOWINNERS</h5></b>
+
+
+
+
+<ion-content>
+  <!-- Contenido de cada sección -->
+  <section  *ngIf="selectedTab === 'foro'" style="padding: 16px;">
+    <h5><strong>FORO DINOWINNERS</strong></h5>
     <ion-list>
       <ion-card *ngFor="let comentario of comentariosForo">
         <ion-card-header>
           <ion-card-title>
-            <strong>{{ comentario.Usuario ?? comentario.Autor }}</strong> publicó :
+            <strong>{{ comentario.Usuario ?? comentario.Autor }}</strong> publicó:
           </ion-card-title>
         </ion-card-header>
         <ion-card-content>
           {{ comentario.Comentario }}
         </ion-card-content>
-        
         <ion-button *ngIf="comentario.Tipo === 'CursoCapacitacion' && nombreUsuario" 
-        (click)="irASuscripcion(comentario.uidCursoForo,comentario.NameCursoForo,comentario.Autor)">
-        Subscribirse
+          (click)="irASuscripcion(comentario.uidCursoForo, comentario.NameCursoForo, comentario.Autor)">
+          Subscribirse
         </ion-button>
-
       </ion-card>
     </ion-list>
-
     
-    <div style="padding: 16px;" *ngIf="nombreUsuario">
-      <ion-item>
-        <ion-label position="floating">Escribe tu comentario</ion-label>
-        <ion-textarea [(ngModel)]="comentarioForo" rows="3"></ion-textarea>
-      </ion-item>
-      <ion-button expand="full" (click)="ComentarForo()">Comentar</ion-button>
-    </div>
   </section>
 
-  
-  <b><h5>PRODUCTOS DE USUARIO:</h5></b>
-
-  <section style="padding: 16px;">
+  <section *ngIf="selectedTab === 'productos'" style="padding: 16px;">
+    <h5><strong>PRODUCTOS DE USUARIO:</strong></h5>
     <ion-list>
       <ion-card *ngFor="let usuario of usuarios">
         <ion-card-header>
           <ion-card-title style="font-weight: bold;">{{ usuario.nombre }}</ion-card-title>
         </ion-card-header>
-
         <ion-card-content>
-          <ion-list-header>
-            <ion-label>Productos</ion-label>
-          </ion-list-header>
+          <ion-list-header><ion-label>Productos</ion-label></ion-list-header>
           <ion-list *ngFor="let producto of productosPorUsuario[usuario.uid]">
             <ion-item>
               <ion-label>
@@ -77,10 +58,7 @@
               </ion-label>
             </ion-item>
           </ion-list>
-
-          <ion-list-header>
-            <ion-label>Ubicaciones</ion-label>
-          </ion-list-header>
+          <ion-list-header><ion-label>Ubicaciones</ion-label></ion-list-header>
           <ion-list *ngFor="let ubicacion of ubicacionesPorUsuario[usuario.uid]">
             <ion-item>
               <ion-label>
@@ -89,9 +67,49 @@
               </ion-label>
             </ion-item>
           </ion-list>
-
         </ion-card-content>
       </ion-card>
     </ion-list>
   </section>
-</ion-content>
+</ion-content> 
+
+<!-- Movi lo de comentar aca para que no se deslice -->
+<div *ngIf="nombreUsuario && selectedTab === 'foro'" class="comentario-fijo">
+  <ion-row>
+    <ion-col>
+      <ion-textarea [(ngModel)]="comentarioForo" rows="3" placeholder="Escribe tu comentario..."></ion-textarea>
+    </ion-col>
+    <ion-col size="auto">
+      <ion-button expand="full" (click)="ComentarForo()">
+        <ion-icon name="send"></ion-icon>
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</div>
+
+
+
+
+<!-- Tab Bar en el footer -->
+<ion-footer>
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button (click)="selectedTab = 'productos'">
+      <ion-icon name="cart"></ion-icon>
+      <ion-label>Productos</ion-label>
+    </ion-tab-button>
+    <ion-tab-button (click)="selectedTab = 'foro'">
+      <ion-icon name="chatbubbles"></ion-icon>
+      <ion-label>Foro</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button *ngIf="nombreUsuario === ''" routerLink="/login" (click)="selectedTab = 'productos'">
+      <ion-icon name="log-in"></ion-icon>
+      <ion-label>Login</ion-label>
+    </ion-tab-button>
+    
+    <ion-tab-button *ngIf="nombreUsuario" routerLink="/profile" (click)="selectedTab = 'productos'">
+      <ion-icon name="person"></ion-icon>
+      <ion-label>Perfil</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-footer>

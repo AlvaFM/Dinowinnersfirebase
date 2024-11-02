@@ -3,6 +3,7 @@ import { AuthService } from '../services/auth.service';
 import { DatabaseService } from '../services/database.service';
 import { Router } from '@angular/router';
 
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.page.html',
@@ -26,11 +27,16 @@ export class ProfilePage {
   Suscritos: string[] = []; // Suscritos al curso
   contenidoCurso: string = ''; // Contenido del curso
 
+
+  selectedTab: string = 'productos';
+
   constructor(
     private authService: AuthService,
     private databaseService: DatabaseService,
     private router: Router
+    
   ) {}
+  
 
   async ngOnInit() {
     this.verificarUsuarioAutenticado();
@@ -45,17 +51,22 @@ export class ProfilePage {
     });
   }
 
+
+
+  
+
   verificarUsuarioAutenticado() {
     this.authService.getUser().subscribe(user => {
       if (user) {
         this.authService.getUserData(user.uid).then(data => {
-          this.nombreUsuario = data?.nombre || ''; 
+          this.nombreUsuario = data?.nombre || '';  
         });
       } else {
         this.nombreUsuario = ''; 
       }
     });
   }
+  
 
   async addCurso() {
     if (!this.CursoNombre || !this.nombreUsuario || !this.DescripcionCurso || this.CuposCurso === null || this.CuposCurso <= 0) {
