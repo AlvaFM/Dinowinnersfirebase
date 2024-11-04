@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { DatabaseService } from '../services/database.service';
 import { Router } from '@angular/router';
+import { UploadService } from '../services/upload.service';
 
 
 @Component({
@@ -26,6 +27,8 @@ export class ProfilePage {
   CuposCurso: number | null = null;  // Número de cupos disponibles
   Suscritos: string[] = []; // Suscritos al curso
   contenidoCurso: string = ''; // Contenido del curso
+  selectedFile: File | null = null; // Para manejar el archivo seleccionado
+
 
 
   selectedTab: string = 'productos';
@@ -33,7 +36,7 @@ export class ProfilePage {
   constructor(
     private authService: AuthService,
     private databaseService: DatabaseService,
-    private router: Router
+    private router: Router,private uploadService: UploadService
     
   ) {}
   
@@ -127,26 +130,40 @@ export class ProfilePage {
     }
   }
 
-  async addProduct() {
+  onFileSelected(event: any) {
+    this.selectedFile = event.target.files[0];
+    console.log('Archivo seleccionado:', this.selectedFile);  
+}
+
+
+async addProduct() {
+  if (!this.selectedFile) {
+    console.error('Por favor, selecciona una imagen para el producto');
+    return;
+  }
+
+  try {
+    
+    const imageUrl = await this.uploadService.uploadImage(this.selectedFile, `productos/${this.user.uid}`);
+
+    
     const product = {
       nombre: this.productName,
       descripcion: this.productDescription,
       precio: this.productPrice,
-      uid: this.user.uid
-       
+      uid: this.user.uid,
+      imageUrl, 
     };
 
-    try {
-      await this.databaseService.addProduct(product);
-      console.log('Producto agregado con éxito');
-      this.productName = '';
-      this.productDescription = '';
-      this.productPrice = null;
-      this.getProducts();
-    } catch (error) {
-      console.error('Error al agregar producto: ', error);
-    }
+   
+    await this.databaseService.addProduct(product);
+    console.log('Producto agregado con éxito con imagen');
+    
+  } catch (error) {
+    console.error('Error al agregar producto con imagen: ', error);
   }
+}
+
 
   async addLocation() {
     const location = {
