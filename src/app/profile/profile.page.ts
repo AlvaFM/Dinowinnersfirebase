@@ -69,66 +69,72 @@ export class ProfilePage {
       }
     });
   }
+
+
+  
+  
   
 
-  async addCurso() {
+  async agregarCursoYComentar() {
+    // Verificar que todos los campos obligatorios estén presentes
     if (!this.CursoNombre || !this.nombreUsuario || !this.DescripcionCurso || this.CuposCurso === null || this.CuposCurso <= 0) {
-      console.error('Todos los campos del curso son obligatorios y los cupos deben ser mayores que 0');
-      return;
+        console.error('Todos los campos del curso son obligatorios y los cupos deben ser mayores que 0');
+        alert('Por favor, completa todos los campos del curso antes de continuar.');
+        return;
     }
+    
+    // Verificar que el usuario esté autenticado
     if (!this.user) {
-      console.error('El usuario no está autenticado');
-      return;
+        console.error('El usuario no está autenticado');
+        alert('Debes estar autenticado para agregar un curso.');
+        return;
     }
+
+    // Crear el nuevo curso
     const NewCurso = {
-      uid: this.user.uid,
-      Autor: this.nombreUsuario,
-      NombreCurso: this.CursoNombre,
-      Descripcion: this.DescripcionCurso,
-      ContenidoCurso: this.contenidoCurso,
-      Cupos: this.CuposCurso,
-      Suscritos: []
+        uid: this.user.uid,
+        Autor: this.nombreUsuario,
+        NombreCurso: this.CursoNombre,
+        Descripcion: this.DescripcionCurso,
+        ContenidoCurso: this.contenidoCurso,
+        Cupos: this.CuposCurso,
+        Suscritos: []
     };
 
     try { 
-      await this.databaseService.addCurso(NewCurso);
-      console.log('Curso agregado con éxito');
-      alert('Curso Agregado a curso')
-      this.CursoNombre = '';
-      this.DescripcionCurso = '';
-      this.CuposCurso = null;
-    } catch (error) {
-      console.error('Error: no se puede agregar el curso', error);
-    }
-  }
+        // Agregar el curso a la base de datos
+        await this.databaseService.addCurso(NewCurso);
+        console.log('Curso agregado con éxito');
+        alert('Curso agregado a la base de datos.');
 
-  async ComentarForo() {
-    
-    if (!this.CursoNombre || !this.DescripcionCurso || !this.nombreUsuario) {
-      console.error('Todos los campos son obligatorios.');
-      alert('Por favor, completa todos los campos antes de comentar.');
-      return;
-  }
-    const ComentarioForo = {
-      Autor:this.nombreUsuario,  
-      Comentario: `
-      Curso de capacitación++++++.
-      Nombre: ${this.CursoNombre}
-      Descripción: ${this.DescripcionCurso}. 
-      Cupos disponibles: ${this.CuposCurso}`,
-      Tipo: 'CursoCapacitacion',
-      NameCursoForo:this.CursoNombre,
-      uidCursoForo:this.user.uid
-    };
+        // Si el curso se agregó con éxito, proceder a comentar en el foro
+        const ComentarioForo = {
+            Autor: this.nombreUsuario,  
+            Comentario: `
+            Curso de capacitación++++++.
+            Nombre: ${this.CursoNombre}
+            Descripción: ${this.DescripcionCurso}. 
+            Cupos disponibles: ${this.CuposCurso}`,
+            Tipo: 'CursoCapacitacion',
+            NameCursoForo: this.CursoNombre,
+            uidCursoForo: this.user.uid
+        };
 
-    try {
-      await this.databaseService.addCommentForo(ComentarioForo);
-      alert('Curso publicado con éxito');
+        // Agregar el comentario al foro
+        await this.databaseService.addCommentForo(ComentarioForo);
+        alert('Curso publicado en el foro con éxito');
+
+        // Limpiar campos después de la operación
+        this.CursoNombre = '';
+        this.DescripcionCurso = '';
+        this.CuposCurso = null;
+
     } catch (error) {
-      console.error('Error: no se pudo agregar el comentario al foro', error);
-      alert('Error: no se pudo comentar');
+        console.error('Error: no se pudo agregar el curso o el comentario al foro', error);
+        alert('Error: no se pudo agregar el curso o comentar en el foro');
     }
-  }
+}
+
 
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];

@@ -60,3 +60,45 @@ button:active {
     background-color: #fa7171; 
     color: white;
 }
+
+
+.product-container {
+    display: flex;
+    overflow-x: auto;
+    padding: 10px;
+  }
+  
+  .product-card {
+    min-width: 100%;
+    flex: 0 0 auto;
+    margin-right: 10px;
+  }
+  
+  .user-name {
+    font-weight: bold;
+  }
+  
+  .section-padding {
+    padding: 16px;
+  }
+  
+.profile-section {
+    padding: 16px;
+  }
+  
+  .profile-product-list {
+    display: flex; 
+    overflow-x: auto; 
+    padding: 10px 0; 
+  }
+  
+  .profile-product-card {
+    flex: 0 0 100%; 
+    margin-right: 10px; 
+  }
+  
+  .profile-product-image {
+    max-width: 100%;
+    height: auto;
+  }
+  
