@@ -6,9 +6,7 @@
       <span>{{nombreUsuario}}</span>
     </div>
 
-    <div slot="end" *ngIf="nombreUsuario">
-      <span (click)="logout()" style="cursor: pointer;">Cerrar Sesión</span>
-    </div>
+    <ion-icon name="log-out" (click)="logout()" slot="end" *ngIf="nombreUsuario" size="large"></ion-icon>
   </ion-toolbar>
 </ion-header>
 
@@ -164,8 +162,8 @@
 <ion-footer>
   <ion-tab-bar slot="bottom">
     <ion-tab-button routerLink="/home" (click)="selectedTab = 'productos'">
-      <ion-icon name="home"></ion-icon>
-      <ion-label>Inicio</ion-label>
+      <ion-icon color="warning" name="home"></ion-icon>
+      <ion-label >Inicio</ion-label>
     </ion-tab-button>
     <ion-tab-button (click)="selectedTab = 'productos'">
       <ion-icon name="cart"></ion-icon>
@@ -178,6 +176,10 @@
     <ion-tab-button (click)="selectedTab = 'cursos'">
       <ion-icon name="school"></ion-icon>
       <ion-label>Cursos</ion-label>
+    </ion-tab-button>
+    <ion-tab-button (click)="selectedTab = 'perfil'">
+      <ion-icon color="warning" name="person"></ion-icon>
+      <ion-label>Perfil</ion-label>
     </ion-tab-button>
   </ion-tab-bar>
 </ion-footer>
