@@ -17,11 +17,11 @@ export class DatabaseService {
   }
 
   addContenidoPerfil(uid: string, contenido: any): Promise<any> {
-    return this.firestore.collection(`Usuario/${uid}/perfil`).add(contenido);
+    return this.firestore.collection(`usuarios/${uid}/perfil`).add(contenido);
   }
   
   getContenidoPerfil(uid: string): Observable<any[]> {
-    return this.firestore.collection(`Usuario/${uid}/perfil`).valueChanges();
+    return this.firestore.collection(`usuarios/${uid}/perfil`).valueChanges();
   }
   
 
@@ -69,6 +69,9 @@ export class DatabaseService {
 
   getAllUsers(): Observable<any[]> {
     return this.firestore.collection('usuarios').valueChanges();
+  }
+  getOneUser(uid: string): Observable<any[]> {
+    return this.firestore.collection('usuarios', (ref) => ref.where('uid', '==', uid)).valueChanges();
   }
   
 }

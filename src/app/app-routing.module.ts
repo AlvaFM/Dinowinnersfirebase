@@ -30,7 +30,12 @@ const routes: Routes = [
   {
     path: 'suscripcion/:id/:name/:autor',
     loadChildren: () => import('./suscripcion/suscripcion.module').then(m => m.SuscripcionPageModule)
+  },
+  {
+    path: 'perfil-ajeno/:uid',
+    loadChildren: () => import('./perfil-ajeno/perfil-ajeno.module').then( m => m.PerfilAjenoPageModule)
   }
+
   
 
 

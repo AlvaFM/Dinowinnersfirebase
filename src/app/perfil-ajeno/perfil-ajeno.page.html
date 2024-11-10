@@ -1,0 +1,107 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-icon name="home" [routerLink]="'/home'" slot="start" size="large"></ion-icon>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <section *ngIf="contactoUser.length > 0">
+    <ion-item *ngFor="let user of contactoUser">
+      <ion-label>
+        <h2>{{ user.nombre }}</h2>
+        <p>{{ user.email }}</p>
+      </ion-label>
+    </ion-item>
+
+
+  </section>
+  
+
+  <!-- Contenido del perfil -->
+  <!-- Mostrar mensaje si no hay foto de perfil -->
+  <ion-card-content *ngIf="!verificarContenido('fotoPerfil')">
+    <ion-item>
+      <h5>Sin foto de perfil</h5>
+    </ion-item>
+  </ion-card-content>
+
+  <!-- Mostrar fotos de perfil si existe en contenidoPerfil -->
+  <ion-card-content *ngFor="let perfilContenido of contenidoPerfil">
+    <img *ngIf="perfilContenido.fotoPerfil" [src]="perfilContenido.fotoPerfil" alt="Foto de perfil" class="foto-perfil" />
+  </ion-card-content>
+
+  <!-- Mostrar mensaje si no hay información sobre el usuario -->
+  <ion-card-content *ngIf="!verificarContenido('Identidad')">
+    <ion-item>
+      <h5>Sin información del usuario</h5>
+    </ion-item>
+  </ion-card-content>
+
+  <!-- Mostrar información sobre el usuario si existe -->
+  <ion-card-content *ngFor="let perfilContenido of contenidoPerfil">
+    <p *ngIf="perfilContenido.Identidad">{{ perfilContenido.Identidad }}</p>
+  </ion-card-content>
+
+  <!-- Productos -->
+  <section *ngIf="productos.length > 0" style="padding: 16px;">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Productos</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list>
+          <ion-item *ngFor="let producto of productos">
+            <ion-label>
+              <h2>{{ producto.nombre }}</h2>
+              <p>{{ producto.descripcion }}</p>
+              <img *ngIf="producto.imageUrl" [src]="producto.imageUrl" alt="Imagen del producto" class="profile-product-image"/>
+              <ion-badge color="primary">{{ producto.precio | currency }}</ion-badge>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  </section>
+
+  <!-- Ubicaciones -->
+  <section *ngIf="ubicaciones.length > 0" style="padding: 16px;">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Ubicaciones</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list>
+          <ion-item *ngFor="let ubicacion of ubicaciones">
+            <ion-label>
+              <h2>{{ ubicacion.ciudad }}</h2>
+              <p>{{ ubicacion.direccion }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  </section>
+
+  <!-- Cursos -->
+  <section *ngIf="cursos.length > 0" style="padding: 16px;">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Cursos</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list>
+          <ion-item *ngFor="let curso of cursos">
+            <ion-label>
+              <h2>{{ curso.nombreCurso }}</h2>
+              <p>{{ curso.descripcion }}</p>
+              <ion-badge color="secondary">{{ curso.fechaInicio | date }}</ion-badge>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  </section>
+
+</ion-content>

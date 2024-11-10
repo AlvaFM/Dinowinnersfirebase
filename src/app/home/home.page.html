@@ -19,7 +19,7 @@
 
 
 <ion-content>
-  <!-- Contenido de cada sección -->
+ <!-- seccion foro -->
   <section  *ngIf="selectedTab === 'foro'" style="padding: 16px;">
     <h5><strong>FORO DINOWINNERS</strong></h5>
     <ion-list>
@@ -40,13 +40,15 @@
     </ion-list>
     
   </section>
-
+<!-- seccion productos -->
   <section *ngIf="selectedTab === 'productos'" class="section-padding">
     <h5><strong>PRODUCTOS DE USUARIO:</strong></h5>
     <ion-list>
       <div *ngFor="let usuario of usuarios">
         <ion-item>
-          <ion-label class="user-name">{{ usuario.nombre }}</ion-label>
+          <ion-label class="user-name">{{ usuario.nombre }} </ion-label>
+          <ion-button [routerLink]="['/perfil-ajeno', usuario.uid]">Ir a perfil</ion-button>
+          
         </ion-item>
         <ion-list-header><ion-label>Productos</ion-label></ion-list-header>
         <div class="product-container">

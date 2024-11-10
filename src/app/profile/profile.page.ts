@@ -33,7 +33,7 @@ export class ProfilePage {
 
 
 
-  selectedTab: string = 'productos';
+  selectedTab: string = 'perfil';
 
   constructor(
     private authService: AuthService,
@@ -98,14 +98,12 @@ export class ProfilePage {
         return;
     }
     
-    // Verificar que el usuario esté autenticado
     if (!this.user) {
         console.error('El usuario no está autenticado');
         alert('Debes estar autenticado para agregar un curso.');
         return;
     }
 
-    // Crear el nuevo curso
     const NewCurso = {
         uid: this.user.uid,
         Autor: this.nombreUsuario,
@@ -117,12 +115,10 @@ export class ProfilePage {
     };
 
     try { 
-        // Agregar el curso a la base de datos
         await this.databaseService.addCurso(NewCurso);
         console.log('Curso agregado con éxito');
         alert('Curso agregado a la base de datos.');
 
-        // Si el curso se agregó con éxito, proceder a comentar en el foro
         const ComentarioForo = {
             Autor: this.nombreUsuario,  
             Comentario: `
@@ -135,11 +131,9 @@ export class ProfilePage {
             uidCursoForo: this.user.uid
         };
 
-        // Agregar el comentario al foro
+        
         await this.databaseService.addCommentForo(ComentarioForo);
         alert('Curso publicado en el foro con éxito');
-
-        // Limpiar campos después de la operación
         this.CursoNombre = '';
         this.DescripcionCurso = '';
         this.CuposCurso = null;
