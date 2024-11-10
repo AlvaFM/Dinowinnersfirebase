@@ -16,6 +16,15 @@ export class DatabaseService {
     return this.firestore.collection('productos').add(product);
   }
 
+  addContenidoPerfil(uid: string, contenido: any): Promise<any> {
+    return this.firestore.collection(`Usuario/${uid}/perfil`).add(contenido);
+  }
+  
+  getContenidoPerfil(uid: string): Observable<any[]> {
+    return this.firestore.collection(`Usuario/${uid}/perfil`).valueChanges();
+  }
+  
+
   addCurso(Curso: any): Promise<any> {
     return this.firestore.collection('Curso').add(Curso);
   }

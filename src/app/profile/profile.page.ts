@@ -11,6 +11,7 @@ import { UploadService } from '../services/upload.service';
   styleUrls: ['./profile.page.scss'],
 })
 export class ProfilePage {
+  perfilList: any[] = []; //contenidoDelperfil
   nombreUsuario: string = '';  // Almacena exclusivamente el nombre del usuario 
   user: any;  // Almacena la información del usuario
   productName: string = '';  // Almacena el nombre del producto
@@ -31,7 +32,7 @@ export class ProfilePage {
 
 
 
-  selectedTab: string = 'productos';
+  selectedTab: string = 'perfil';
 
   constructor(
     private authService: AuthService,
@@ -42,10 +43,12 @@ export class ProfilePage {
   
 
   async ngOnInit() {
+
     this.verificarUsuarioAutenticado();
     this.authService.getUser().subscribe(user => {
       this.user = user;  
       if (user) {
+        this.ContenidoDelPerfil();
         this.getProducts();
         this.getLocations();
         this.obtenerCursosAgregados();
@@ -53,6 +56,13 @@ export class ProfilePage {
       }
     });
   }
+
+  ContenidoDelPerfil() {
+    this.databaseService.getContenidoPerfil(this.user.uid).subscribe(perfil => {
+      this.perfilList = perfil;
+    });
+  }
+  
 
 
 
@@ -76,7 +86,7 @@ export class ProfilePage {
   
 
   async agregarCursoYComentar() {
-    // Verificar que todos los campos obligatorios estén presentes
+    
     if (!this.CursoNombre || !this.nombreUsuario || !this.DescripcionCurso || this.CuposCurso === null || this.CuposCurso <= 0) {
         console.error('Todos los campos del curso son obligatorios y los cupos deben ser mayores que 0');
         alert('Por favor, completa todos los campos del curso antes de continuar.');
@@ -211,6 +221,33 @@ async addProduct() {
       this.cursosSuscritos = cursos;
     });
   }
+
+  async addFotoPerfil() {
+    if (!this.selectedFile) {
+      console.error('Por favor, selecciona una imagen para el producto');
+      return;
+    }
+  
+    try {
+      
+      const imageUrl = await this.uploadService.uploadImage(this.selectedFile, `perfil/${this.user.uid}`);
+  
+      
+      const contenido = {
+        uidUser: this.user.uid,
+        fotoPerfil: imageUrl
+      };
+  
+      await this.databaseService.addContenidoPerfil(this.user.uid, contenido);
+  
+      console.log("Foto de perfil añadida correctamente");
+    } catch (error) {
+      console.error("Error al añadir la foto de perfil:", error);
+    }
+  }
+  
+
+  
   
 
   async logout() {

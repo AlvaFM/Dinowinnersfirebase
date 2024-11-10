@@ -11,6 +11,33 @@
 </ion-header>
 
 <ion-content>
+
+  <section *ngIf="selectedTab === 'perfil'" style="padding: 16px;">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>{{nombreUsuario}}</ion-card-title>
+      </ion-card-header>
+  
+      <!-- Si no hay perfiles en la lista, mostramos la opción para subir una foto -->
+      <ion-card-content *ngIf="perfilList.length === 0">
+        <ion-item>
+          <input type="file" (change)="onFileSelected($event)" />
+        </ion-item>
+        <ion-button (click)="addFotoPerfil()">Subir Foto</ion-button>
+      </ion-card-content>
+  
+      <!-- Si hay perfiles en la lista, mostramos las fotos de perfil -->
+      <ion-card-content *ngFor="let perfilContenido of perfilList">
+        <img *ngIf="perfilContenido.fotoPerfil" [src]="perfilContenido.fotoPerfil" alt="Foto de perfil" />
+  
+        <p *ngIf="!perfilContenido.fotoPerfil">No tienes una foto de perfil.</p>
+      </ion-card-content>
+      
+    </ion-card>
+  </section>
+  
+
+  <!-- Seccion de productos  -->
   <section *ngIf="selectedTab === 'productos'" style="padding: 16px;">
     <ion-card>
       <ion-card-header>
@@ -161,7 +188,7 @@
 <!-- Tab Bar en el footer -->
 <ion-footer>
   <ion-tab-bar slot="bottom">
-    <ion-tab-button routerLink="/home" (click)="selectedTab = 'productos'">
+    <ion-tab-button routerLink="/home" (click)="selectedTab = 'perfil'">
       <ion-icon color="warning" name="home"></ion-icon>
       <ion-label >Inicio</ion-label>
     </ion-tab-button>
@@ -171,7 +198,7 @@
     </ion-tab-button>
     <ion-tab-button (click)="selectedTab = 'ubicaciones'">
       <ion-icon name="pin"></ion-icon>
-      <ion-label>Mis Ubicaciones</ion-label>
+      <ion-label>Ubicaciones</ion-label>
     </ion-tab-button>
     <ion-tab-button (click)="selectedTab = 'cursos'">
       <ion-icon name="school"></ion-icon>
