@@ -15,26 +15,36 @@
   <section *ngIf="selectedTab === 'perfil'" style="padding: 16px;">
     <ion-card>
       <ion-card-header>
-        <ion-card-title>{{nombreUsuario}}</ion-card-title>
+        <ion-card-title>{{ nombreUsuario }}</ion-card-title>
       </ion-card-header>
   
-      <!-- Si no hay perfiles en la lista, mostramos la opción para subir una foto -->
-      <ion-card-content *ngIf="perfilList.length === 0">
+      <!-- Mostrar campos de subida de foto si no hay una foto de perfil -->
+      <ion-card-content *ngIf="!verificarContenido('fotoPerfil')">
         <ion-item>
           <input type="file" (change)="onFileSelected($event)" />
         </ion-item>
         <ion-button (click)="addFotoPerfil()">Subir Foto</ion-button>
-      </ion-card-content>
-  
-      <!-- Si hay perfiles en la lista, mostramos las fotos de perfil -->
+        </ion-card-content>
+       <!-- Mostrar fotos de perfil si existen en perfilList -->
       <ion-card-content *ngFor="let perfilContenido of perfilList">
-        <img *ngIf="perfilContenido.fotoPerfil" [src]="perfilContenido.fotoPerfil" alt="Foto de perfil" />
-  
-        <p *ngIf="!perfilContenido.fotoPerfil">No tienes una foto de perfil.</p>
+        <img *ngIf="perfilContenido.fotoPerfil" [src]="perfilContenido.fotoPerfil" alt="Foto de perfil" class="foto-perfil" />
       </ion-card-content>
-      
+      <!-- Si no se tiene informacion "sobre mi" se muestra la opcion de subir info -->
+      <ion-card-content *ngIf="!verificarContenido('Identidad')">
+        <ion-item>
+          <ion-label position="floating">Escribir sobre mi</ion-label>
+          <ion-input [(ngModel)]="sobremi"></ion-input>
+        </ion-item>
+        <ion-button (click)="addinfosobremi()">agregar info</ion-button>
+      </ion-card-content>
+      <!-- Si tienes informacion "Sobre mi" se muestra -->
+      <ion-card-content *ngFor="let perfilContenido of perfilList">
+        <p *ngIf="perfilContenido.Identidad">{{perfilContenido.Identidad}}</p>
+      </ion-card-content>
+  
     </ion-card>
   </section>
+  
   
 
   <!-- Seccion de productos  -->

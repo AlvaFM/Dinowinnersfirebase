@@ -11,6 +11,7 @@ import { UploadService } from '../services/upload.service';
   styleUrls: ['./profile.page.scss'],
 })
 export class ProfilePage {
+  sobremi: string=''//variable para agregar info de usuario
   perfilList: any[] = []; //contenidoDelperfil
   nombreUsuario: string = '';  // Almacena exclusivamente el nombre del usuario 
   user: any;  // Almacena la información del usuario
@@ -32,7 +33,7 @@ export class ProfilePage {
 
 
 
-  selectedTab: string = 'perfil';
+  selectedTab: string = 'productos';
 
   constructor(
     private authService: AuthService,
@@ -62,6 +63,10 @@ export class ProfilePage {
       this.perfilList = perfil;
     });
   }
+  verificarContenido(nombreContenido: string): boolean {
+    return this.perfilList.some(perfil => nombreContenido in perfil);
+  }
+  
   
 
 
@@ -245,6 +250,20 @@ async addProduct() {
       console.error("Error al añadir la foto de perfil:", error);
     }
   }
+
+  async addinfosobremi() {
+    const Identidad = {
+      Identidad: this.sobremi
+    };
+  
+    try {
+      await this.databaseService.addContenidoPerfil(this.user.uid, Identidad);
+      console.log("Información 'Sobre mí' añadida correctamente.");
+    } catch (error) {
+      console.error("Error al añadir la información 'Sobre mí':", error);
+    }
+  }
+  
   
 
   
