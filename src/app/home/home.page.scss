@@ -25,4 +25,20 @@
 #container a {
   text-decoration: none;
 }
+.mensaje-exito, .mensaje-error {
+  color: rgb(0, 0, 0);
+  padding: 10px;
+  border-radius: 5px;
+  width: 20rem; 
+  margin: 10px auto; 
+  text-align: center; 
+}
 
+.mensaje-exito {
+  background-color: #f5c46e; 
+
+.mensaje-error {
+  background-color: #bc6262; 
+}
+
+}

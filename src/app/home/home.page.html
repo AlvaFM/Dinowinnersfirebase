@@ -8,12 +8,10 @@
   </ion-toolbar>
 </ion-header>
 
-
-
-
-
-
 <ion-content>
+  <div *ngIf="mensaje" [ngClass]="tipoMensaje === 'exito' ? 'mensaje-exito' : 'mensaje-error'">
+    {{ mensaje }}
+  </div>    
  <!-- seccion foro -->
   <section  *ngIf="selectedTab === 'foro'" style="padding: 16px;">
     <h5><strong>FORO DINOWINNERS</strong></h5>

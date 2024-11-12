@@ -19,6 +19,9 @@
     ubicacionesPorUsuario: { [key: string]: any[] } = {};
     nombreUsuario: string = '';
     selectedTab: string = 'productos';
+    mensaje: string = '';
+    tipoMensaje: string = ''; 
+
   
     constructor(private dbService: DatabaseService, private authService: AuthService, private router : Router) {}
 
@@ -75,11 +78,22 @@
           tipo: 'comentarioNormal'
         };
         this.dbService.addCommentForo(ComentarioForo);
-        alert('Comentario agregado con exito')
-        this.comentarioForo='';
+        
+        this.mensaje = 'Comentario agregado con éxito';
+        this.tipoMensaje = 'exito';
+        
+        
+        this.comentarioForo = '';
       } else {
-        alert('Error: No se pudo comentar');
+     
+        this.mensaje = 'Error, no se pudo comentar';
+        this.tipoMensaje = 'error';
       }
+      
+      setTimeout(() => {
+        this.mensaje = '';
+        this.tipoMensaje = '';
+      }, 3000); 
     }
     
     irASuscripcion(uidCurso: string, nombreCurso: string, autor: string) {
