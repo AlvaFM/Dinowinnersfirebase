@@ -1,11 +1,6 @@
 <ion-header>
   <ion-toolbar class="ion-toolbar">
     <ion-title>Perfil</ion-title>
-
-    <div *ngIf="nombreUsuario" slot="start">
-      <span>{{nombreUsuario}}</span>
-    </div>
-
     <ion-icon name="log-out" (click)="logout()" slot="end" *ngIf="nombreUsuario" size="large"></ion-icon>
   </ion-toolbar>
 </ion-header>
