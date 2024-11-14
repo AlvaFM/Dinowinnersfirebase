@@ -32,7 +32,7 @@
         </ion-item>
         <ion-button (click)="addinfosobremi()">agregar info</ion-button>
       </ion-card-content>
-      <!-- Si tienes informacion "Sobre mi" se muestra -->
+      <!-- Si existe informacion "Sobre mi" se muestra -->
       <ion-card-content *ngFor="let perfilContenido of perfilList">
         <p *ngIf="perfilContenido.Identidad">{{perfilContenido.Identidad}}</p>
       </ion-card-content>

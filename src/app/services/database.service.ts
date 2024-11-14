@@ -12,19 +12,26 @@ export class DatabaseService {
     private authService: AuthService  
   ) {}
 
+  //_______________________________________ 
+  // Metodos relacionados con Productos 
+
   addProduct(product: any): Promise<any> {
     return this.firestore.collection('productos').add(product);
   }
 
-  addContenidoPerfil(uid: string, contenido: any): Promise<any> {
-    return this.firestore.collection(`usuarios/${uid}/perfil`).add(contenido);
-  }
   
-  getContenidoPerfil(uid: string): Observable<any[]> {
-    return this.firestore.collection(`usuarios/${uid}/perfil`).valueChanges();
+  getProductsByUser(uid: string): Observable<any[]> {
+    return this.firestore.collection('productos', (ref) => ref.where('uid_DW', '==', uid)).valueChanges();
   }
-  
 
+  getProductsByUserForSEND(uid: string, ID_VENTA: string): Observable<any[]> {
+    return this.firestore.collection('productos', (ref) => 
+      ref.where('uid', '==', uid).where('ID_VENTA', '==', ID_VENTA)
+    ).valueChanges();
+  }
+  // __________________________________________________________
+  
+  // metodos relacionados con cursos
   addCurso(Curso: any): Promise<any> {
     return this.firestore.collection('Curso').add(Curso);
   }
@@ -44,29 +51,36 @@ export class DatabaseService {
   addsubscription(subscription: any): Promise<any> {
     return this.firestore.collection('suscripciones').add(subscription);
   }
+  // ___________________________________________________________
+  
 
-
-
+  // Metodos relacionados con lacalidades  
   addLocation(location: any): Promise<any> {
     return this.firestore.collection('ubicaciones').add(location);
   }
+  getLocationsByUser(uid: string): Observable<any[]> {
+    return this.firestore.collection('ubicaciones', (ref) => ref.where('uid', '==', uid)).valueChanges();
+  }
+  // ____________________________________________________________
   
+  // Metodos relacionados con el foro
+
   addCommentForo(CommentForo: any): Promise<any> {
     return this.firestore.collection('Foro').add(CommentForo);
   }
   getAllCommentsForo(): Observable<any[]> {
     return this.firestore.collection('Foro').valueChanges();
   }
+  // ____________________________________________________________
 
-  getProductsByUser(uid: string): Observable<any[]> {
-    return this.firestore.collection('productos', (ref) => ref.where('uid', '==', uid)).valueChanges();
+  // Metodos relacionados con Usuario y contenidos 
+  
+  addContenidoPerfil(uid: string, contenido: any): Promise<any> {
+    return this.firestore.collection(`usuarios/${uid}/perfil`).add(contenido);
   }
-
-  getLocationsByUser(uid: string): Observable<any[]> {
-    return this.firestore.collection('ubicaciones', (ref) => ref.where('uid', '==', uid)).valueChanges();
+  getContenidoPerfil(uid: string): Observable<any[]> {
+    return this.firestore.collection(`usuarios/${uid}/perfil`).valueChanges();
   }
-
-
   getAllUsers(): Observable<any[]> {
     return this.firestore.collection('usuarios').valueChanges();
   }
@@ -75,3 +89,14 @@ export class DatabaseService {
   }
   
 }
+
+  
+  
+
+  
+
+
+
+
+
+

@@ -33,31 +33,38 @@
     </ion-list>
     
   </section>
-<!-- seccion productos -->
-  <section *ngIf="selectedTab === 'productos'" class="section-padding">
-    <h5><strong>PRODUCTOS DE USUARIO:</strong></h5>
-    <ion-list>
-      <div *ngFor="let usuario of usuarios">
-        <ion-item>
-          <ion-label class="user-name">{{ usuario.nombre }} </ion-label>
-          <ion-button [routerLink]="['/perfil-ajeno', usuario.uid]">Ir a perfil</ion-button>
-          
-        </ion-item>
-        <ion-list-header><ion-label>Productos</ion-label></ion-list-header>
-        <div class="product-container">
-          <ion-card *ngFor="let producto of productosPorUsuario[usuario.uid]" class="product-card">
-            <ion-card-header>
-              <ion-card-title>{{ producto.nombre }}</ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-              <p>Descripción: {{ producto.descripcion }}</p>
-              <p>Precio: ${{ producto.precio }}</p>
-              <img *ngIf="producto.imageUrl" [src]="producto.imageUrl" alt="Imagen del producto" style="max-width: 100%; height: auto; max-height: 150px; object-fit: contain;" />
-            </ion-card-content>
-          </ion-card>
-        </div>
-  
-        <ion-list-header><ion-label>Ubicaciones</ion-label></ion-list-header>
+ <section *ngIf="selectedTab === 'productos'" class="section-padding">
+  <h5><strong>PRODUCTOS DINOWINNERS:</strong></h5>
+  <ion-list>
+    <div *ngFor="let usuario of usuarios"> 
+      <ion-item>
+        <ion-label [routerLink]="['/perfil-ajeno', usuario.uid]" class="user-name" color="warning">
+          {{ usuario.nombre }}
+        </ion-label>
+      </ion-item>
+      
+      <div class="product-container">
+        <ion-card *ngFor="let producto of productosPorUsuario[usuario.uid]" class="product-card">
+          <ion-card-header>
+            <ion-card-title>{{ producto.nombre }}</ion-card-title>
+            <p>ID del producto: {{ producto}}</p>
+          </ion-card-header>
+          <ion-badge color="primary">{{ producto.precio | currency }}</ion-badge>
+          <ion-card-content>
+            <img *ngIf="producto.imageUrl" [src]="producto.imageUrl" alt="Imagen del producto" style="max-width: 100%; height: auto; max-height: 150px; object-fit: contain;" />
+            <p>Descripción: {{ producto.descripcion }}</p>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+  </ion-list>
+</section>
+
+
+
+
+
+    <!-- <ion-list-header><ion-label>Ubicaciones</ion-label></ion-list-header>
         <div class="product-container">
           <ion-card *ngFor="let ubicacion of ubicacionesPorUsuario[usuario.uid]" class="product-card">
             <ion-card-header>
@@ -67,10 +74,7 @@
               <p>Dirección: {{ ubicacion.direccion }}</p>
             </ion-card-content>
           </ion-card>
-        </div>
-      </div>
-    </ion-list>
-  </section>
+        </div> -->
   
   
 </ion-content> 

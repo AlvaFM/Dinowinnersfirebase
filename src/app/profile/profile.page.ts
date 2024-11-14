@@ -3,6 +3,8 @@ import { AuthService } from '../services/auth.service';
 import { DatabaseService } from '../services/database.service';
 import { Router } from '@angular/router';
 import { UploadService } from '../services/upload.service';
+import firebase from 'firebase/compat';
+
 
 
 @Component({
@@ -38,7 +40,7 @@ export class ProfilePage {
   constructor(
     private authService: AuthService,
     private databaseService: DatabaseService,
-    private router: Router,private uploadService: UploadService
+    private router: Router,private uploadService: UploadService,
     
   ) {}
   
@@ -128,7 +130,10 @@ export class ProfilePage {
             Cupos disponibles: ${this.CuposCurso}`,
             Tipo: 'CursoCapacitacion',
             NameCursoForo: this.CursoNombre,
-            uidCursoForo: this.user.uid
+            uidCursoForo: this.user.uid,
+            
+            
+            
         };
 
         
@@ -150,6 +155,11 @@ export class ProfilePage {
     console.log('Archivo seleccionado:', this.selectedFile);  
 }
 
+generateUniqueId(): string {
+  return 'ID_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+}
+
+
 
 async addProduct() {
   if (!this.selectedFile) {
@@ -161,13 +171,19 @@ async addProduct() {
     
     const imageUrl = await this.uploadService.uploadImage(this.selectedFile, `productos/${this.user.uid}`);
 
+    const ID_VENTA = this.generateUniqueId();
+
+
     
     const product = {
       nombre: this.productName,
       descripcion: this.productDescription,
       precio: this.productPrice,
-      uid: this.user.uid,
+      uid_DW: this.user.uid,
       imageUrl, 
+      ID_VENTA:ID_VENTA,
+
+
     };
 
    
