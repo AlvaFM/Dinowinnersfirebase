@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Carrito de Compras</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="productosCarrito.length > 0; else noProductos">
+    <ion-list>
+      <ion-item *ngFor="let producto of productosCarrito">
+        <ion-thumbnail slot="start">
+          <img *ngIf="producto.imageUrl" [src]="producto.imageUrl" alt="Imagen del producto" />
+        </ion-thumbnail>
+
+        <ion-grid>
+          <ion-row>
+            <ion-col size="12">
+              <h2>{{ producto.Nombre }}</h2>
+              <p>{{ producto.CreadorProducto }}</p>
+              <ion-badge color="primary">{{ producto.Precio | currency }}</ion-badge>
+            </ion-col>
+
+            <ion-col size="auto">
+              <ion-button color="danger" (click)="eliminarProducto(producto.ID_LUGAR_CARRITO)">
+                Eliminar
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </ion-list>
+  </div>
+  
+  <ng-template #noProductos>
+    <div class="no-productos">
+      <ion-text>
+        <h2>No tienes productos en el carrito.</h2>
+      </ion-text>
+    </div>
+  </ng-template>
+</ion-content>
+
+
+<ion-footer>
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button routerLink="/home">
+      <ion-icon color="warning" name="home"></ion-icon>
+      <ion-label>Inicio</ion-label>
+    </ion-tab-button>
+  
+    <ion-tab-button routerLink="/profile">
+      <ion-icon color="warning" name="person"></ion-icon>
+      <ion-label>Perfil</ion-label>
+    </ion-tab-button>
+  
+    
+    
+  
+  </ion-tab-bar>
+  
+</ion-footer>

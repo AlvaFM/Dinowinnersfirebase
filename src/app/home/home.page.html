@@ -47,13 +47,15 @@
         <ion-card *ngFor="let producto of productosPorUsuario[usuario.uid]" class="product-card">
           <ion-card-header>
             <ion-card-title>{{ producto.nombre }}</ion-card-title>
-            <p>ID del producto: {{ producto}}</p>
           </ion-card-header>
           <ion-badge color="primary">{{ producto.precio | currency }}</ion-badge>
           <ion-card-content>
             <img *ngIf="producto.imageUrl" [src]="producto.imageUrl" alt="Imagen del producto" style="max-width: 100%; height: auto; max-height: 150px; object-fit: contain;" />
             <p>Descripción: {{ producto.descripcion }}</p>
           </ion-card-content>
+          <ion-label (click)="addCarrito(producto.nombre, producto.precio, producto.CreadorProducto, producto.ID_VENTA, producto.imageUrl)" class="user-name" color="primary" style="cursor: pointer;">
+            Agregar a carrito 
+          </ion-label>
         </ion-card>
       </div>
     </div>
@@ -103,19 +105,31 @@
       <ion-icon color="warning" name="home"></ion-icon>
       <ion-label>Inicio</ion-label>
     </ion-tab-button>
+  
     <ion-tab-button (click)="selectedTab = 'foro'">
       <ion-icon name="chatbubbles"></ion-icon>
       <ion-label>Foro</ion-label>
     </ion-tab-button>
-
+  
     <ion-tab-button *ngIf="nombreUsuario === ''" routerLink="/login" (click)="selectedTab = 'productos'">
       <ion-icon color="warning" name="log-in"></ion-icon>
       <ion-label>Login</ion-label>
     </ion-tab-button>
+
+    <ion-tab-button *ngIf="nombreUsuario" routerLink="/carrito" (click)="selectedTab = 'productos'">
+      <ion-icon name="cart"></ion-icon>
+      <ion-label>Carrito</ion-label>
+    </ion-tab-button>
     
+  
     <ion-tab-button *ngIf="nombreUsuario" routerLink="/profile" (click)="selectedTab = 'productos'">
       <ion-icon color="warning" name="person"></ion-icon>
       <ion-label>Perfil</ion-label>
     </ion-tab-button>
+  
+    
+    
+  
   </ion-tab-bar>
+  
 </ion-footer>

@@ -26,9 +26,34 @@ export class DatabaseService {
 
   getProductsByUserForSEND(uid: string, ID_VENTA: string): Observable<any[]> {
     return this.firestore.collection('productos', (ref) => 
-      ref.where('uid', '==', uid).where('ID_VENTA', '==', ID_VENTA)
+      ref.where('uid_DW', '==', uid).where('ID_VENTA', '==', ID_VENTA)
     ).valueChanges();
+
   }
+  // ________________________________________________________
+  // Carrito
+
+  addContenidoCarrito(uid: string, contenido: any): Promise<any> {
+    return this.firestore.collection(`usuarios/${uid}/carrito`).add(contenido);
+  }
+  eliminarProductoDelCarrito(uid: string, ID_LUGAR_CARRITO: string): Promise<void> {
+    return this.firestore.collection(`usuarios/${uid}/carrito`).doc(ID_LUGAR_CARRITO).delete();
+  }
+  getContenidoCarrito(uid: string): Observable<any[]> {
+    return this.firestore.collection(`usuarios/${uid}/carrito`).valueChanges();
+  }
+  addHistorialDecompras(uid: string, contenido: any): Promise<any> {
+    return this.firestore.collection(`usuarios/${uid}/HistorialDecompras`).add(contenido);
+  }
+  getHistoriaDecompras(uid: string): Observable<any[]> {
+    return this.firestore.collection(`usuarios/${uid}/HistorialDecompras`).valueChanges();
+  }
+  
+  
+
+
+
+
   // __________________________________________________________
   
   // metodos relacionados con cursos
@@ -86,6 +111,10 @@ export class DatabaseService {
   }
   getOneUser(uid: string): Observable<any[]> {
     return this.firestore.collection('usuarios', (ref) => ref.where('uid', '==', uid)).valueChanges();
+  }
+
+  addHistorialDeVentas(uid: string, contenido: any): Promise<any> {
+    return this.firestore.collection(`usuarios/${uid}/HistorialDeVentas`).add(contenido);
   }
   
 }

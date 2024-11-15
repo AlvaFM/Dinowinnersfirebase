@@ -16,6 +16,7 @@ export class HomePage implements OnInit {
   productosPorUsuario: { [key: string]: any[] } = {};
   ubicacionesPorUsuario: { [key: string]: any[] } = {};
   nombreUsuario: string = '';
+  idUsuarioActual : string ='';
   selectedTab: string = 'productos';
   mensaje: string = '';
   tipoMensaje: string = '';
@@ -39,11 +40,11 @@ export class HomePage implements OnInit {
       users.forEach(usuario => {
         const uid = usuario.uid;
   
-  
         if (!this.productosPorUsuario[uid]) {
           this.dbService.getProductsByUser(uid).subscribe(products => {
+            products.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
+            
             if (products && products.length > 0) {
-           
               this.productosPorUsuario[uid] = products;
               this.usuarios.push(usuario);  
             }
@@ -56,6 +57,32 @@ export class HomePage implements OnInit {
       });
     });
   }
+
+  generateUniqueIdforPosition(): string {
+    return 'ID_Carrito' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+  }
+
+  addCarrito(Nombre: string, precio: number, CreadorProducto: string, Id_venta: string, imageUrl: string) {
+    const ID_posicion_carrito = this.generateUniqueIdforPosition();
+    const contenidoCarrito = {
+      
+      imageUrl : imageUrl,
+      ID_LUGAR_CARRITO : ID_posicion_carrito,
+      ID_VENTA: Id_venta,
+      Nombre: Nombre,
+      Precio: precio,
+      CreadorProducto: CreadorProducto,
+      Fecha: new Date().toISOString(),
+      UsuarioId: this.idUsuarioActual, 
+    };
+  
+    this.dbService.addContenidoCarrito(this.idUsuarioActual, contenidoCarrito).then(() => {
+      console.log('Producto añadido al carrito con éxito');
+    }).catch((error) => {
+      console.error('Error al añadir producto al carrito:', error);
+    });
+  }
+  
   
 
   verificarUsuarioAutenticado() {
@@ -63,9 +90,11 @@ export class HomePage implements OnInit {
       if (user) {
         this.authService.getUserData(user.uid).then(data => {
           this.nombreUsuario = data?.nombre || ''; 
+          this.idUsuarioActual = user.uid; 
         });
       } else {
         this.nombreUsuario = ''; 
+        this.idUsuarioActual = ''; 
       }
     });
   }
@@ -75,7 +104,8 @@ export class HomePage implements OnInit {
       const ComentarioForo = {
         Usuario: this.nombreUsuario,
         Comentario: this.comentarioForo,
-        tipo: 'comentarioNormal'
+        tipo: 'comentarioNormal',
+        fecha: new Date().toISOString()
       };
       this.dbService.addCommentForo(ComentarioForo);
       
@@ -101,9 +131,12 @@ export class HomePage implements OnInit {
 
   obtenerComentariosForo() {
     this.dbService.getAllCommentsForo().subscribe(comentarios => {
+      comentarios.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
+      
       this.comentariosForo = comentarios;      
     });
   }
+  
 
   async logout() {
     await this.authService.logout();

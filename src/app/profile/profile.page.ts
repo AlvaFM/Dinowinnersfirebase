@@ -3,7 +3,8 @@ import { AuthService } from '../services/auth.service';
 import { DatabaseService } from '../services/database.service';
 import { Router } from '@angular/router';
 import { UploadService } from '../services/upload.service';
-import firebase from 'firebase/compat';
+
+
 
 
 
@@ -131,6 +132,7 @@ export class ProfilePage {
             Tipo: 'CursoCapacitacion',
             NameCursoForo: this.CursoNombre,
             uidCursoForo: this.user.uid,
+            fecha: new Date().toISOString()
             
             
             
@@ -176,15 +178,15 @@ async addProduct() {
 
     
     const product = {
+      CreadorProducto: this.nombreUsuario,
       nombre: this.productName,
       descripcion: this.productDescription,
       precio: this.productPrice,
       uid_DW: this.user.uid,
       imageUrl, 
       ID_VENTA:ID_VENTA,
-
-
-    };
+      fecha: new Date().toISOString()
+      };
 
    
     await this.databaseService.addProduct(product);
@@ -216,9 +218,10 @@ async addProduct() {
 
   getProducts() {
     this.databaseService.getProductsByUser(this.user.uid).subscribe(products => {
-      this.products = products;
+      this.products = products.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
     });
   }
+  
 
   getLocations() {
     this.databaseService.getLocationsByUser(this.user.uid).subscribe(locations => {

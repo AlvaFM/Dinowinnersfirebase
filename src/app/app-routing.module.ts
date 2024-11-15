@@ -34,7 +34,13 @@ const routes: Routes = [
   {
     path: 'perfil-ajeno/:uid',
     loadChildren: () => import('./perfil-ajeno/perfil-ajeno.module').then( m => m.PerfilAjenoPageModule)
+  },
+  
+  {
+    path: 'carrito',
+    loadChildren: () => import('./carrito/carrito.module').then(m => m.CarritoPageModule)
   }
+  
 
   
 
