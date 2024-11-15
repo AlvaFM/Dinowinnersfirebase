@@ -17,6 +17,7 @@ export class CarritoPage implements OnInit {
   ngOnInit() {
     
     this.verificarUsuarioAutenticado();
+    
   }
 
   verificarUsuarioAutenticado() {
@@ -24,7 +25,8 @@ export class CarritoPage implements OnInit {
     this.authService.getUser().subscribe(user => {
       if (user) {
         this.idUsuarioActual = user.uid; 
-        this.obtenerProductosDelCarrito(); 
+        this.obtenerProductosDelCarrito();
+         
       } else {
         this.idUsuarioActual = ''; 
         this.productosCarrito = [];  
@@ -34,20 +36,38 @@ export class CarritoPage implements OnInit {
 
   obtenerProductosDelCarrito() {
     if (this.idUsuarioActual) {
-      this.databaseService.getContenidoCarrito(this.idUsuarioActual).subscribe(productos => {
-        this.productosCarrito = productos;
+      this.databaseService.getContenidoCarrito(this.idUsuarioActual).subscribe((productos: any) => {
+        console.log('Productos recibidos:', productos);
+  
+        this.productosCarrito = productos.map((doc: any) => {
+          console.log('Producto mapeado:', doc);  // Verifica la estructura de cada producto
+          return {
+            ID_CARRITO: doc.id,  // Verifica que "id" está presente
+            Nombre: doc.Nombre,
+            CreadorProducto: doc.CreadorProducto,
+            Precio: doc.Precio,
+            imageUrl: doc.imageUrl
+          };
+        });
+  
         console.log('Productos del carrito:', this.productosCarrito);
       });
     }
   }
-
-  eliminarProducto(ID_LUGAR_CARRITO: string) {
+  
+  
+  
+  
+  
+  eliminarProducto(ID_CARRITO: string) {
     if (this.idUsuarioActual) {
-      this.databaseService.eliminarProductoDelCarrito(this.idUsuarioActual, ID_LUGAR_CARRITO)
+      console.log('Producto a eliminar:', ID_CARRITO);
+      this.databaseService.eliminarProductoDelCarrito(this.idUsuarioActual, ID_CARRITO)
         .then(() => {
           console.log('Producto eliminado con éxito');
-    
-          this.productosCarrito = this.productosCarrito.filter(producto => producto.ID_LUGAR_CARRITO !== ID_LUGAR_CARRITO);
+          
+          // Aquí usamos "id" en lugar de "ID_CARRITO"
+          this.productosCarrito = this.productosCarrito.filter(producto => producto.id !== ID_CARRITO);
           console.log('Productos en el carrito después de eliminar:', this.productosCarrito);
         })
         .catch((error) => {
@@ -55,6 +75,8 @@ export class CarritoPage implements OnInit {
         });
     }
   }
+  
+  
   
   
   

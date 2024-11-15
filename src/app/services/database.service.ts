@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
+import { map } from 'rxjs/operators';
+
 
 @Injectable({
   providedIn: 'root',
@@ -36,12 +38,26 @@ export class DatabaseService {
   addContenidoCarrito(uid: string, contenido: any): Promise<any> {
     return this.firestore.collection(`usuarios/${uid}/carrito`).add(contenido);
   }
-  eliminarProductoDelCarrito(uid: string, ID_LUGAR_CARRITO: string): Promise<void> {
-    return this.firestore.collection(`usuarios/${uid}/carrito`).doc(ID_LUGAR_CARRITO).delete();
+  eliminarProductoDelCarrito(uid: string, ID_CARRITO: string): Promise<void> {
+    return this.firestore.collection(`usuarios/${uid}/carrito`).doc(ID_CARRITO).delete();
   }
   getContenidoCarrito(uid: string): Observable<any[]> {
-    return this.firestore.collection(`usuarios/${uid}/carrito`).valueChanges();
+    return this.firestore.collection(`usuarios/${uid}/carrito`).snapshotChanges().pipe(
+      map(actions =>
+        actions.map(a => {
+          const data = a.payload.doc.data();  // Los datos completos del documento
+          const id = a.payload.doc.id;        // La ID del documento
+  
+          // Aquí devolvemos la ID y todos los datos del producto
+          return { id, ...data || {} };  // Si data es null o undefined, usa un objeto vacío
+
+        })
+      )
+    );
   }
+  
+  
+  
   addHistorialDecompras(uid: string, contenido: any): Promise<any> {
     return this.firestore.collection(`usuarios/${uid}/HistorialDecompras`).add(contenido);
   }
