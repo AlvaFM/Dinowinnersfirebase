@@ -32,8 +32,9 @@ export class ProfilePage {
   CuposCurso: number | null = null;  // Número de cupos disponibles
   Suscritos: string[] = []; // Suscritos al curso
   contenidoCurso: string = ''; // Contenido del curso
-  selectedFile: File | null = null;
-  selectedFilePPHOTO: File | undefined = undefined;  // Para manejar el archivo seleccionado (Perfil)
+  selectedFile: File | undefined = undefined;
+  selectedFilePPHOTO: File | undefined = undefined;
+ 
 
 
 
@@ -43,7 +44,8 @@ export class ProfilePage {
   SAproducto: string = 'desactivado';
 
   SAubicacion: string = 'desactivado'
-  SAcurso: string = 'desactivado'
+  
+  SAcurso: string = 'desactivado';
 
   constructor(
     private authService: AuthService,
@@ -156,14 +158,27 @@ export class ProfilePage {
 }
 
 
-  onFileSelected(event: any) {
-    this.selectedFile = event.target.files[0];
-    console.log('Archivo seleccionado:', this.selectedFile);  
+onFileSelected(event: Event) {
+  const input = event.target as HTMLInputElement;
+  if (input.files && input.files.length > 0) {
+    this.selectedFile = input.files[0];
+  }
 }
+
 
 onFileSelectedPHOTO(event: any) {
   this.selectedFilePPHOTO = event.target.files[0];
   console.log('Archivo seleccionado:', this.selectedFilePPHOTO);  
+}
+
+cancelarSeleccionPhoto(fileInput: HTMLInputElement) {
+  this.selectedFilePPHOTO = undefined;
+  fileInput.value = '';
+}
+
+cancelarSeleccionFproducto(fileInput: HTMLInputElement) {
+  this.selectedFile = undefined;
+  fileInput.value = '';
 }
 
 generateUniqueId(): string {

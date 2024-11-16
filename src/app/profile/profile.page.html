@@ -28,21 +28,21 @@
               </ion-button>
               
               <input type="file" #fileInput (change)="onFileSelectedPHOTO($event)" style="display: none;" />
-              
-              <!-- Mostrar el nombre del archivo seleccionado -->
+
               <ion-item *ngIf="selectedFilePPHOTO">
                 <ion-label>{{ selectedFilePPHOTO.name }}</ion-label>
-            </ion-item>
-            
               
-            <ion-row>
-              <ion-col>
-                <ion-button *ngIf="selectedFilePPHOTO" expand="block" (click)="addFotoPerfil()">subir</ion-button>
-              </ion-col>
-              <ion-col>
-                <ion-button *ngIf="selectedFilePPHOTO" expand="block" (click)="selectedFilePPHOTO = undefined">cancelar</ion-button>
-              </ion-col>
-            </ion-row>
+                <ion-row>
+                  <ion-col>
+                    <ion-button expand="block" (click)="addFotoPerfil()">Subir</ion-button>
+                  </ion-col>
+                  <ion-col>
+                    <ion-button expand="block" (click)="cancelarSeleccionPhoto(fileInput)">Cancelar</ion-button>
+                  </ion-col>
+                </ion-row>
+              </ion-item>
+
+
             
             </div>
           </ion-card-content>
@@ -130,7 +130,8 @@
                 <ion-button expand="block" fill="outline" (click)="fileInput.click()">
                   Seleccionar Imagen
                 </ion-button>
-                <input #fileInput type="file" (change)="onFileSelected($event)" style="display: none;" />
+                <input type="file" #fileInput (change)="onFileSelected($event)" style="display: none;" />
+
               </ion-item>
               
               <!-- Mostrar el nombre del archivo seleccionado si existe -->
@@ -273,8 +274,8 @@
               </ion-item>
               
       
-              <ion-button expand="full" (click)="agregarCursoYComentar()" (click)="SAcurso = 'activado'">Publicar en foro</ion-button>
-              <ion-button expand="full" (click)="SAcurso = 'activado'" >Cancelar</ion-button>
+              <ion-button (click)="agregarCursoYComentar()" (click)="SAcurso = 'activado'">Publicar en foro</ion-button>
+              <ion-button (click)="SAcurso = 'desactivado'" >Cancelar</ion-button>
       
             </ion-card-content>
           </ion-card>
