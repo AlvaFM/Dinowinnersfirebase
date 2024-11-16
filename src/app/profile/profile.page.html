@@ -22,7 +22,7 @@
     
             <div *ngIf="!verificarContenido('fotoPerfil')" class="ion-text-center">
               <ion-label style="opacity: 0;">________________</ion-label>
-              <ion-button *ngIf="selectedFilePPHOTO === null" (click)="fileInput.click()" expand="block" fill="solid">
+              <ion-button *ngIf="selectedFilePPHOTO === undefined" (click)="fileInput.click()" expand="block" fill="solid">
                 <ion-icon name="image-outline" slot="end"></ion-icon>
                 Seleccionar imagen perfil 
               </ion-button>
@@ -40,7 +40,7 @@
                 <ion-button *ngIf="selectedFilePPHOTO" expand="block" (click)="addFotoPerfil()">subir</ion-button>
               </ion-col>
               <ion-col>
-                <ion-button *ngIf="selectedFilePPHOTO" expand="block" (click)="selectedFilePPHOTO = null">cancelar</ion-button>
+                <ion-button *ngIf="selectedFilePPHOTO" expand="block" (click)="selectedFilePPHOTO = undefined">cancelar</ion-button>
               </ion-col>
             </ion-row>
             
@@ -60,9 +60,9 @@
       
           <ion-button (click)="addinfosobremi()">Agregar info</ion-button>
         </div>
+        <strong> Sobre mí :</strong>
 
     <div *ngFor="let perfilContenido of perfilList" class="perfil-container">
-  <strong>Sobre mí :</strong>
   <p *ngIf="perfilContenido.Identidad">
     <strong>{{ perfilContenido.Identidad }}</strong>
   </p>
@@ -155,7 +155,7 @@
 
         <!-- Sección de ubicaciones -->
         <section *ngIf="selectedTab === 'ubicaciones'" style="padding: 16px;">
-          <ion-card>
+          <ion-card *ngIf="SAubicacion === 'desactivado'">
             <ion-card-header>
               <ion-card-title>Tus ubicaciones:</ion-card-title>
             </ion-card-header>
@@ -167,8 +167,18 @@
               </ion-list>
             </ion-card-content>
           </ion-card>
+
+           <!-- Con este boton alternamos entre la vista de ubicacion y la de agregar ubicacion -->
+           <ion-fab *ngIf="SAubicacion === 'desactivado'" vertical="bottom" 
+           horizontal="end"  (click)="SAubicacion = 'activado'">
+             <ion-fab-button color="warning">
+               Agregar
+             </ion-fab-button>
+           </ion-fab>
+
+
       
-          <ion-card>
+          <ion-card *ngIf="SAubicacion === 'activado'">
             <ion-card-header>
               <ion-card-title>Agregar Ubicación</ion-card-title>
             </ion-card-header>
@@ -182,28 +192,25 @@
                 <ion-label position="floating">Dirección</ion-label>
                 <ion-input [(ngModel)]="address"></ion-input>
               </ion-item>
+
+              <ion-row>
+                <ion-col>
+                  <ion-button (click)="addLocation()" (click)="SAubicacion = 'desactivado'">Agregar</ion-button>
+                </ion-col>
+                <ion-col>
+                  <ion-button (click)="SAubicacion = 'desactivado'">Cancelar</ion-button>
+                </ion-col>
+              </ion-row>
       
-              <ion-button expand="full" (click)="addLocation()">Agregar Ubicación</ion-button>
             </ion-card-content>
           </ion-card>
         </section>
 
         <!-- Sección de cursos -->
         <section *ngIf="selectedTab === 'cursos'" style="padding: 16px;">
-          <ion-card>
-            <ion-card-header>
-              <ion-card-title>Cursos que he agregado</ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-              <ion-list>
-                <ion-item *ngFor="let curso of cursosAgregados">
-                  {{ curso.NombreCurso }} - Cupos: {{ curso.Cupos }}
-                </ion-item>
-              </ion-list>
-            </ion-card-content>
-          </ion-card>
+         
       
-          <ion-card>
+          <ion-card  *ngIf="SAcurso === 'desactivado'">
             <ion-card-header>
               <ion-card-title>Cursos a los que estoy suscrito</ion-card-title>
             </ion-card-header>
@@ -215,8 +222,32 @@
               </ion-list>
             </ion-card-content>
           </ion-card>
+
+          <ion-card *ngIf="SAcurso === 'desactivado'">
+            <ion-card-header>
+              <ion-card-title>Cursos que he agregado</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-list>
+                <ion-item *ngFor="let curso of cursosAgregados">
+                  {{ curso.NombreCurso }} - Cupos: {{ curso.Cupos }}
+                </ion-item>
+              </ion-list>
+            </ion-card-content>
+          </ion-card>
+
+
+          <!-- Con este boton alternamos entre la vista de cursos y la de agregar cursos -->
+          <ion-fab *ngIf="SAcurso === 'desactivado'" vertical="bottom" 
+          horizontal="end"  (click)="SAcurso = 'activado'">
+            <ion-fab-button color="warning">
+              Agregar
+            </ion-fab-button>
+          </ion-fab>
+
+
       
-          <ion-card>
+          <ion-card *ngIf="SAcurso === 'activado'">
             <ion-card-header>
               <ion-card-title>Agregar Curso</ion-card-title>
             </ion-card-header>
@@ -240,8 +271,10 @@
                 <ion-label position="floating">Cupos Disponibles</ion-label>
                 <ion-input [(ngModel)]="CuposCurso" type="number" min="0" step="1"></ion-input>
               </ion-item>
+              
       
-              <ion-button expand="full" (click)="agregarCursoYComentar()">Publicar en foro</ion-button>
+              <ion-button expand="full" (click)="agregarCursoYComentar()" (click)="SAcurso = 'activado'">Publicar en foro</ion-button>
+              <ion-button expand="full" (click)="SAcurso = 'activado'" >Cancelar</ion-button>
       
             </ion-card-content>
           </ion-card>

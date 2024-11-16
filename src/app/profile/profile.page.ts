@@ -33,7 +33,7 @@ export class ProfilePage {
   Suscritos: string[] = []; // Suscritos al curso
   contenidoCurso: string = ''; // Contenido del curso
   selectedFile: File | null = null;
-  selectedFilePPHOTO: File | null = null; // Para manejar el archivo seleccionado (Perfil)
+  selectedFilePPHOTO: File | undefined = undefined;  // Para manejar el archivo seleccionado (Perfil)
 
 
 
