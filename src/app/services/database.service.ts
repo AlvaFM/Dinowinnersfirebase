@@ -45,11 +45,10 @@ export class DatabaseService {
     return this.firestore.collection(`usuarios/${uid}/carrito`).snapshotChanges().pipe(
       map(actions =>
         actions.map(a => {
-          const data = a.payload.doc.data();  // Los datos completos del documento
-          const id = a.payload.doc.id;        // La ID del documento
-  
-          // Aquí devolvemos la ID y todos los datos del producto
-          return { id, ...data || {} };  // Si data es null o undefined, usa un objeto vacío
+          const data = a.payload.doc.data();  
+          const id = a.payload.doc.id;       
+
+          return { id, ...data || {} };  
 
         })
       )

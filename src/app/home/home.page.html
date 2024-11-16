@@ -13,26 +13,49 @@
     {{ mensaje }}
   </div>    
  <!-- seccion foro -->
-  <section  *ngIf="selectedTab === 'foro'" style="padding: 16px;">
-    <h5><strong>FORO DINOWINNERS</strong></h5>
-    <ion-list>
-      <ion-card *ngFor="let comentario of comentariosForo">
-        <ion-card-header>
-          <ion-card-title>
-            <strong>{{ comentario.Usuario ?? comentario.Autor }}</strong> publicó:
-          </ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          {{ comentario.Comentario }}
-        </ion-card-content>
-        <ion-button *ngIf="comentario.Tipo === 'CursoCapacitacion' && nombreUsuario" 
-          (click)="irASuscripcion(comentario.uidCursoForo, comentario.NameCursoForo, comentario.Autor)">
+ <section *ngIf="selectedTab === 'foro'" class="foro-container">
+  <h5 class="foro-title"><strong>FORO DINOWINNERS</strong></h5>
+  <ion-list>
+    <ion-card *ngFor="let comentario of comentariosForo" class="comentario-card">
+      <ion-card-header>
+        <ion-card-title>
+          <strong *ngIf="comentario.Usuario">{{ comentario.Usuario }} comentó</strong>
+          <h5 *ngIf="comentario.Autor" >_____________________________________</h5>
+          <strong *ngIf="comentario.Autor">{{comentario.Autor}} publicó un curso de capacitación: </strong> 
+        </ion-card-title>
+      </ion-card-header>
+      
+      <!-- Comentario normal -->
+      <ion-card-content *ngIf="comentario.Comentario" class="comentario-contenido">
+        {{ comentario.Comentario }}
+      </ion-card-content>
+      
+      <!-- Curso de capacitación -->
+      <ion-card-content *ngIf="comentario.CCnombre" class="curso-contenido">
+        <h2> <b>Nombre del curso:</b> {{ comentario.CCnombre }}</h2>
+        <p><b>Descripción:</b> {{ comentario.CCdescripcion }}</p>
+        <p><b>Cupos disponibles:</b> {{ comentario.Cupos }}</p>
+      </ion-card-content>
+      <h5 *ngIf="comentario.Autor" >_____________________________________</h5>
+      
+      <!-- Botón Suscribirse o mensaje para iniciar sesión -->
+      <div *ngIf="comentario.CCnombre" class="suscripcion-container">
+        <ion-button *ngIf="nombreUsuario" 
+                    (click)="irASuscripcion(comentario.uidCursoForo, comentario.CCnombre, comentario.Autor)">
           Suscribirse
         </ion-button>
-      </ion-card>
-    </ion-list>
-    
-  </section>
+        <ion-label *ngIf="!nombreUsuario" color="warning">
+          Por favor inicia sesión para suscribirte
+        </ion-label>
+      </div>
+    </ion-card>
+  </ion-list>
+</section>
+
+
+
+
+
  <section *ngIf="selectedTab === 'productos'" class="section-padding">
   <h5><strong>PRODUCTOS DINOWINNERS:</strong></h5>
   <ion-list>

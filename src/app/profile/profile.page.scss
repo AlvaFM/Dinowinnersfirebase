@@ -1,14 +1,23 @@
-ion-button{
-    background: #fab371;
-}
+
 
 .foto-perfil {
-    width: 150px;
-    height: 150px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
     border-radius: 50%;
+    width: 150px; 
+    height: 150px; 
+  }
+
+  .SeccionPerfilFija {
+    position: sticky;
+    top: -20px;
+    
+    width: auto;
+    background: linear-gradient(135deg, #f8e7db 0%, #faf6e8 50%, #ffffff 100%);
   }
   
-ion-card{
-    justify-content: center;
-    display: column;
-}
+  
+  
+  
+

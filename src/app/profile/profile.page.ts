@@ -32,11 +32,18 @@ export class ProfilePage {
   CuposCurso: number | null = null;  // Número de cupos disponibles
   Suscritos: string[] = []; // Suscritos al curso
   contenidoCurso: string = ''; // Contenido del curso
-  selectedFile: File | null = null; // Para manejar el archivo seleccionado
+  selectedFile: File | null = null;
+  selectedFilePPHOTO: File | null = null; // Para manejar el archivo seleccionado (Perfil)
 
 
 
-  selectedTab: string = 'perfil';
+  selectedTab: string = 'productos';
+
+  
+  SAproducto: string = 'desactivado';
+
+  SAubicacion: string = 'desactivado'
+  SAcurso: string = 'desactivado'
 
   constructor(
     private authService: AuthService,
@@ -124,13 +131,10 @@ export class ProfilePage {
 
         const ComentarioForo = {
             Autor: this.nombreUsuario,  
-            Comentario: `
-            Curso de capacitación++++++.
-            Nombre: ${this.CursoNombre}
-            Descripción: ${this.DescripcionCurso}. 
-            Cupos disponibles: ${this.CuposCurso}`,
+            CCnombre:this.CursoNombre,
+            CCdescripcion:this.DescripcionCurso,
+            Cupos: this.CuposCurso,
             Tipo: 'CursoCapacitacion',
-            NameCursoForo: this.CursoNombre,
             uidCursoForo: this.user.uid,
             fecha: new Date().toISOString()
             
@@ -155,6 +159,11 @@ export class ProfilePage {
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
     console.log('Archivo seleccionado:', this.selectedFile);  
+}
+
+onFileSelectedPHOTO(event: any) {
+  this.selectedFilePPHOTO = event.target.files[0];
+  console.log('Archivo seleccionado:', this.selectedFilePPHOTO);  
 }
 
 generateUniqueId(): string {
@@ -241,14 +250,14 @@ async addProduct() {
   }
 
   async addFotoPerfil() {
-    if (!this.selectedFile) {
+    if (!this.selectedFilePPHOTO) {
       console.error('Por favor, selecciona una imagen para el producto');
       return;
     }
   
     try {
       
-      const imageUrl = await this.uploadService.uploadImage(this.selectedFile, `perfil/${this.user.uid}`);
+      const imageUrl = await this.uploadService.uploadImage(this.selectedFilePPHOTO, `perfil/${this.user.uid}`);
   
       
       const contenido = {

@@ -1,217 +1,283 @@
 <ion-header>
   <ion-toolbar class="ion-toolbar">
-    <ion-title>Perfil</ion-title>
+    <ion-title>Perfil Dinowinner:</ion-title>
     <ion-icon name="log-out" (click)="logout()" slot="end" *ngIf="nombreUsuario" size="large"></ion-icon>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding" style="overflow-y: auto;">
 
-  <section *ngIf="selectedTab === 'perfil'" style="padding: 16px;">
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>{{ nombreUsuario }}</ion-card-title>
-      </ion-card-header>
-  
-      <!-- Mostrar campos de subida de foto si no hay una foto de perfil -->
-      <ion-card-content *ngIf="!verificarContenido('fotoPerfil')">
-        <ion-item>
-          <input type="file" (change)="onFileSelected($event)" />
-        </ion-item>
-        <ion-button (click)="addFotoPerfil()">Subir Foto</ion-button>
-        </ion-card-content>
-       <!-- Mostrar fotos de perfil si existen en perfilList -->
-      <ion-card-content *ngFor="let perfilContenido of perfilList">
-        <img *ngIf="perfilContenido.fotoPerfil" [src]="perfilContenido.fotoPerfil" alt="Foto de perfil" class="foto-perfil" />
-      </ion-card-content>
-      <!-- Si no se tiene informacion "sobre mi" se muestra la opcion de subir info -->
-      <ion-card-content *ngIf="!verificarContenido('Identidad')">
-        <ion-item>
-          <ion-label position="floating">Escribir sobre mi</ion-label>
-          <ion-input [(ngModel)]="sobremi"></ion-input>
-        </ion-item>
-        <ion-button (click)="addinfosobremi()">agregar info</ion-button>
-      </ion-card-content>
-      <!-- Si existe informacion "Sobre mi" se muestra -->
-      <ion-card-content *ngFor="let perfilContenido of perfilList">
-        <p *ngIf="perfilContenido.Identidad">{{perfilContenido.Identidad}}</p>
-      </ion-card-content>
-  
-    </ion-card>
-  </section>
-  
-  
-
-  <!-- Seccion de productos  -->
-  <section *ngIf="selectedTab === 'productos'" style="padding: 16px;">
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Tus productos:</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-list>
-          <div class="profile-product-list">
-            <ion-item *ngFor="let product of products" class="profile-product-card">
-              <ion-label>
-                <h2>{{ product.nombre }} - {{ product.precio | currency }}</h2>
-                <h2> {{ product.descripcion }}</h2>
-                <img *ngIf="product.imageUrl" [src]="product.imageUrl" alt="Imagen del producto" class="profile-product-image"/>
-              </ion-label>
+    
+  <ion-card class="SeccionPerfilFija ion-card">
+          <ion-card-header>
+            <ion-card-title class="ion-text-center">
+            {{ nombreUsuario }}
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <div *ngFor="let perfilContenido of perfilList" class="profile-card-content">
+              <img *ngIf="perfilContenido.fotoPerfil" [src]="perfilContenido.fotoPerfil" 
+                   alt="Foto de perfil" class="foto-perfil" />
+            </div>
+    
+            <div *ngIf="!verificarContenido('fotoPerfil')" class="ion-text-center">
+              <ion-label style="opacity: 0;">________________</ion-label>
+              <ion-button *ngIf="selectedFilePPHOTO === null" (click)="fileInput.click()" expand="block" fill="solid">
+                <ion-icon name="image-outline" slot="end"></ion-icon>
+                Seleccionar imagen perfil 
+              </ion-button>
+              
+              <input type="file" #fileInput (change)="onFileSelectedPHOTO($event)" style="display: none;" />
+              
+              <!-- Mostrar el nombre del archivo seleccionado -->
+              <ion-item *ngIf="selectedFilePPHOTO">
+                <ion-label>{{ selectedFilePPHOTO.name }}</ion-label>
             </ion-item>
-          </div>
-        </ion-list>
-      </ion-card-content>
-    </ion-card>
+            
+              
+            <ion-row>
+              <ion-col>
+                <ion-button *ngIf="selectedFilePPHOTO" expand="block" (click)="addFotoPerfil()">subir</ion-button>
+              </ion-col>
+              <ion-col>
+                <ion-button *ngIf="selectedFilePPHOTO" expand="block" (click)="selectedFilePPHOTO = null">cancelar</ion-button>
+              </ion-col>
+            </ion-row>
+            
+            </div>
+          </ion-card-content>
+        </ion-card>
 
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Agregar Producto</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-item>
-          <ion-label position="floating">Nombre del Producto</ion-label>
-          <ion-input [(ngModel)]="productName"></ion-input>
-        </ion-item>
 
-        <ion-item>
-          <ion-label position="floating">Descripción</ion-label>
-          <ion-input [(ngModel)]="productDescription"></ion-input>
-        </ion-item>
+      <section *ngIf="selectedTab === 'perfil'">
 
-        <ion-item>
-          <ion-label position="floating">Precio</ion-label>
-          <ion-input [(ngModel)]="productPrice" type="number"></ion-input>
-        </ion-item>
-
-        <ion-item>
-          <ion-label position="floating">Selecciona una imagen</ion-label>
-        </ion-item>
-        <ion-item>          
-          <input type="file" (change)="onFileSelected($event)" />
-        </ion-item>
-
-        <ion-button expand="full" (click)="addProduct()">Agregar Producto</ion-button>
-      </ion-card-content>
-    </ion-card>
-  </section>
-
-  <!-- Sección de ubicaciones -->
-  <section *ngIf="selectedTab === 'ubicaciones'" style="padding: 16px;">
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Tus ubicaciones:</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-list>
-          <ion-item *ngFor="let location of locations">
-            {{ location.ciudad }} - {{ location.direccion }}
+        <div *ngIf="!verificarContenido('Identidad')">
+          <ion-label style="opacity: 0;">__________________________________________</ion-label>
+          <ion-item>
+            <ion-label position="floating">Escribe algo sobre ti:</ion-label>
+            <ion-textarea [(ngModel)]="sobremi" rows="1" auto-grow></ion-textarea>
           </ion-item>
-        </ion-list>
-      </ion-card-content>
-    </ion-card>
+      
+          <ion-button (click)="addinfosobremi()">Agregar info</ion-button>
+        </div>
 
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Agregar Ubicación</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-item>
-          <ion-label position="floating">Ciudad</ion-label>
-          <ion-input [(ngModel)]="city"></ion-input>
-        </ion-item>
+    <div *ngFor="let perfilContenido of perfilList" class="perfil-container">
+  <strong>Sobre mí :</strong>
+  <p *ngIf="perfilContenido.Identidad">
+    <strong>{{ perfilContenido.Identidad }}</strong>
+  </p>
+</div>
+</section>      
+        <!-- Sección de productos -->
+        <section *ngIf="selectedTab === 'productos'" class="content-section">
 
-        <ion-item>
-          <ion-label position="floating">Dirección</ion-label>
-          <ion-input [(ngModel)]="address"></ion-input>
-        </ion-item>
+          <ion-card *ngIf="SAproducto === 'desactivado'">
+            <ion-card-header>
+              <ion-card-title>Tus productos:</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-list>
+                <div class="profile-product-list">
+                  <ion-item *ngFor="let product of products" class="profile-product-card">
+                    <ion-label>
+                      <h2>{{ product.nombre }} - {{ product.precio | currency }}</h2>
+                      <h2>{{ product.descripcion }}</h2>
+                      <img *ngIf="product.imageUrl" [src]="product.imageUrl" alt="Imagen del producto" class="profile-product-image"/>
+                    </ion-label>
+                  </ion-item>
+                </div>
+              </ion-list>
+            </ion-card-content>
+          </ion-card>
 
-        <ion-button expand="full" (click)="addLocation()">Agregar Ubicación</ion-button>
-      </ion-card-content>
-    </ion-card>
-  </section>
 
-  <!-- Sección de cursos -->
-  <section *ngIf="selectedTab === 'cursos'" style="padding: 16px;">
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Cursos que he agregado</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-list>
-          <ion-item *ngFor="let curso of cursosAgregados">
-            {{ curso.NombreCurso }} - Cupos: {{ curso.Cupos }}
-          </ion-item>
-        </ion-list>
-      </ion-card-content>
-    </ion-card>
 
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Cursos a los que estoy suscrito</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-list>
-          <ion-item *ngFor="let curso of cursosSuscritos">
-            {{ curso.nombreCursoSub }} - Autor: {{ curso.nameAutor }}
-          </ion-item>
-        </ion-list>
-      </ion-card-content>
-    </ion-card>
 
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Agregar Curso</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-item>
-          <ion-label position="floating">Nombre del Curso</ion-label>
-          <ion-input [(ngModel)]="CursoNombre"></ion-input>
-        </ion-item>
+          <!-- Con este boton alternamos entre la vista de productos y la de agregar productos -->
+          <ion-fab *ngIf="SAproducto === 'desactivado'" vertical="bottom" 
+          horizontal="end"  (click)="SAproducto = 'activado'">
+            <ion-fab-button color="warning">
+              Agregar
+            </ion-fab-button>
+          </ion-fab>
 
-        <ion-item>
-          <ion-label position="floating">Descripción</ion-label>
-          <ion-textarea [(ngModel)]="DescripcionCurso" auto-grow="true"></ion-textarea>
-        </ion-item>
 
-        <ion-item>
-          <ion-label position="floating">Contenido</ion-label>
-          <ion-textarea [(ngModel)]="contenidoCurso" auto-grow="true"></ion-textarea>
-        </ion-item>
 
-        <ion-item>
-          <ion-label position="floating">Cupos Disponibles</ion-label>
-          <ion-input [(ngModel)]="CuposCurso" type="number" min="0" step="1"></ion-input>
-        </ion-item>
+          <ion-card *ngIf="SAproducto === 'activado'">
+            <ion-card-header>
+              <ion-card-title>Agregar Producto</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-item>
+                <ion-label position="floating">Nombre del Producto</ion-label>
+                <ion-input [(ngModel)]="productName"></ion-input>
+              </ion-item>
 
-        <ion-button expand="full" (click)="agregarCursoYComentar()">Publicar en foro</ion-button>
+              <ion-item>
+                <ion-label position="floating">Descripción</ion-label>
+                <ion-input [(ngModel)]="productDescription"></ion-input>
+              </ion-item>
 
-      </ion-card-content>
-    </ion-card>
-  </section>
+              <ion-item>
+                <ion-label position="floating">Precio</ion-label>
+                <ion-input [(ngModel)]="productPrice" type="number"></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label position="floating">Selecciona una imagen</ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-button expand="block" fill="outline" (click)="fileInput.click()">
+                  Seleccionar Imagen
+                </ion-button>
+                <input #fileInput type="file" (change)="onFileSelected($event)" style="display: none;" />
+              </ion-item>
+              
+              <!-- Mostrar el nombre del archivo seleccionado si existe -->
+              <ion-item *ngIf="selectedFile">
+                <ion-label>{{ selectedFile.name }}</ion-label>
+              </ion-item>
+              
+              
+
+              <ion-row>
+                <ion-col>
+                  <ion-button (click)="addProduct()" (click)="SAproducto = 'desactivado'">Agregar</ion-button>
+                </ion-col>
+                <ion-col>
+                  <ion-button (click)="SAproducto = 'desactivado'">Cancelar</ion-button>
+                </ion-col>
+              </ion-row>
+              
+            </ion-card-content>
+          </ion-card>
+        </section>
+
+        <!-- Sección de ubicaciones -->
+        <section *ngIf="selectedTab === 'ubicaciones'" style="padding: 16px;">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Tus ubicaciones:</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-list>
+                <ion-item *ngFor="let location of locations">
+                  {{ location.ciudad }} - {{ location.direccion }}
+                </ion-item>
+              </ion-list>
+            </ion-card-content>
+          </ion-card>
+      
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Agregar Ubicación</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-item>
+                <ion-label position="floating">Ciudad</ion-label>
+                <ion-input [(ngModel)]="city"></ion-input>
+              </ion-item>
+      
+              <ion-item>
+                <ion-label position="floating">Dirección</ion-label>
+                <ion-input [(ngModel)]="address"></ion-input>
+              </ion-item>
+      
+              <ion-button expand="full" (click)="addLocation()">Agregar Ubicación</ion-button>
+            </ion-card-content>
+          </ion-card>
+        </section>
+
+        <!-- Sección de cursos -->
+        <section *ngIf="selectedTab === 'cursos'" style="padding: 16px;">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Cursos que he agregado</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-list>
+                <ion-item *ngFor="let curso of cursosAgregados">
+                  {{ curso.NombreCurso }} - Cupos: {{ curso.Cupos }}
+                </ion-item>
+              </ion-list>
+            </ion-card-content>
+          </ion-card>
+      
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Cursos a los que estoy suscrito</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-list>
+                <ion-item *ngFor="let curso of cursosSuscritos">
+                  {{ curso.nombreCursoSub }} - Autor: {{ curso.nameAutor }}
+                </ion-item>
+              </ion-list>
+            </ion-card-content>
+          </ion-card>
+      
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Agregar Curso</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-item>
+                <ion-label position="floating">Nombre del Curso</ion-label>
+                <ion-input [(ngModel)]="CursoNombre"></ion-input>
+              </ion-item>
+      
+              <ion-item>
+                <ion-label position="floating">Descripción</ion-label>
+                <ion-textarea [(ngModel)]="DescripcionCurso" auto-grow="true"></ion-textarea>
+              </ion-item>
+      
+              <ion-item>
+                <ion-label position="floating">Contenido</ion-label>
+                <ion-textarea [(ngModel)]="contenidoCurso" auto-grow="true"></ion-textarea>
+              </ion-item>
+      
+              <ion-item>
+                <ion-label position="floating">Cupos Disponibles</ion-label>
+                <ion-input [(ngModel)]="CuposCurso" type="number" min="0" step="1"></ion-input>
+              </ion-item>
+      
+              <ion-button expand="full" (click)="agregarCursoYComentar()">Publicar en foro</ion-button>
+      
+            </ion-card-content>
+          </ion-card>
+        </section>
+
+     
+    
+
 </ion-content>
 
-<!-- Tab Bar en el footer -->
+<!-- Footer fijo para navegación -->
 <ion-footer>
   <ion-tab-bar slot="bottom">
-    <ion-tab-button routerLink="/home" (click)="selectedTab = 'perfil'">
+    <ion-tab-button routerLink="/home" (click)="selectedTab = 'productos'">
       <ion-icon color="warning" name="home"></ion-icon>
-      <ion-label >Inicio</ion-label>
+      <ion-label>Inicio</ion-label>
     </ion-tab-button>
+  
     <ion-tab-button (click)="selectedTab = 'productos'">
       <ion-icon name="cube"></ion-icon>
       <ion-label>Mis Productos</ion-label>
     </ion-tab-button>
+  
     <ion-tab-button (click)="selectedTab = 'ubicaciones'">
       <ion-icon name="pin"></ion-icon>
       <ion-label>Ubicaciones</ion-label>
     </ion-tab-button>
+  
     <ion-tab-button (click)="selectedTab = 'cursos'">
       <ion-icon name="school"></ion-icon>
       <ion-label>Cursos</ion-label>
     </ion-tab-button>
+
     <ion-tab-button (click)="selectedTab = 'perfil'">
       <ion-icon color="warning" name="person"></ion-icon>
-      <ion-label>Perfil</ion-label>
+      <ion-label>perfil</ion-label>
     </ion-tab-button>
   </ion-tab-bar>
 </ion-footer>

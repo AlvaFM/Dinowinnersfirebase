@@ -40,9 +40,9 @@ export class CarritoPage implements OnInit {
         console.log('Productos recibidos:', productos);
   
         this.productosCarrito = productos.map((doc: any) => {
-          console.log('Producto mapeado:', doc);  // Verifica la estructura de cada producto
+          console.log('Producto mapeado:', doc);  
           return {
-            ID_CARRITO: doc.id,  // Verifica que "id" está presente
+            ID_CARRITO: doc.id,  
             Nombre: doc.Nombre,
             CreadorProducto: doc.CreadorProducto,
             Precio: doc.Precio,
@@ -65,8 +65,6 @@ export class CarritoPage implements OnInit {
       this.databaseService.eliminarProductoDelCarrito(this.idUsuarioActual, ID_CARRITO)
         .then(() => {
           console.log('Producto eliminado con éxito');
-          
-          // Aquí usamos "id" en lugar de "ID_CARRITO"
           this.productosCarrito = this.productosCarrito.filter(producto => producto.id !== ID_CARRITO);
           console.log('Productos en el carrito después de eliminar:', this.productosCarrito);
         })
