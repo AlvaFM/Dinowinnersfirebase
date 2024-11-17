@@ -62,17 +62,10 @@ button:active {
 }
 
 
-.product-container {
-    display: flex;
-    overflow-x: auto;
-    padding: 10px;
-  }
-  
-  .product-card {
-    min-width: 100%;
-    flex: 0 0 auto;
-    margin-right: 10px;
-  }
+
+
+
+
   
   .user-name {
     font-weight: bold;
@@ -102,15 +95,81 @@ button:active {
     height: auto;
   }
   
-ion-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   
-  padding: 10px;
+ion-card {
+
   background: linear-gradient(135deg, #f8e7db 0%, #faf6e8 50%, #ffffff 100%);
   color: rgb(0, 0, 0); 
   border-radius: 8px; 
   }
+
+  /// La matoyoria de metodos que tienen la palabra home son de los productos de home, 
+// modificar de aqui la visa de productos por favor 
+.homecontainer {
+  display: flex;
+  flex-direction: row; 
+  gap: 1rem;
+  padding: 1rem;
+  overflow-x: auto; 
+  scroll-snap-type: x mandatory; 
+}
+
+.homecard {
+  flex: 0 0 auto; 
+  width: 90vw; 
+  max-width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  scroll-snap-align: center; /* Cada carta se centra al deslizar */
+}
+
+.homecardheader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.homecardtitle {
+  font-size: 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.homebadge {
+  font-size: 0.8rem;
+  padding: 0.3rem;
+}
+
+.homecardcontent {
+  text-align: left;
+}
+
+.homeimage {
+  width: 100%; 
+  height: 200px; 
+  object-fit: cover; 
+  display: block; 
+  margin: 0 auto; 
+}
+
+
+
+.homedescription,
+.homestock {
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
+}
+
+.homeaddtocart {
+  font-size: 0.9rem;
+  color: #3880ff;
+  text-align: center;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+
+/// Aqui se acaban las clases de productos de home__, 
   

@@ -5,41 +5,114 @@
 </ion-header>
 
 <ion-content>
-  <div *ngIf="productosCarrito.length > 0; else noProductos">
+  <!-- Lista de productos si existen en el carrito y si está activa la visualización de lista -->
+  <div *ngIf="productosCarrito.length > 0 && mostrarListaProductos; else noProductos">
     <ion-list>
       <ion-item *ngFor="let producto of productosCarrito">
+        
+     
         <ion-thumbnail slot="start">
           <img *ngIf="producto.imageUrl" [src]="producto.imageUrl" alt="Imagen del producto" />
+          <ion-badge>{{ producto.stock }}</ion-badge>
         </ion-thumbnail>
-
+  
+    
         <ion-grid>
           <ion-row>
-            <ion-col size="12">
-              <h2>{{ producto.Nombre }}</h2>
-              <p>{{ producto.CreadorProducto }}</p>
-              <ion-badge color="primary">{{ producto.Precio | currency }}</ion-badge>
-            </ion-col>
 
-            <ion-col size="auto">
+            <ion-col size="12">
+              <h1>{{ producto.Nombre }}</h1>
+              <ion-badge color="primary">${{ producto.Precio }}</ion-badge>
+              <ion-badge color="warning">
+                Total: ${{ producto.Precio * producto.cantidadDeseada }}
+              </ion-badge>
+            </ion-col>
+  
+    
+            <ion-col size="6">
               <ion-button color="danger" (click)="eliminarProducto(producto.ID_CARRITO)">
                 Eliminar
               </ion-button>
+            </ion-col>
+  
+            <ion-col size="6">
+              <ion-button color="success" (click)="abrirVentanaCompra(producto)">
+                Comprar
+              </ion-button>
+            </ion-col>
+  
+    
+            <ion-col size="12">
+              <ion-item>
+                <ion-label>Cantidad</ion-label>
+                <ion-input 
+                  type="number" 
+                  [(ngModel)]="producto.cantidadDeseada"  
+                  min="1" 
+                  placeholder="1"
+                  required>
+                </ion-input>
+              </ion-item>
             </ion-col>
           </ion-row>
         </ion-grid>
       </ion-item>
     </ion-list>
   </div>
+
+  <div *ngIf="!mostrarListaProductos" class="ventana-compra">
+    <h2>Producto: {{ productoSeleccionado.Nombre }}</h2>
+    <p>Cantidad: {{ productoSeleccionado.cantidadDeseada }}</p>
+    <p>Precio: ${{ productoSeleccionado.Precio }}</p>
+    <p>Total: ${{ productoSeleccionado.Precio * productoSeleccionado.cantidadDeseada }}</p>
   
-  <ng-template #noProductos>
+    <ion-item>
+      <ion-label position="floating">Número de Tarjeta</ion-label>
+      <ion-input type="text" [(ngModel)]="pago.numeroTarjeta" name="numeroTarjeta"></ion-input>
+    </ion-item>
+  
+    <ion-item>
+      <ion-label position="floating">Fecha de Expiración (MM/AA)</ion-label>
+      <ion-input type="text" [(ngModel)]="pago.fechaExpiracion" name="fechaExpiracion"></ion-input>
+    </ion-item>
+  
+    <ion-item>
+      <ion-label position="floating">CVV</ion-label>
+      <ion-input type="password" [(ngModel)]="pago.cvv" name="cvv"></ion-input>
+    </ion-item>
+  
+    <ion-button color="warning" (click)="PrepararCompraYventa(
+      productoSeleccionado.ID_CARRITO,
+      productoSeleccionado.ID_DOCUMENTO,
+      productoSeleccionado.Nombre, 
+      productoSeleccionado.CreadorProducto, 
+      productoSeleccionado.ID_VENTA, 
+      productoSeleccionado.stock, 
+      productoSeleccionado.Precio,
+      productoSeleccionado.cantidadDeseada,
+      productoSeleccionado.uid_DW,
+      pago 
+    )">
+    Comprar  
+  </ion-button>
+  
+  
+    <!-- Botón para volver a la lista de productos -->
+    <ion-button color="light" (click)="cerrarVentanaCompra()">
+      Volver a la lista de productos
+    </ion-button>
+  </div>
+  
+
+  <!-- Mensaje en caso de no tener productos -->
+  <ng-template  #noProductos  >
     <div class="no-productos">
       <ion-text>
-        <h2>No tienes productos en el carrito.</h2>
+        <h2 *ngIf="mostrarListaProductos">No tienes productos en el carrito.</h2>
       </ion-text>
     </div>
   </ng-template>
 </ion-content>
-
 
 <ion-footer>
   <ion-tab-bar slot="bottom">
@@ -52,10 +125,5 @@
       <ion-icon color="warning" name="person"></ion-icon>
       <ion-label>Perfil</ion-label>
     </ion-tab-button>
-  
-    
-    
-  
   </ion-tab-bar>
-  
 </ion-footer>

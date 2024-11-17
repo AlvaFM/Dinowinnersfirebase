@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 export class HomePage implements OnInit {
 
   comentarioForo: string = '';
+  perfilList: any[] = [];
   comentariosForo: any[] = [];
   usuarios: any[] = [];
   productosPorUsuario: { [key: string]: any[] } = {};
@@ -24,8 +25,8 @@ export class HomePage implements OnInit {
   constructor(private dbService: DatabaseService, private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
-    this.obtenerUsuariosYDatos();
     this.verificarUsuarioAutenticado();
+    this.obtenerUsuariosYDatos();
     this.obtenerComentariosForo();
   }
 
@@ -35,45 +36,75 @@ export class HomePage implements OnInit {
 
   obtenerUsuariosYDatos() {
     this.dbService.getAllUsers().subscribe(users => {
-      this.usuarios = []; 
+      this.usuarios = [];  
   
       users.forEach(usuario => {
         const uid = usuario.uid;
-  
         if (!this.productosPorUsuario[uid]) {
           this.dbService.getProductsByUser(uid).subscribe(products => {
             products.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
-            
+  
+            this.productosPorUsuario[uid] = products.map((producto: any) => {
+              console.log('Producto mapeado:', producto);
+  
+              return {
+                ID_DOCUMENTO: producto.id,
+                CreadorProducto: producto.CreadorProducto, 
+                ID_VENTA: producto.ID_VENTA,  
+                descripcion: producto.descripcion,  
+                fecha: producto.fecha,
+                imageUrl: producto.imageUrl,
+                nombre: producto.nombre,
+                precio: producto.precio,
+                stock: producto.stock,
+                uid_DW: producto.uid_DW
+              };
+            });
+  
+            console.log('Productos del usuario:', this.productosPorUsuario[uid]);
             if (products && products.length > 0) {
-              this.productosPorUsuario[uid] = products;
-              this.usuarios.push(usuario);  
+              this.usuarios.push(usuario);
             }
           });
         }
-  
         this.dbService.getLocationsByUser(uid).subscribe(locations => {
           this.ubicacionesPorUsuario[uid] = locations;
         });
       });
     });
   }
+  
 
-  generateUniqueIdforPosition(): string {
-    return 'ID_Carrito' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+  ContenidoDelPerfil() {
+    if (this.idUsuarioActual) {
+      this.dbService.getContenidoPerfil(this.idUsuarioActual).subscribe(perfil => {
+        this.perfilList = perfil;
+        console.log('Contenido: ', this.perfilList);
+      });
+    } else {
+      console.error('idUsuarioActual no está disponible');
+    }
+  }
+  
+  verificarContenido(nombreContenido: string): boolean {
+    return this.perfilList.some(perfil => nombreContenido in perfil);
   }
 
-  addCarrito(Nombre: string, precio: number, CreadorProducto: string, Id_venta: string, imageUrl: string) {
-    const ID_posicion_carrito = this.generateUniqueIdforPosition();
+
+  addCarrito(ID_DOCUMENTO: string, Nombre: string, precio: number, CreadorProducto: string, Id_venta: string, imageUrl: string, productostock: number, uid_DW:string) {
+
     const contenidoCarrito = {
-      
+
+      ID_DOCUMENTO:ID_DOCUMENTO,
       imageUrl : imageUrl,
-      ID_LUGAR_CARRITO : ID_posicion_carrito,
       ID_VENTA: Id_venta,
       Nombre: Nombre,
       Precio: precio,
       CreadorProducto: CreadorProducto,
       Fecha: new Date().toISOString(),
-      UsuarioId: this.idUsuarioActual, 
+      UsuarioId: this.idUsuarioActual,
+      productostock: productostock,
+      uid_DW:uid_DW,
     };
   
     this.dbService.addContenidoCarrito(this.idUsuarioActual, contenidoCarrito).then(() => {
@@ -90,7 +121,8 @@ export class HomePage implements OnInit {
       if (user) {
         this.authService.getUserData(user.uid).then(data => {
           this.nombreUsuario = data?.nombre || ''; 
-          this.idUsuarioActual = user.uid; 
+          this.idUsuarioActual = user.uid;
+          this.ContenidoDelPerfil();  
         });
       } else {
         this.nombreUsuario = ''; 

@@ -1,5 +1,9 @@
 <ion-header class="ion-header">
   <ion-toolbar class="ion-toolbar">
+    <div *ngFor="let perfilContenido of perfilList" class="profile-card-content">
+      <img *ngIf="perfilContenido.fotoPerfil" [src]="perfilContenido.fotoPerfil" 
+           alt="Foto de perfil" class="foto-perfil-home" />
+    </div>
     <ion-title>Inicio</ion-title>
   
     <ion-icon name="log-out" (click)="logout()" slot="end" *ngIf="nombreUsuario" size="large"></ion-icon>
@@ -8,7 +12,13 @@
   </ion-toolbar>
 </ion-header>
 
+
+
+
 <ion-content>
+  
+ 
+
   <div *ngIf="mensaje" [ngClass]="tipoMensaje === 'exito' ? 'mensaje-exito' : 'mensaje-error'">
     {{ mensaje }}
   </div>    
@@ -20,7 +30,7 @@
       <ion-card-header>
         <ion-card-title>
           <strong *ngIf="comentario.Usuario">{{ comentario.Usuario }} comentó</strong>
-          <h5 *ngIf="comentario.Autor" >_____________________________________</h5>
+          <h5 *ngIf="comentario.Autor" >_________________________________</h5>
           <strong *ngIf="comentario.Autor">{{comentario.Autor}} publicó un curso de capacitación: </strong> 
         </ion-card-title>
       </ion-card-header>
@@ -35,8 +45,9 @@
         <h2> <b>Nombre del curso:</b> {{ comentario.CCnombre }}</h2>
         <p><b>Descripción:</b> {{ comentario.CCdescripcion }}</p>
         <p><b>Cupos disponibles:</b> {{ comentario.Cupos }}</p>
+        <h5 *ngIf="comentario.Autor" >___________________________________________</h5>
       </ion-card-content>
-      <h5 *ngIf="comentario.Autor" >_____________________________________</h5>
+      
       
       <!-- Botón Suscribirse o mensaje para iniciar sesión -->
       <div *ngIf="comentario.CCnombre" class="suscripcion-container">
@@ -57,7 +68,7 @@
 
 
  <section *ngIf="selectedTab === 'productos'" class="section-padding">
-  <h5><strong>PRODUCTOS DINOWINNERS:</strong></h5>
+  <h5><strong >PRODUCTOS DINOWINNERS:</strong></h5>
   <ion-list>
     <div *ngFor="let usuario of usuarios"> 
       <ion-item>
@@ -66,21 +77,29 @@
         </ion-label>
       </ion-item>
       
-      <div class="product-container">
-        <ion-card *ngFor="let producto of productosPorUsuario[usuario.uid]" class="product-card">
-          <ion-card-header>
-            <ion-card-title>{{ producto.nombre }}</ion-card-title>
+      <div class="homecontainer">
+        <ion-card *ngFor="let producto of productosPorUsuario[usuario.uid]" class="homecard">
+          <ion-card-header class="homecardheader">
+            <ion-card-title class="homecardtitle">{{ producto.nombre }}</ion-card-title>
+            <ion-badge color="primary" class="homebadge">${{ producto.precio }}</ion-badge>
           </ion-card-header>
-          <ion-badge color="primary">{{ producto.precio | currency }}</ion-badge>
-          <ion-card-content>
-            <img *ngIf="producto.imageUrl" [src]="producto.imageUrl" alt="Imagen del producto" style="max-width: 100%; height: auto; max-height: 150px; object-fit: contain;" />
-            <p>Descripción: {{ producto.descripcion }}</p>
+      
+          <ion-card-content class="homecardcontent">
+            <img *ngIf="producto.imageUrl" [src]="producto.imageUrl" alt="Imagen del producto" class="homeimage" />
+            <p class="homedescription">Descripción: {{ producto.descripcion }}</p>
+            <p class="homestock">Stocks: {{ producto.stock }}</p>
           </ion-card-content>
-          <ion-label (click)="addCarrito(producto.nombre, producto.precio, producto.CreadorProducto, producto.ID_VENTA, producto.imageUrl)" class="user-name" color="primary" style="cursor: pointer;">
-            Agregar a carrito 
+      
+          <ion-label 
+            (click)="addCarrito(producto.ID_DOCUMENTO, producto.nombre, producto.precio, producto.CreadorProducto, producto.ID_VENTA, producto.imageUrl, producto.stock, producto.uid_DW)"
+            class="homeaddtocart" color="primary">
+            Agregar a carrito
           </ion-label>
         </ion-card>
       </div>
+      
+      
+      
     </div>
   </ion-list>
 </section>

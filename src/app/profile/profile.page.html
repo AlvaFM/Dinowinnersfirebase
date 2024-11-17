@@ -75,20 +75,32 @@
             <ion-card-header>
               <ion-card-title>Tus productos:</ion-card-title>
             </ion-card-header>
+          
             <ion-card-content>
               <ion-list>
                 <div class="profile-product-list">
                   <ion-item *ngFor="let product of products" class="profile-product-card">
+                    
+                    <!-- Imagen del producto -->
+                    <ion-thumbnail slot="start">
+                      <img *ngIf="product.imageUrl" [src]="product.imageUrl" alt="Imagen del producto" />
+                    </ion-thumbnail>
+          
                     <ion-label>
-                      <h2>{{ product.nombre }} - {{ product.precio | currency }}</h2>
-                      <h2>{{ product.descripcion }}</h2>
-                      <img *ngIf="product.imageUrl" [src]="product.imageUrl" alt="Imagen del producto" class="profile-product-image"/>
+                      <!-- Nombre y precio del producto -->
+                      <h2>{{ product.nombre }}</h2>
+                      <p>${{ product.precio}}</p>
+          
+                      <!-- Descripción y stock -->
+                      <p class="product-description">{{ product.descripcion }}</p>
+                      <p class="product-stock">Stocks : {{ product.stock }}</p>
                     </ion-label>
                   </ion-item>
                 </div>
               </ion-list>
             </ion-card-content>
           </ion-card>
+          
 
 
 
@@ -121,6 +133,11 @@
               <ion-item>
                 <ion-label position="floating">Precio</ion-label>
                 <ion-input [(ngModel)]="productPrice" type="number"></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label position="floating">stocks</ion-label>
+                <ion-input [(ngModel)]="stockProducto" type="number" min="1" step="1"></ion-input>
               </ion-item>
 
               <ion-item>
@@ -300,8 +317,8 @@
     </ion-tab-button>
   
     <ion-tab-button (click)="selectedTab = 'ubicaciones'">
-      <ion-icon name="pin"></ion-icon>
-      <ion-label>Ubicaciones</ion-label>
+      <ion-icon name="map"></ion-icon>
+      <ion-label>Locales</ion-label>
     </ion-tab-button>
   
     <ion-tab-button (click)="selectedTab = 'cursos'">

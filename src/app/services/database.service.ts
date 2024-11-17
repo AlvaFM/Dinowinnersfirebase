@@ -3,6 +3,8 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 import { map } from 'rxjs/operators';
+import { from } from 'rxjs';
+
 
 
 @Injectable({
@@ -21,17 +23,29 @@ export class DatabaseService {
     return this.firestore.collection('productos').add(product);
   }
 
+  updateProduct(productId: string, newData: any): Observable<any> {
+    return from(this.firestore.collection('productos').doc(productId).update(newData));
+}
+
+
+
+
   
   getProductsByUser(uid: string): Observable<any[]> {
-    return this.firestore.collection('productos', (ref) => ref.where('uid_DW', '==', uid)).valueChanges();
+    return this.firestore.collection('productos', ref => ref.where('uid_DW', '==', uid))
+    .snapshotChanges().pipe(
+      map(actions =>
+        actions.map(a => {
+          const data = a.payload.doc.data();  
+          const id = a.payload.doc.id;       
+
+          return { id, ...data || {} };  
+
+        })
+      )
+    );
   }
 
-  getProductsByUserForSEND(uid: string, ID_VENTA: string): Observable<any[]> {
-    return this.firestore.collection('productos', (ref) => 
-      ref.where('uid_DW', '==', uid).where('ID_VENTA', '==', ID_VENTA)
-    ).valueChanges();
-
-  }
   // ________________________________________________________
   // Carrito
 
@@ -41,6 +55,13 @@ export class DatabaseService {
   eliminarProductoDelCarrito(uid: string, ID_CARRITO: string): Promise<void> {
     return this.firestore.collection(`usuarios/${uid}/carrito`).doc(ID_CARRITO).delete();
   }
+
+  
+  updateProductcarrito(uid: string, ID_CARRITO: string, newData: any): Observable<any> {
+    return from(this.firestore.collection(`usuarios/${uid}/carrito`).doc(ID_CARRITO).update(newData));
+  }
+  
+
   getContenidoCarrito(uid: string): Observable<any[]> {
     return this.firestore.collection(`usuarios/${uid}/carrito`).snapshotChanges().pipe(
       map(actions =>

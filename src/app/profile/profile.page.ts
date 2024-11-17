@@ -30,6 +30,7 @@ export class ProfilePage {
   CursoNombre: string = '';  // Nombre del curso
   DescripcionCurso: string = '';  // Descripción del curso
   CuposCurso: number | null = null;  // Número de cupos disponibles
+  stockProducto: number | null = null; // Número de stocks disponibles
   Suscritos: string[] = []; // Suscritos al curso
   contenidoCurso: string = ''; // Contenido del curso
   selectedFile: File | undefined = undefined;
@@ -207,6 +208,7 @@ async addProduct() {
       descripcion: this.productDescription,
       precio: this.productPrice,
       uid_DW: this.user.uid,
+      stock: this.stockProducto,
       imageUrl, 
       ID_VENTA:ID_VENTA,
       fecha: new Date().toISOString()

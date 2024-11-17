@@ -8,9 +8,37 @@ import { DatabaseService } from '../services/database.service';
   styleUrls: ['./carrito.page.scss'],
 })
 export class CarritoPage implements OnInit {
+  NombreUsuarioActual: string ='';
   uidDueñoProducto: string = '';
   productosCarrito: any[] = [];
   idUsuarioActual: string = '';
+
+
+  ventanadepago: string | null = null;
+
+  mostrarListaProductos = true; // Variable para alternar entre vistas
+  productoSeleccionado: any; // Variable para almacenar el producto seleccionado para compra
+
+  // Método para abrir la ventana de compra para un producto específico
+  abrirVentanaCompra(producto: any) {
+    this.productoSeleccionado = producto;
+    this.mostrarListaProductos = false;
+  }
+
+  // Método para cerrar la ventana de compra y volver a la lista de productos
+  cerrarVentanaCompra() {
+    this.mostrarListaProductos = true;
+    this.productoSeleccionado = null;
+  }
+
+  pago = {
+    numeroTarjeta: '',
+    fechaExpiracion: '',
+    cvv: ''
+  };
+
+  
+
 
   constructor(private authService: AuthService, private databaseService: DatabaseService) {}
 
@@ -21,19 +49,24 @@ export class CarritoPage implements OnInit {
   }
 
   verificarUsuarioAutenticado() {
-   
     this.authService.getUser().subscribe(user => {
       if (user) {
-        this.idUsuarioActual = user.uid; 
-        this.obtenerProductosDelCarrito();
-         
+        this.authService.getUserData(user.uid).then(data => {
+          this.NombreUsuarioActual = data?.nombre || ''; 
+          this.idUsuarioActual = user.uid;
+          this.obtenerProductosDelCarrito()
+          console.log('Nombre desde Firestore:', this.NombreUsuarioActual);
+
+        }).catch(error => {
+          console.error('Error al obtener los datos del usuario:', error);
+        });
       } else {
         this.idUsuarioActual = ''; 
-        this.productosCarrito = [];  
+        this.NombreUsuarioActual = ''; 
       }
     });
   }
-
+  
   obtenerProductosDelCarrito() {
     if (this.idUsuarioActual) {
       this.databaseService.getContenidoCarrito(this.idUsuarioActual).subscribe((productos: any) => {
@@ -42,11 +75,16 @@ export class CarritoPage implements OnInit {
         this.productosCarrito = productos.map((doc: any) => {
           console.log('Producto mapeado:', doc);  
           return {
+            ID_DOCUMENTO:doc.ID_DOCUMENTO,
             ID_CARRITO: doc.id,  
             Nombre: doc.Nombre,
             CreadorProducto: doc.CreadorProducto,
             Precio: doc.Precio,
-            imageUrl: doc.imageUrl
+            imageUrl: doc.imageUrl,
+            uid_DW:doc.uid_DW, 
+            ID_VENTA: doc.ID_VENTA,
+            cantidadDeseada: 1,
+            stock: doc.productostock
           };
         });
   
@@ -73,9 +111,112 @@ export class CarritoPage implements OnInit {
         });
     }
   }
+
+
+
+
+  
+  
+
+PrepararCompraYventa(ID_CARRITO:string,ID_DOCUMENTO:string,
+  NombreXproducto: string,
+   CreadorXProducto: string, 
+   idCompra: string, 
+   stockproducto: number
+   , totalXproducto: number, 
+cantidadDeseada: number, 
+uid_DW:string,
+pago: { numeroTarjeta: string; fechaExpiracion: string; cvv: string }) {
+  const cantidadFinal = cantidadDeseada ?? 1;
+  const stockProducto =  stockproducto;  
+  
+  if (!this.comprobarStockProducto(cantidadDeseada,stockProducto)) {
+    console.log(`La cantidad deseada excede el stock disponible de ${NombreXproducto}`);
+
+
+    return;  
+  }
+
+  if (!this.NombreUsuarioActual) {
+    console.error("El nombre de usuario no está disponible.");
+    return;
+  }
+
+  const compra = {
+    usuarioId: this.idUsuarioActual,
+    productoId: idCompra,
+    nombre: NombreXproducto,
+    creador: CreadorXProducto,
+    cantidad: cantidadFinal,
+    precioTotal: totalXproducto * cantidadFinal,
+    fechaCompra: new Date().toISOString(),
+    MetodoDepago: pago,
+  };
+
+  this.databaseService.addHistorialDecompras(this.idUsuarioActual, compra).then(() => {
+    console.log(`Compra de ${NombreXproducto} realizada con éxito`);
+    const venta = {
+      ID_venta: idCompra,
+      nombre: NombreXproducto,
+      comprador: this.NombreUsuarioActual,
+      cantidad: cantidadFinal,
+      Total_venta: totalXproducto * cantidadFinal,
+    };
+      this.actualizarStock(ID_CARRITO,ID_DOCUMENTO,stockproducto,cantidadFinal,this.idUsuarioActual)
+    
+
+
+
+    this.databaseService.addHistorialDeVentas(uid_DW, venta).then(() => {
+      console.log(`Venta de ${NombreXproducto} registrada exitosamente`);
+    }).catch((error) => {
+      console.error(`Error al registrar la venta de ${NombreXproducto}:`, error);
+    });
+
+    this.cerrarVentanaCompra();
+
+  }).catch((error) => {
+    console.error(`Error al registrar la compra de ${NombreXproducto}:`, error);
+  });
+}
+
+comprobarStockProducto(cantidadDeseada: number, cantidadXproducto: number): boolean {
+  if (cantidadDeseada === null || cantidadDeseada <= 0) {
+    console.log('Por favor ingrese una cantidad válida');
+    return false;
+  }
+
+  if (cantidadDeseada > cantidadXproducto) {
+    console.log('La cantidad deseada excede el stock disponible.');
+    return false;
+  }
+
+  console.log('Cantidad disponible suficiente');
+  return true;
+}
+
+actualizarStock(ID_CARRITO: string, ID_DOCUMENTO: string, stock1: number, newstock: number, uid: string) {
+  const stockActualizado = {
+    stock: stock1 - newstock
+  };
+  const stockActualizadocarrito = {
+    productostock: stock1 - newstock
+  };
+  
+  this.databaseService.updateProduct(ID_DOCUMENTO, stockActualizado);
+
+  this.databaseService.updateProductcarrito(uid, ID_CARRITO, stockActualizadocarrito);
+}
+
+
+
+
   
   
   
   
   
 }
+
+
+
