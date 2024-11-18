@@ -25,23 +25,31 @@
 #container a {
   text-decoration: none;
 }
+
+
 .mensaje-exito, .mensaje-error {
   color: rgb(0, 0, 0);
   padding: 10px;
   border-radius: 5px;
   width: 20rem; 
-  margin: 10px auto; 
-  text-align: center; 
+  text-align: center;
+  position: fixed;
+  top: 50px; /* Espacio desde la parte superior de la pantalla */
+  left: 50%;
+  transform: translateX(-50%); 
+  z-index: 9999; 
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); 
+  transition: opacity 0.3s ease-in-out;
 }
 
 .mensaje-exito {
-  background-color: #f5c46e; 
+  background-color: #f5c46e;
+}
 
 .mensaje-error {
-  background-color: #bc6262; 
+  background-color: #bc6262;
 }
 
-}
 
 .foto-perfil-home {
   width: 40px;  

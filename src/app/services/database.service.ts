@@ -27,6 +27,21 @@ export class DatabaseService {
     return from(this.firestore.collection('productos').doc(productId).update(newData));
 }
 
+getStockProduct(ID_VENTA: string): Observable<any[]> {
+  return this.firestore.collection('productos', ref => ref.where('ID_VENTA', '==', ID_VENTA))
+  .snapshotChanges().pipe(
+    map(actions =>
+      actions.map(a => {
+        const data = a.payload.doc.data();  
+        const id = a.payload.doc.id;       
+
+        return { id, ...data || {} };  
+
+      })
+    )
+  );
+}
+
 
 
 

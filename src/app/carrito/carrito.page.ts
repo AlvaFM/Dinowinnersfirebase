@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { DatabaseService } from '../services/database.service';
+import { map } from 'rxjs';
+import { Observable } from 'rxjs'
+import { catchError } from 'rxjs/operators';  // Para el operador catchError
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-carrito',
@@ -16,16 +20,14 @@ export class CarritoPage implements OnInit {
 
   ventanadepago: string | null = null;
 
-  mostrarListaProductos = true; // Variable para alternar entre vistas
-  productoSeleccionado: any; // Variable para almacenar el producto seleccionado para compra
+  mostrarListaProductos = true; 
+  productoSeleccionado: any; 
 
-  // Método para abrir la ventana de compra para un producto específico
+  
   abrirVentanaCompra(producto: any) {
     this.productoSeleccionado = producto;
     this.mostrarListaProductos = false;
   }
-
-  // Método para cerrar la ventana de compra y volver a la lista de productos
   cerrarVentanaCompra() {
     this.mostrarListaProductos = true;
     this.productoSeleccionado = null;
@@ -72,26 +74,62 @@ export class CarritoPage implements OnInit {
       this.databaseService.getContenidoCarrito(this.idUsuarioActual).subscribe((productos: any) => {
         console.log('Productos recibidos:', productos);
   
+      
         this.productosCarrito = productos.map((doc: any) => {
-          console.log('Producto mapeado:', doc);  
           return {
-            ID_DOCUMENTO:doc.ID_DOCUMENTO,
+            ID_DOCUMENTO: doc.ID_DOCUMENTO,
             ID_CARRITO: doc.id,  
             Nombre: doc.Nombre,
             CreadorProducto: doc.CreadorProducto,
             Precio: doc.Precio,
             imageUrl: doc.imageUrl,
-            uid_DW:doc.uid_DW, 
+            uid_DW: doc.uid_DW, 
             ID_VENTA: doc.ID_VENTA,
             cantidadDeseada: 1,
-            stock: doc.productostock
+            stock: null 
           };
         });
-  
-        console.log('Productos del carrito:', this.productosCarrito);
+        productos.forEach((producto: any, index: number) => {
+          this.obtenerStock(producto.ID_VENTA).subscribe((stock: any) => {
+            this.productosCarrito[index].stock = stock;
+            if (index === productos.length - 1) {
+              console.log('Productos con stock actualizado:', this.productosCarrito);
+            }
+          });
+        });
       });
     }
   }
+  
+
+
+
+
+obtenerStock(ID_VENTA: string): Observable<number> {
+  return this.databaseService.getStockProduct(ID_VENTA).pipe(
+    map((productos: any[]) => {
+      
+      if (productos.length > 0 && productos[0].stock !== undefined) {
+        console.log('Stock recibido:', productos[0].stock); 
+        return productos[0].stock; 
+      } else {
+        console.error('Stock no encontrado para ID_VENTA:', ID_VENTA);
+        return 0; 
+      }
+    }),
+    catchError(error => {
+      console.error('Error al obtener el stock:', error);
+      return of(0);
+    })
+  );
+}
+
+
+
+  
+  
+  
+  
   
   
   
@@ -162,7 +200,7 @@ pago: { numeroTarjeta: string; fechaExpiracion: string; cvv: string }) {
       cantidad: cantidadFinal,
       Total_venta: totalXproducto * cantidadFinal,
     };
-      this.actualizarStock(ID_CARRITO,ID_DOCUMENTO,stockproducto,cantidadFinal,this.idUsuarioActual)
+      this.actualizarStock(ID_DOCUMENTO,stockproducto,cantidadFinal)
     
 
 
@@ -195,17 +233,11 @@ comprobarStockProducto(cantidadDeseada: number, cantidadXproducto: number): bool
   return true;
 }
 
-actualizarStock(ID_CARRITO: string, ID_DOCUMENTO: string, stock1: number, newstock: number, uid: string) {
+actualizarStock(ID_DOCUMENTO: string, stock1: number, newstock: number) {
   const stockActualizado = {
     stock: stock1 - newstock
   };
-  const stockActualizadocarrito = {
-    productostock: stock1 - newstock
-  };
-  
   this.databaseService.updateProduct(ID_DOCUMENTO, stockActualizado);
-
-  this.databaseService.updateProductcarrito(uid, ID_CARRITO, stockActualizadocarrito);
 }
 
 

@@ -108,9 +108,11 @@ export class HomePage implements OnInit {
     };
   
     this.dbService.addContenidoCarrito(this.idUsuarioActual, contenidoCarrito).then(() => {
+      this.notificacionAccion('Producto añadido al carrito con éxito', 'exito');
       console.log('Producto añadido al carrito con éxito');
     }).catch((error) => {
       console.error('Error al añadir producto al carrito:', error);
+      this.notificacionAccion('Error, no se pudo agregar al carrito', 'error');
     });
   }
   
@@ -141,20 +143,27 @@ export class HomePage implements OnInit {
       };
       this.dbService.addCommentForo(ComentarioForo);
       
-      this.mensaje = 'Comentario agregado con éxito';
-      this.tipoMensaje = 'exito';
+      this.notificacionAccion('Comentario agregado con éxito', 'exito');
 
       this.comentarioForo = '';
     } else {
-      this.mensaje = 'Error, no se pudo comentar';
-      this.tipoMensaje = 'error';
+      this.notificacionAccion('Error, no se pudo comentar', 'error');
     }
+    
+ 
+  }
+
+
+  notificacionAccion(mensaje: string, tipomensaje: string): void {
+    this.mensaje = mensaje;
+    this.tipoMensaje = tipomensaje;
     
     setTimeout(() => {
       this.mensaje = '';
       this.tipoMensaje = '';
-    }, 3000); 
+    }, 3000);
   }
+  
 
   irASuscripcion(uidCurso: string, nombreCurso: string, autor: string) {
     console.log(uidCurso, nombreCurso, autor); 
