@@ -18,36 +18,45 @@
 <ion-content>
   
  
-
+<!-- Notificación -->
   <div *ngIf="mensaje" [ngClass]="tipoMensaje === 'exito' ? 'mensaje-exito' : 'mensaje-error'">
     {{ mensaje }}
-  </div>    
+  </div> 
+  
+  
  <!-- seccion foro -->
  <section *ngIf="selectedTab === 'foro'" class="foro-container">
   <h5 class="foro-title"><strong>FORO DINOWINNERS</strong></h5>
-  <ion-list>
-    <ion-card *ngFor="let comentario of comentariosForo" class="comentario-card">
-      <ion-card-header>
-        <ion-card-title>
-          <strong *ngIf="comentario.Usuario">{{ comentario.Usuario }} comentó</strong>
-          <h5 *ngIf="comentario.Autor" >_________________________________</h5>
-          <strong *ngIf="comentario.Autor">{{comentario.Autor}} publicó un curso de capacitación: </strong> 
+  <ion-list >
+    <ion-card *ngFor="let comentario of comentariosForo" class="comentariocarta">
+
+      <ion-card-header  class="nombreUsuarioPequeño" >
+        <ion-card-title >
+          
+  
+          <div *ngIf="comentario.Usuario" 
+          [ngClass]="{'dueñocomentarioderecha': comentario.Usuario === nombreUsuario}" >
+       
+                    {{ comentario.Usuario }}
+          </div>
+          <h5 *ngIf="comentario.Autor">____________________________________</h5>
+          <strong class="AutorCurso" *ngIf="comentario.Autor">{{ comentario.Autor }} publicó un curso de capacitación:</strong>
         </ion-card-title>
       </ion-card-header>
       
-      <!-- Comentario normal -->
-      <ion-card-content *ngIf="comentario.Comentario" class="comentario-contenido">
-        {{ comentario.Comentario }}
+      <ion-card-content class="comentariocontenido" 
+            [ngClass]="{'comentarioUsuarioActual': comentario.Usuario === nombreUsuario}">
+              {{ comentario.Comentario }} 
       </ion-card-content>
+      
       
       <!-- Curso de capacitación -->
       <ion-card-content *ngIf="comentario.CCnombre" class="curso-contenido">
-        <h2> <b>Nombre del curso:</b> {{ comentario.CCnombre }}</h2>
+        <h2><b>Nombre del curso:</b> {{ comentario.CCnombre }}</h2>
         <p><b>Descripción:</b> {{ comentario.CCdescripcion }}</p>
         <p><b>Cupos disponibles:</b> {{ comentario.Cupos }}</p>
-        <h5 *ngIf="comentario.Autor" >___________________________________________</h5>
+        <h5 *ngIf="comentario.Autor">___________________________________________</h5>
       </ion-card-content>
-      
       
       <!-- Botón Suscribirse o mensaje para iniciar sesión -->
       <div *ngIf="comentario.CCnombre" class="suscripcion-container">
@@ -62,6 +71,9 @@
     </ion-card>
   </ion-list>
 </section>
+
+
+
 
 
 
@@ -123,19 +135,21 @@
   
 </ion-content> 
 
-<!-- Movi lo de comentar aca para que no se deslice -->
+
 <div *ngIf="nombreUsuario && selectedTab === 'foro'" class="comentario-fijo">
   <ion-row>
     <ion-col>
       <ion-textarea [(ngModel)]="comentarioForo" rows="3" placeholder="Escribe tu comentario..."></ion-textarea>
     </ion-col>
     <ion-col size="auto">
-      <ion-button expand="full" (click)="ComentarForo()">
-        <ion-icon name="send"></ion-icon>
+  
+      <ion-button class="BotonComentar" (click)="ComentarForo()">
+        <ion-icon  name="send"></ion-icon>
       </ion-button>
     </ion-col>
   </ion-row>
 </div>
+
 
 
 

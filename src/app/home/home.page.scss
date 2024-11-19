@@ -34,7 +34,7 @@
   width: 20rem; 
   text-align: center;
   position: fixed;
-  top: 50px; /* Espacio desde la parte superior de la pantalla */
+  top: 50px; 
   left: 50%;
   transform: translateX(-50%); 
   z-index: 9999; 
@@ -55,6 +55,84 @@
   width: 40px;  
   border-radius: 100px;
 }
+
+
+
+
+
+.dueñocomentarioderecha {
+  text-align: right; 
+  margin-left: auto;   
+}
+
+
+.comentariocontenido {
+  background-color: #FFF5CC; 
+  color: #333;     
+  transform: translateX(100%); 
+  animation: emergerIzquierda 0.6s ease forwards;
+  padding: 10px;
+
+}
+.AutorCurso {
+  font-size: 40px;  
+}
+
+
+.comentarioUsuarioActual{
+  background-color: #ffca91; 
+  color: #333;
+  transform: translateX(100%);
+  animation: emergerDerecha 0.6s ease forwards;    
+}
+.nombreUsuarioPequeño{
+  size: 25px;
+  padding: 5px;
+}
+
+
+.comentario-fijo{
+  
+ 
+  box-shadow: inset 0px 4px 6px rgba(0, 0, 0, 0.2);
+
+}
+
+
+
+@keyframes emergerIzquierda {
+  from {
+    opacity: 0;
+    transform: translateX(-100%); 
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0); 
+  }
+}
+
+
+@keyframes emergerDerecha {
+  from {
+    opacity: 0;
+    transform: translateX(100%); 
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0); 
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 
