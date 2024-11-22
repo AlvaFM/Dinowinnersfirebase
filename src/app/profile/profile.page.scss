@@ -12,10 +12,46 @@
   .SeccionPerfilFija {
     position: sticky;
     top: -20px;
+    z-index: 1;
     
     width: auto;
     background: linear-gradient(135deg, #f8e7db 0%, #faf6e8 50%, #ffffff 100%);
   }
+
+
+
+  .contenidoPerfil {
+
+    position: sticky;
+    z-index: -1; 
+    margin-top: 50px;
+  }
+  
+
+  .historial-container {
+    max-height: 200px;
+    overflow-y: auto;
+    padding-right: 10px;  
+  }
+  
+  .historial-compra {
+    list-style-type: none; 
+    margin: 0;
+    padding: 0;
+  
+    li {
+      margin-bottom: 10px;  
+      font-size: 14px;
+    }
+  }
+  
+
+
+
+
+
+
+  
   
   
   

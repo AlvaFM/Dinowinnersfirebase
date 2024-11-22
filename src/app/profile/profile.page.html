@@ -47,9 +47,9 @@
             </div>
           </ion-card-content>
         </ion-card>
+          <!-- Sección contenido perfil -->
 
-
-      <section *ngIf="selectedTab === 'perfil'">
+      <section *ngIf="selectedTab === 'perfil'" class="contenidoPerfil">
 
         <div *ngIf="!verificarContenido('Identidad')">
           <ion-label style="opacity: 0;">__________________________________________</ion-label>
@@ -57,17 +57,56 @@
             <ion-label position="floating">Escribe algo sobre ti:</ion-label>
             <ion-textarea [(ngModel)]="sobremi" rows="1" auto-grow></ion-textarea>
           </ion-item>
-      
+          
           <ion-button (click)="addinfosobremi()">Agregar info</ion-button>
         </div>
-        <strong> Sobre mí :</strong>
+        
+        
+        <strong style="display: flex; justify-content: center; margin: 10px 0;" >Sobre mí :</strong>
+        
+        <div *ngFor="let perfilContenido of perfilList" class="perfil-container">
+          <div *ngIf="perfilContenido.Identidad">
+            <!-- Línea de separación personalizada -->
+            <div style="display: flex; justify-content: center; margin: 10px 0;">
+              <strong>{{ perfilContenido.Identidad }}</strong></div>
+            
+          </div>
+        </div>
+        
 
-    <div *ngFor="let perfilContenido of perfilList" class="perfil-container">
-  <p *ngIf="perfilContenido.Identidad">
-    <strong>{{ perfilContenido.Identidad }}</strong>
-  </p>
-</div>
-</section>      
+<!-- Historial de compras -->
+
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>Historial de Compras</ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <div class="historial-container">
+      <div *ngFor="let historial of historialCompras; ">
+        <div>
+          <ul class="historial-compra">
+            <li>
+              <strong>Nombre: </strong>{{ historial.nombre }}
+            </li>
+            <li>
+              <strong>Cantidad: </strong>{{ historial.cantidad }}
+            </li>
+            <li>
+              <strong>Precio Total: </strong>{{ historial.precioTotal  }}
+            </li>
+            <ion-label style="opacity: 0;">____</ion-label>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </ion-card-content>
+</ion-card>
+
+
+
+
+</section>     
+
         <!-- Sección de productos -->
         <section *ngIf="selectedTab === 'productos'" class="content-section">
 
@@ -80,18 +119,15 @@
               <ion-list>
                 <div class="profile-product-list">
                   <ion-item *ngFor="let product of products" class="profile-product-card">
-                    
-                    <!-- Imagen del producto -->
+      
                     <ion-thumbnail slot="start">
                       <img *ngIf="product.imageUrl" [src]="product.imageUrl" alt="Imagen del producto" />
                     </ion-thumbnail>
           
                     <ion-label>
-                      <!-- Nombre y precio del producto -->
+                     
                       <h2>{{ product.nombre }}</h2>
                       <p>${{ product.precio}}</p>
-          
-                      <!-- Descripción y stock -->
                       <p class="product-description">{{ product.descripcion }}</p>
                       <p class="product-stock">Stocks : {{ product.stock }}</p>
                     </ion-label>

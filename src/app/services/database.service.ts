@@ -97,7 +97,18 @@ getStockProduct(ID_VENTA: string): Observable<any[]> {
     return this.firestore.collection(`usuarios/${uid}/HistorialDecompras`).add(contenido);
   }
   getHistoriaDecompras(uid: string): Observable<any[]> {
-    return this.firestore.collection(`usuarios/${uid}/HistorialDecompras`).valueChanges();
+
+    return this.firestore.collection(`usuarios/${uid}/HistorialDecompras`).snapshotChanges().pipe(
+      map(actions =>
+        actions.map(a => {
+          const data = a.payload.doc.data();  
+          const id = a.payload.doc.id;       
+
+          return { id, ...data || {} };  
+
+        })
+      )
+    );
   }
   
   

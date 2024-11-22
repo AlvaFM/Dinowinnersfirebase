@@ -16,6 +16,7 @@ import { UploadService } from '../services/upload.service';
 export class ProfilePage {
   sobremi: string=''//variable para agregar info de usuario
   perfilList: any[] = []; //contenidoDelperfil
+  historialCompras: any[] = [];
   nombreUsuario: string = '';  // Almacena exclusivamente el nombre del usuario 
   user: any;  // Almacena la información del usuario
   productName: string = '';  // Almacena el nombre del producto
@@ -67,6 +68,7 @@ export class ProfilePage {
         this.getLocations();
         this.obtenerCursosAgregados();
         this.obtenerCursosSuscritos();
+        this.getHistorialDecompras();
       }
     });
   }
@@ -79,6 +81,14 @@ export class ProfilePage {
   verificarContenido(nombreContenido: string): boolean {
     return this.perfilList.some(perfil => nombreContenido in perfil);
   }
+
+
+  getHistorialDecompras(){
+    this.databaseService.getHistoriaDecompras(this.user.uid).subscribe(historial => {
+      this.historialCompras = historial;
+    });
+    }
+  
   
   
 
