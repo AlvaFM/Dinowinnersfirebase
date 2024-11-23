@@ -91,7 +91,13 @@ export class HomePage implements OnInit {
   }
 
 
-  addCarrito(ID_DOCUMENTO: string, Nombre: string, precio: number, CreadorProducto: string, Id_venta: string, imageUrl: string, productostock: number, uid_DW:string) {
+  addCarrito(ID_DOCUMENTO: string,
+  Nombre: string,
+  precio: number,
+  CreadorProducto: string,
+  Id_venta: string, imageUrl: string,
+  productostock: number,
+  uid_DW:string) {
 
     const contenidoCarrito = {
 

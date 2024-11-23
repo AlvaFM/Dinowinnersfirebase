@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { DatabaseService } from '../services/database.service';  // Asegúrate de importar tu servicio
+import { DatabaseService } from '../services/database.service'; 
 
 @Component({
   selector: 'app-perfil-ajeno',
@@ -8,14 +8,14 @@ import { DatabaseService } from '../services/database.service';  // Asegúrate d
   styleUrls: ['./perfil-ajeno.page.scss'],
 })
 export class PerfilAjenoPage implements OnInit {
-
-
+  
   uid: string = '';  
   productos: any[] = [];
   ubicaciones: any[] = [];
   cursos: any[] = [];
   contenidoPerfil: any[] = [];
   contactoUser: any[] = [];
+  historialVentas: any[] = [];
 
   constructor(private route: ActivatedRoute, private databaseService: DatabaseService) { }
 
@@ -29,6 +29,7 @@ export class PerfilAjenoPage implements OnInit {
         this.obtenerCursos();
         this.obtenerContenidoPerfil();
         this.extraerInfoContacto();
+        this.getHistorialDeventas();
       }
     });
   }
@@ -41,6 +42,11 @@ export class PerfilAjenoPage implements OnInit {
   obtenerProductos() {
     this.databaseService.getProductsByUser(this.uid).subscribe(products => {
       this.productos = products; 
+    });
+  }
+  getHistorialDeventas(){
+    this.databaseService.getHistorialVentas(this.uid).subscribe(historialV => {
+      this.historialVentas = historialV;
     });
   }
 

@@ -47,44 +47,42 @@
             </div>
           </ion-card-content>
         </ion-card>
-          <!-- Sección contenido perfil -->
 
-      <section *ngIf="selectedTab === 'perfil'" class="contenidoPerfil">
 
-        <div *ngIf="!verificarContenido('Identidad')">
-          <ion-label style="opacity: 0;">__________________________________________</ion-label>
-          <ion-item>
-            <ion-label position="floating">Escribe algo sobre ti:</ion-label>
-            <ion-textarea [(ngModel)]="sobremi" rows="1" auto-grow></ion-textarea>
-          </ion-item>
-          
-          <ion-button (click)="addinfosobremi()">Agregar info</ion-button>
-        </div>
-        
-        
-        <strong style="display: flex; justify-content: center; margin: 10px 0;" >Sobre mí :</strong>
-        
-        <div *ngFor="let perfilContenido of perfilList" class="perfil-container">
-          <div *ngIf="perfilContenido.Identidad">
-            <!-- Línea de separación personalizada -->
-            <div style="display: flex; justify-content: center; margin: 10px 0;">
-              <strong>{{ perfilContenido.Identidad }}</strong></div>
+          <!-- Sección contenido perfil/esta dividida en dos:v -->
+          <div *ngIf="selectedTab === 'perfil'" class="SeccioncontenidoFija" >
+            <div *ngIf="!verificarContenido('Identidad')">
+              <ion-label style="opacity: 0;">__________________________________________</ion-label>
+              <ion-item>
+                <ion-label position="floating">Escribe algo sobre ti:</ion-label>
+                <ion-textarea [(ngModel)]="sobremi" rows="1" auto-grow></ion-textarea>
+              </ion-item>
+              
+              <ion-button (click)="addinfosobremi()">Agregar info</ion-button>
+            </div>
             
+            
+            <strong style="display: flex; justify-content: center; margin: 10px 0;" >Sobre mí :</strong>
+            
+            <div *ngFor="let perfilContenido of perfilList" class="perfil-container">
+              <div *ngIf="perfilContenido.Identidad">
+          
+                <div style="display: flex; justify-content: center; margin: 10px 0;">
+                  <strong>{{ perfilContenido.Identidad }}</strong></div>
+                </div>
+            </div>
           </div>
-        </div>
-        
-
-<!-- Historial de compras -->
-
-<ion-card>
+<section *ngIf="selectedTab === 'perfil'" class="contenidoPerfil">
+        <!-- Historial de compras -->
+  <ion-card>
   <ion-card-header>
-    <ion-card-title>Historial de Compras</ion-card-title>
+  <ion-card-title>Historial de Compras</ion-card-title>
   </ion-card-header>
   <ion-card-content>
-    <div class="historial-container">
+    <div class="historialcontainer">
       <div *ngFor="let historial of historialCompras; ">
         <div>
-          <ul class="historial-compra">
+          <ul class="historialcompra">
             <li>
               <strong>Nombre: </strong>{{ historial.nombre }}
             </li>
@@ -92,20 +90,41 @@
               <strong>Cantidad: </strong>{{ historial.cantidad }}
             </li>
             <li>
-              <strong>Precio Total: </strong>{{ historial.precioTotal  }}
+              <strong>Precio Total: </strong>$ {{ historial.precioTotal  }}
             </li>
-            <ion-label style="opacity: 0;">____</ion-label>
           </ul>
         </div>
       </div>
     </div>
   </ion-card-content>
 </ion-card>
-
-
-
-
-</section>     
+<!-- Historial de ventas -->
+<ion-card>
+  <ion-card-header>
+  <ion-card-title>Historial de Ventas</ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <div class="historialcontainer">
+      <div *ngFor="let historial of historialVentas; ">
+          <ul class="historialcompra">
+            <li>
+              <strong>Venta: </strong>{{ historial.nombre }}
+            </li>
+            <li>
+              <strong>Cantidad: </strong>{{ historial.cantidad}}
+            </li>
+            <li>
+              <strong>Cliente: </strong>{{ historial.comprador}}
+            </li>
+            <li>
+              <strong>Total venta: </strong>$ {{ historial.Total_venta  }}
+            </li>
+          </ul>
+      </div>
+    </div>
+  </ion-card-content>
+</ion-card>
+</section>    
 
         <!-- Sección de productos -->
         <section *ngIf="selectedTab === 'productos'" class="content-section">

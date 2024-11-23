@@ -16,7 +16,8 @@ import { UploadService } from '../services/upload.service';
 export class ProfilePage {
   sobremi: string=''//variable para agregar info de usuario
   perfilList: any[] = []; //contenidoDelperfil
-  historialCompras: any[] = [];
+  historialCompras: any[] = [];//Historial compras
+  historialVentas: any[] = [];//Historial Ventas
   nombreUsuario: string = '';  // Almacena exclusivamente el nombre del usuario 
   user: any;  // Almacena la información del usuario
   productName: string = '';  // Almacena el nombre del producto
@@ -42,7 +43,6 @@ export class ProfilePage {
 
   selectedTab: string = 'productos';
 
-  
   SAproducto: string = 'desactivado';
 
   SAubicacion: string = 'desactivado'
@@ -69,6 +69,7 @@ export class ProfilePage {
         this.obtenerCursosAgregados();
         this.obtenerCursosSuscritos();
         this.getHistorialDecompras();
+        this.getHistorialDeventas();
       }
     });
   }
@@ -88,6 +89,12 @@ export class ProfilePage {
       this.historialCompras = historial;
     });
     }
+  
+  getHistorialDeventas(){
+    this.databaseService.getHistorialVentas(this.user.uid).subscribe(historialV => {
+      this.historialVentas = historialV;
+    });
+  }
   
   
   
@@ -265,7 +272,7 @@ async addProduct() {
     });
   }
   obtenerCursosAgregados() {
-    this.databaseService.getCursosAgregados(this.user.uid).subscribe(cursos => {
+    this.databaseService.getCursoByUser(this.user.uid).subscribe(cursos => {
       this.cursosAgregados = cursos;
     });
   }

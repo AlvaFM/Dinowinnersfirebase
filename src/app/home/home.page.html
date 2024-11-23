@@ -1,23 +1,19 @@
 <ion-header class="ion-header">
   <ion-toolbar class="ion-toolbar">
-    <div *ngFor="let perfilContenido of perfilList" class="profile-card-content">
-      <img *ngIf="perfilContenido.fotoPerfil" [src]="perfilContenido.fotoPerfil" 
-           alt="Foto de perfil" class="foto-perfil-home" />
-    </div>
-    <ion-title>Inicio</ion-title>
-  
-    <ion-icon name="log-out" (click)="logout()" slot="end" *ngIf="nombreUsuario" size="large"></ion-icon>
+    <ng-container *ngFor="let perfilContenido of perfilList">
+      <div slot="start" >
+        <img *ngIf="perfilContenido.fotoPerfil" [src]="perfilContenido.fotoPerfil" 
+             alt="Foto de perfil" class="foto-perfil-home" />
+      </div>
+    </ng-container>
 
+    <ion-title >Inicio</ion-title>
     
+    <ion-icon name="log-out" (click)="logout()" slot="end" *ngIf="nombreUsuario" size="large"></ion-icon>
   </ion-toolbar>
 </ion-header>
 
-
-
-
 <ion-content>
-  
- 
 <!-- Notificación -->
   <div *ngIf="mensaje" [ngClass]="tipoMensaje === 'exito' ? 'mensaje-exito' : 'mensaje-error'">
     {{ mensaje }}
@@ -71,14 +67,7 @@
     </ion-card>
   </ion-list>
 </section>
-
-
-
-
-
-
-
-
+<!-- Sección productos -->
  <section *ngIf="selectedTab === 'productos'" class="section-padding">
   <h5><strong >PRODUCTOS DINOWINNERS:</strong></h5>
   <ion-list>

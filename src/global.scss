@@ -55,6 +55,9 @@ ion-buttons {
     align-items: center;
     gap: 1rem;
 }
+body {
+  background: linear-gradient(135deg, #f8e7db 0%, #faf6e8 50%, #ffffff 100%);
+}
 
 button:active {
     background-color: #fa7171; 
@@ -96,17 +99,21 @@ button:active {
   }
 
 
+
   
   
 ion-card {
 
   background: linear-gradient(135deg, #f8e7db 0%, #faf6e8 50%, #ffffff 100%);
   color: rgb(0, 0, 0); 
-  border-radius: 8px; 
+  border-radius: 0px; 
+  border: none !important;  
   }
 
+
+
   /// La matoyoria de metodos que tienen la palabra home son de los productos de home, 
-// modificar de aqui la visa de productos por favor 
+// modifica de aqui la visa de productos por favor 
 .homecontainer {
   display: flex;
   flex-direction: row; 
@@ -124,7 +131,7 @@ ion-card {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  scroll-snap-align: center; /* Cada carta se centra al deslizar */
+  scroll-snap-align: center; 
 }
 
 .homecardheader {

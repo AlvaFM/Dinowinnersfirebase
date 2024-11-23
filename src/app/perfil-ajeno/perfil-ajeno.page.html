@@ -103,6 +103,31 @@
       </ion-card-content>
     </ion-card>
   </section>
+  
+  <section>
+    <ion-card>
+      <ion-card-header>
+      <ion-card-title>Historial de Ventas</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="historialcontainer">
+          <div *ngFor="let historial of historialVentas; ">           
+              <ul class="historialcompra">
+                <li>
+                  <strong>Venta: </strong>{{ historial.nombre }}
+                </li>
+                <li>
+                  <strong>Cantidad: </strong>{{ historial.cantidad}}
+                </li>
+                <li>
+                  <strong>Total venta: </strong>$ {{ historial.Total_venta  }}
+                </li>
+              </ul>           
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </section>
 
 </ion-content>
 

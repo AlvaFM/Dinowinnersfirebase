@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Observable } from 'rxjs';
-import { AuthService } from './auth.service';
 import { map } from 'rxjs/operators';
 import { from } from 'rxjs';
 
@@ -12,8 +11,7 @@ import { from } from 'rxjs';
 })
 export class DatabaseService {
   constructor(
-    private firestore: AngularFirestore,
-    private authService: AuthService  
+    private firestore: AngularFirestore, 
   ) {}
 
   //_______________________________________ 
@@ -42,10 +40,6 @@ getStockProduct(ID_VENTA: string): Observable<any[]> {
   );
 }
 
-
-
-
-  
   getProductsByUser(uid: string): Observable<any[]> {
     return this.firestore.collection('productos', ref => ref.where('uid_DW', '==', uid))
     .snapshotChanges().pipe(
@@ -64,18 +58,12 @@ getStockProduct(ID_VENTA: string): Observable<any[]> {
   // ________________________________________________________
   // Carrito
 
-  addContenidoCarrito(uid: string, contenido: any): Promise<any> {
+addContenidoCarrito(uid: string, contenido: any): Promise<any> {
     return this.firestore.collection(`usuarios/${uid}/carrito`).add(contenido);
   }
   eliminarProductoDelCarrito(uid: string, ID_CARRITO: string): Promise<void> {
     return this.firestore.collection(`usuarios/${uid}/carrito`).doc(ID_CARRITO).delete();
   }
-
-  
-  updateProductcarrito(uid: string, ID_CARRITO: string, newData: any): Observable<any> {
-    return from(this.firestore.collection(`usuarios/${uid}/carrito`).doc(ID_CARRITO).update(newData));
-  }
-  
 
   getContenidoCarrito(uid: string): Observable<any[]> {
     return this.firestore.collection(`usuarios/${uid}/carrito`).snapshotChanges().pipe(
@@ -90,31 +78,29 @@ getStockProduct(ID_VENTA: string): Observable<any[]> {
       )
     );
   }
-  
-  
-  
-  addHistorialDecompras(uid: string, contenido: any): Promise<any> {
-    return this.firestore.collection(`usuarios/${uid}/HistorialDecompras`).add(contenido);
-  }
-  getHistoriaDecompras(uid: string): Observable<any[]> {
 
-    return this.firestore.collection(`usuarios/${uid}/HistorialDecompras`).snapshotChanges().pipe(
+  extraerONEPRODUCTCarrito(uid: string, idVenta: string): Observable<any[]> {
+    return this.firestore.collection(`usuarios/${uid}/carrito`, ref =>
+      ref.where("ID_VENTA", "==", idVenta)  
+    ).snapshotChanges().pipe(
       map(actions =>
         actions.map(a => {
           const data = a.payload.doc.data();  
           const id = a.payload.doc.id;       
-
+  
           return { id, ...data || {} };  
-
         })
       )
     );
   }
   
   
+  
+  
 
-
-
+addHistorialDecompras(uid: string, contenido: any): Promise<any> {
+    return this.firestore.collection(`usuarios/${uid}/HistorialDecompras`).add(contenido);
+  }
 
   // __________________________________________________________
   
@@ -122,16 +108,11 @@ getStockProduct(ID_VENTA: string): Observable<any[]> {
   addCurso(Curso: any): Promise<any> {
     return this.firestore.collection('Curso').add(Curso);
   }
-  getCursosAgregados(userId: string) {
-    return this.firestore.collection('Curso', ref => ref.where('uid', '==', userId)).valueChanges();
-  }
-
-  
+ 
   getCursosSuscritos(userId: string) {
     return this.firestore.collection('suscripciones', ref => ref.where('idUsuarioSub', '==', userId)).valueChanges();
   }
  
-
   getCursoByUser(uid: string): Observable<any[]> {
     return this.firestore.collection('Curso', (ref) => ref.where('uid', '==', uid)).valueChanges();
   }
@@ -178,6 +159,40 @@ getStockProduct(ID_VENTA: string): Observable<any[]> {
   addHistorialDeVentas(uid: string, contenido: any): Promise<any> {
     return this.firestore.collection(`usuarios/${uid}/HistorialDeVentas`).add(contenido);
   }
+
+
+  getHistoriaDecompras(uid: string): Observable<any[]> {
+
+    return this.firestore.collection(`usuarios/${uid}/HistorialDecompras`).snapshotChanges().pipe(
+      map(actions =>
+        actions.map(a => {
+          const data = a.payload.doc.data();  
+          const id = a.payload.doc.id;       
+
+          return { id, ...data || {} };  
+
+        })
+      )
+    );
+  }
+
+  getHistorialVentas(uid: string): Observable<any[]> {
+
+    return this.firestore.collection(`usuarios/${uid}/HistorialDeVentas`).snapshotChanges().pipe(
+      map(actions =>
+        actions.map(a => {
+          const data = a.payload.doc.data();  
+          const id = a.payload.doc.id;       
+
+          return { id, ...data || {} };  
+
+        })
+      )
+    );
+  }
+
+
+
   
 }
 

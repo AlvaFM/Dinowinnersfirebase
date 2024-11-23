@@ -39,18 +39,13 @@ export class CarritoPage implements OnInit {
     cvv: ''
   };
 
-  
-
-
   constructor(private authService: AuthService, private databaseService: DatabaseService) {}
-
   ngOnInit() {
-    
-    this.verificarUsuarioAutenticado();
-    
+    this.verificarUsuarioAutenticado(); 
   }
 
-  verificarUsuarioAutenticado() {
+
+verificarUsuarioAutenticado() {
     this.authService.getUser().subscribe(user => {
       if (user) {
         this.authService.getUserData(user.uid).then(data => {
@@ -69,7 +64,7 @@ export class CarritoPage implements OnInit {
     });
   }
   
-  obtenerProductosDelCarrito() {
+obtenerProductosDelCarrito() {
     if (this.idUsuarioActual) {
       this.databaseService.getContenidoCarrito(this.idUsuarioActual).subscribe((productos: any) => {
         console.log('Productos recibidos:', productos);
@@ -100,10 +95,6 @@ export class CarritoPage implements OnInit {
       });
     }
   }
-  
-
-
-
 
 obtenerStock(ID_VENTA: string): Observable<number> {
   return this.databaseService.getStockProduct(ID_VENTA).pipe(
@@ -124,18 +115,7 @@ obtenerStock(ID_VENTA: string): Observable<number> {
   );
 }
 
-
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  eliminarProducto(ID_CARRITO: string) {
+eliminarProducto(ID_CARRITO: string) {
     if (this.idUsuarioActual) {
       console.log('Producto a eliminar:', ID_CARRITO);
       this.databaseService.eliminarProductoDelCarrito(this.idUsuarioActual, ID_CARRITO)
@@ -150,18 +130,12 @@ obtenerStock(ID_VENTA: string): Observable<number> {
     }
   }
 
-
-
-
-  
-  
-
 PrepararCompraYventa(ID_CARRITO:string,ID_DOCUMENTO:string,
-  NombreXproducto: string,
-   CreadorXProducto: string, 
-   idCompra: string, 
-   stockproducto: number
-   , totalXproducto: number, 
+NombreXproducto: string,
+CreadorXProducto: string, 
+idCompra: string, 
+stockproducto: number,
+totalXproducto: number, 
 cantidadDeseada: number, 
 uid_DW:string,
 pago: { numeroTarjeta: string; fechaExpiracion: string; cvv: string }) {
@@ -201,11 +175,7 @@ pago: { numeroTarjeta: string; fechaExpiracion: string; cvv: string }) {
       Total_venta: totalXproducto * cantidadFinal,
     };
       this.actualizarStock(ID_DOCUMENTO,stockproducto,cantidadFinal)
-    
-
-
-
-    this.databaseService.addHistorialDeVentas(uid_DW, venta).then(() => {
+      this.databaseService.addHistorialDeVentas(uid_DW, venta).then(() => {
       console.log(`Venta de ${NombreXproducto} registrada exitosamente`);
     }).catch((error) => {
       console.error(`Error al registrar la venta de ${NombreXproducto}:`, error);
