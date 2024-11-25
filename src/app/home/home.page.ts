@@ -172,7 +172,6 @@ export class HomePage implements OnInit {
   
 
   irASuscripcion(uidCurso: string, nombreCurso: string, autor: string) {
-    console.log(uidCurso, nombreCurso, autor); 
     this.router.navigate(['/suscripcion', uidCurso, nombreCurso, autor]);
   }
 

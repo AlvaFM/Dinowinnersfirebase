@@ -105,16 +105,44 @@ addHistorialDecompras(uid: string, contenido: any): Promise<any> {
   // __________________________________________________________
   
   // metodos relacionados con cursos
-  addCurso(Curso: any): Promise<any> {
-    return this.firestore.collection('Curso').add(Curso);
+  addCurso(curso: any): Promise<any> {
+    return this.firestore.collection('Curso').add(curso);
   }
+  
+  
  
   getCursosSuscritos(userId: string) {
-    return this.firestore.collection('suscripciones', ref => ref.where('idUsuarioSub', '==', userId)).valueChanges();
+    return this.firestore.collection('suscripciones', ref => ref.where('idUsuarioSub', '==', userId)).snapshotChanges().pipe(
+      map(actions =>
+        actions.map(a => {
+          const data = a.payload.doc.data();  
+          const id = a.payload.doc.id;
+          
+          console.log('Datos del curso:', data); 
+          return { id, ...data || {} };
+        })
+      )
+    );
   }
+  
+
+  getCurso(idsub: string) {
+    return this.firestore.collection('Curso', ref => ref.where('uid', '==', idsub))
+      .snapshotChanges()
+      .pipe(
+        map(actions => actions.map(a => {
+          const data = a.payload.doc.data();
+          const id = a.payload.doc.id;
+          return { id, ...data|| {} };
+        }))
+      );
+  }
+  
+  
  
   getCursoByUser(uid: string): Observable<any[]> {
     return this.firestore.collection('Curso', (ref) => ref.where('uid', '==', uid)).valueChanges();
+
   }
   addsubscription(subscription: any): Promise<any> {
     return this.firestore.collection('suscripciones').add(subscription);

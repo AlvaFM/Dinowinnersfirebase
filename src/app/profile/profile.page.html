@@ -281,22 +281,27 @@
 
         <!-- Sección de cursos -->
         <section *ngIf="selectedTab === 'cursos'" style="padding: 16px;">
-         
-      
-          <ion-card  *ngIf="SAcurso === 'desactivado'">
+
+          <!-- Cursos a los que estoy suscrito -->
+          <ion-card *ngIf="SAcurso === 'desactivado' && contenidocurso === 'desactivado'">
             <ion-card-header>
               <ion-card-title>Cursos a los que estoy suscrito</ion-card-title>
             </ion-card-header>
             <ion-card-content>
-              <ion-list>
-                <ion-item *ngFor="let curso of cursosSuscritos">
-                  {{ curso.nombreCursoSub }} - Autor: {{ curso.nameAutor }}
+              <ion-list *ngFor="let curso of cursosSuscritos">
+                <ion-item >
+                  {{ curso.nombre }} - Autor: {{ curso.autor }}
+                  
+                </ion-item>
+                <ion-item>
+                  <ion-button (click)="verContenidoCurso(curso)">Ver contenido</ion-button>
                 </ion-item>
               </ion-list>
             </ion-card-content>
           </ion-card>
-
-          <ion-card *ngIf="SAcurso === 'desactivado'">
+        
+          <!-- Cursos agregados -->
+          <ion-card *ngIf="SAcurso === 'desactivado' && contenidocurso === 'desactivado'">
             <ion-card-header>
               <ion-card-title>Cursos que he agregado</ion-card-title>
             </ion-card-header>
@@ -308,18 +313,28 @@
               </ion-list>
             </ion-card-content>
           </ion-card>
-
-
-          <!-- Con este boton alternamos entre la vista de cursos y la de agregar cursos -->
-          <ion-fab *ngIf="SAcurso === 'desactivado'" vertical="bottom" 
-          horizontal="end"  (click)="SAcurso = 'activado'">
+        
+          <!-- contenido del curso seleccionado:D  -->
+          <ion-card *ngIf="cursoSeleccionado && contenidocurso === 'activado'">
+            <ion-card-header>
+              <ion-card-title>{{ cursoSeleccionado.nombre }}</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <p><strong>Descripción:</strong> {{ cursoSeleccionado.descripcion }}</p>
+              <p style="opacity: 0;">____________________</p>
+              <p>{{ cursoSeleccionado.contenido }}</p>
+              <ion-button (click)="cerrarContenido()">Cerrar contenido</ion-button>
+            </ion-card-content>
+          </ion-card>
+        
+          <!-- Botón flotante para agregar cursos (No borrar please) -->
+          <ion-fab *ngIf="SAcurso === 'desactivado'" vertical="bottom" horizontal="end" (click)="SAcurso = 'activado'">
             <ion-fab-button color="warning">
               Agregar
             </ion-fab-button>
           </ion-fab>
+    
 
-
-      
           <ion-card *ngIf="SAcurso === 'activado'">
             <ion-card-header>
               <ion-card-title>Agregar Curso</ion-card-title>
@@ -329,30 +344,26 @@
                 <ion-label position="floating">Nombre del Curso</ion-label>
                 <ion-input [(ngModel)]="CursoNombre"></ion-input>
               </ion-item>
-      
               <ion-item>
                 <ion-label position="floating">Descripción</ion-label>
                 <ion-textarea [(ngModel)]="DescripcionCurso" auto-grow="true"></ion-textarea>
               </ion-item>
-      
               <ion-item>
                 <ion-label position="floating">Contenido</ion-label>
                 <ion-textarea [(ngModel)]="contenidoCurso" auto-grow="true"></ion-textarea>
               </ion-item>
-      
               <ion-item>
                 <ion-label position="floating">Cupos Disponibles</ion-label>
                 <ion-input [(ngModel)]="CuposCurso" type="number" min="0" step="1"></ion-input>
               </ion-item>
-              
-      
-              <ion-button (click)="agregarCursoYComentar()" (click)="SAcurso = 'activado'">Publicar en foro</ion-button>
-              <ion-button (click)="SAcurso = 'desactivado'" >Cancelar</ion-button>
-      
+              <ion-button (click)="agregarCursoYComentar()">Publicar en foro</ion-button>
+              <ion-button (click)="SAcurso = 'desactivado'">Cancelar</ion-button>
             </ion-card-content>
           </ion-card>
         </section>
+        
 
+        
      
     
 
