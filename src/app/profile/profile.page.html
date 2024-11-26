@@ -357,7 +357,7 @@
          
         
           <!-- Botón flotante para agregar cursos (No borrar please) -->
-          <ion-fab *ngIf="SAcurso === 'desactivado'" vertical="bottom" horizontal="end" (click)="SAcurso = 'activado'">
+          <ion-fab *ngIf="SAcurso === 'desactivado' && contenidocurso === 'desactivado'" vertical="bottom" horizontal="end" (click)="SAcurso = 'activado'">
             <ion-fab-button color="warning">
               Agregar
             </ion-fab-button>

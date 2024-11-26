@@ -175,7 +175,13 @@ export class HomePage implements OnInit {
     this.router.navigate(['/suscripcion', uidCurso, nombreCurso, autor]);
   }
 
-  calificacion: any[] = []; 
+
+
+
+
+
+calificacion: any[] = []; 
+
   obtenerComentariosForo() {
     this.dbService.getAllCommentsForo().subscribe(comentarios => {
       comentarios.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());   
@@ -185,20 +191,28 @@ export class HomePage implements OnInit {
       });
     });
   }
+
   obtenerCalificacionCurso(uidCursoForo: string, comentario: any) {
     this.dbService.getCurso(uidCursoForo).subscribe((cursos: any[]) => {
       cursos.forEach(curso => {
         this.dbService.obtenerCalificacion(curso.id).subscribe((calificaciones: any[]) => {
-
-          comentario.calificaciones = calificaciones
-            .map(cal => cal.calificacion)
-            .filter(valor => valor !== undefined); 
-    
-          console.log(`Calificaciones para el curso ${curso.id}:`, comentario.calificaciones);
+          
+          const calificacionesMapeadas = calificaciones.map((calificacion: any) => ({
+            id: calificacion.id,
+            puntaje: calificacion.calificacion,
+          }));
+          
+          const totalPuntaje = calificacionesMapeadas.reduce((total, cal) => total + cal.puntaje, 0);
+          const promedio = calificacionesMapeadas.length > 0 ? totalPuntaje / calificacionesMapeadas.length : 0;
+          comentario.calificacionPromedio = promedio.toFixed(1); 
+  
+          console.log(`Calificación promedio para el curso ${curso.id}:`, comentario.calificacionPromedio);
         });
       });
     });
   }
+  
+  
   
   
   

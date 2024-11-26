@@ -4,10 +4,6 @@
   import { Router } from '@angular/router';
   import { UploadService } from '../services/upload.service';
 
-
-
-
-
   @Component({
     selector: 'app-profile',
     templateUrl: './profile.page.html',
@@ -21,14 +17,14 @@
     nombreUsuario: string = '';  // Almacena exclusivamente el nombre del usuario 
     user: any;  // Almacena la información del usuario
     productName: string = '';  // Almacena el nombre del producto
-    productDescription: string = '';  // Almacena la descripción del producto
+    productDescription: string = ''; // Almacena la descripción del producto
     productPrice: number | null = null;  // Almacena el precio del producto
     city: string = '';  // Almacena la ciudad
     address: string = '';  // Almacena la dirección
     products: any[] = [];  // Arreglo para almacenar los productos del usuario
-    locations: any[] = [];
+    locations: any[] = [];//Arreglo para almacenar los locales
     cursosAgregados: any[] = [];  // Cursos que el usuario ha agregado
-    cursosSuscritos: any[] = [];
+    cursosSuscritos: any[] = []; //Arreglo para sacar la id del curso suscrito
     detallesDelCurso: any[] = []; // Cursos a los que el usuario está suscrito
     CursoNombre: string = '';  // Nombre del curso
     DescripcionCurso: string = '';  // Descripción del curso
