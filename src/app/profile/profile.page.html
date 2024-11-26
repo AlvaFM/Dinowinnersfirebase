@@ -317,15 +317,44 @@
           <!-- contenido del curso seleccionado:D  -->
           <ion-card *ngIf="cursoSeleccionado && contenidocurso === 'activado'">
             <ion-card-header>
-              <ion-card-title>{{ cursoSeleccionado.nombre }}</ion-card-title>
+              <ion-card-title style="font-size: 24px;">{{ cursoSeleccionado.nombre }}</ion-card-title>
             </ion-card-header>
-            <ion-card-content>
+            <ion-card-content *ngIf="Calificar === 'desactivado'">
               <p><strong>Descripción:</strong> {{ cursoSeleccionado.descripcion }}</p>
               <p style="opacity: 0;">____________________</p>
               <p>{{ cursoSeleccionado.contenido }}</p>
-              <ion-button (click)="cerrarContenido()">Cerrar contenido</ion-button>
+              <ion-item>
+              <ion-button (click)="cerrarContenido()">Cerrar</ion-button>
+              <ion-button (click)="Calificar = 'activado'">Calificar</ion-button>
+              </ion-item>
+            </ion-card-content>
+            <ion-card-content *ngIf="Calificar === 'activado'">
+              <ion-item>
+                <ion-button fill="clear" (click)="calificarCurso(cursoSeleccionado.id, 1)">1
+                  <ion-icon name="star-outline"></ion-icon>
+                </ion-button>
+                <ion-button fill="clear" (click)="calificarCurso(cursoSeleccionado.id, 2)">2
+                  <ion-icon name="star-outline"></ion-icon>
+                </ion-button>
+                <ion-button fill="clear" (click)="calificarCurso(cursoSeleccionado.id, 3)">3
+                  <ion-icon name="star-outline"></ion-icon>
+                </ion-button>
+                <ion-button fill="clear" (click)="calificarCurso(cursoSeleccionado.id, 4)">4
+                  <ion-icon name="star-outline"></ion-icon>
+                </ion-button>
+                <ion-button fill="clear" (click)="calificarCurso(cursoSeleccionado.id, 5)">5
+                  <ion-icon name="star-outline"></ion-icon>
+                </ion-button>
+              </ion-item>
+              <ion-item>
+                <ion-button (click)="Calificar = 'desactivado'" >cancelar</ion-button>
+              </ion-item>
+              
             </ion-card-content>
           </ion-card>
+          
+          
+         
         
           <!-- Botón flotante para agregar cursos (No borrar please) -->
           <ion-fab *ngIf="SAcurso === 'desactivado'" vertical="bottom" horizontal="end" (click)="SAcurso = 'activado'">

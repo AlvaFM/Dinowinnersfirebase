@@ -175,13 +175,32 @@ export class HomePage implements OnInit {
     this.router.navigate(['/suscripcion', uidCurso, nombreCurso, autor]);
   }
 
+  //Aqui obtenemos tanto comentarios del foro como calificacions del curso 
+
+  calificacion: any[] = [];
   obtenerComentariosForo() {
     this.dbService.getAllCommentsForo().subscribe(comentarios => {
-      comentarios.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
-      
-      this.comentariosForo = comentarios;      
+      comentarios.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());   
+      this.comentariosForo = comentarios;
+      comentarios.forEach(comentario => {
+        this.obtenerCalificacionCurso(comentario.uidCursoForo, comentario);
+      });
     });
   }
+  
+  obtenerCalificacionCurso(uidCursoForo: string, comentario: any) {
+    this.dbService.getCurso(uidCursoForo).subscribe((cursos: any[]) => {
+      cursos.forEach(curso => {
+        this.dbService.obtenerCalificacion(curso.id).subscribe((calificaciones: any[]) => {
+          const calificacionPromedio = calificaciones.reduce((total, calificacion) => total + calificacion.valor, 0) / calificaciones.length;
+          comentario.calificacion = Math.round(calificacionPromedio); 
+          console.log(`Calificación para el curso ${curso.id}:`, comentario.calificacion);
+        });
+      });
+    });
+  }
+  
+  
   
 
   async logout() {

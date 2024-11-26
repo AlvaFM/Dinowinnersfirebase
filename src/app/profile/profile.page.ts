@@ -116,6 +116,50 @@
       });
     }
 
+    //Codigo importante no borrar ni alterar, tiene que ver con curso
+Calificar: string = 'desactivado'
+
+calificarCurso(Id: string, numCalificacion: number) {
+  const calificacioncurso = {
+    calificacion: numCalificacion || null  
+  };
+
+  this.databaseService.CalificacionCurso(Id, calificacioncurso);
+  console.log('Calificación enviada:', calificacioncurso); 
+  this.Calificar = 'desactivado';
+}
+contenidocurso:string = 'desactivado';
+cursoSeleccionado: any = null;
+verContenidoCurso(curso: any) {
+  this.cursoSeleccionado = curso;
+  this.contenidocurso = 'activado';
+}
+cerrarContenido() {
+  this.cursoSeleccionado = null;
+  this.contenidocurso = 'desactivado';
+}
+    obtenerCursosSuscritos() {
+      this.cursosSuscritos = [];
+      this.databaseService.getCursosSuscritos(this.user.uid).subscribe((cursos: any[]) => {
+        cursos.forEach(curso => {
+          this.databaseService.getCurso(curso.cursoIdSub).subscribe((detallesCurso: any[]) => {
+            const detallesMapeados = detallesCurso.map((detalle: any) => ({
+              id: detalle.id,
+              autor: detalle.Autor,  
+              contenido: detalle.ContenidoCurso,  
+              cupos: detalle.Cupos,  
+              descripcion: detalle.Descripcion,  
+              nombre: detalle.NombreCurso,  
+              suscritos: detalle.Suscritos,  
+              uid: detalle.uid  
+            }));
+            this.cursosSuscritos.push(...detallesMapeados);
+          });
+        });
+      });
+    }
+    
+
 
     
     
@@ -134,6 +178,10 @@
           alert('Debes estar autenticado para agregar un curso.');
           return;
       }
+
+
+
+      
 
       const NewCurso = {
           uid: this.user.uid,
@@ -279,47 +327,6 @@
     }
 
 
-//Codigo importante no borrar ni alterar
-contenidocurso:string = 'desactivado';
-cursoSeleccionado: any = null;
-verContenidoCurso(curso: any) {
-  this.cursoSeleccionado = curso;
-  this.contenidocurso = 'activado';
-}
-
-cerrarContenido() {
-  this.cursoSeleccionado = null;
-  this.contenidocurso = 'desactivado';
-}
-    obtenerCursosSuscritos() {
-      this.cursosSuscritos = [];
-      this.databaseService.getCursosSuscritos(this.user.uid).subscribe((cursos: any[]) => {
-        cursos.forEach(curso => {
-          this.databaseService.getCurso(curso.cursoIdSub).subscribe((detallesCurso: any[]) => {
-            const detallesMapeados = detallesCurso.map((detalle: any) => ({
-              autor: detalle.Autor,  
-              contenido: detalle.ContenidoCurso,  
-              cupos: detalle.Cupos,  
-              descripcion: detalle.Descripcion,  
-              nombre: detalle.NombreCurso,  
-              suscritos: detalle.Suscritos,  
-              uid: detalle.uid  
-            }));
-            this.cursosSuscritos.push(...detallesMapeados);
-          });
-        });
-      });
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 
     async addFotoPerfil() {
       if (!this.selectedFilePPHOTO) {

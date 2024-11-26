@@ -51,6 +51,8 @@
         <h2><b>Nombre del curso:</b> {{ comentario.CCnombre }}</h2>
         <p><b>Descripción:</b> {{ comentario.CCdescripcion }}</p>
         <p><b>Cupos disponibles:</b> {{ comentario.Cupos }}</p>
+        <p><b>Calificación promedio:</b> {{ comentario.calificacion }} / 5</p>
+        
         <h5 *ngIf="comentario.Autor">___________________________________________</h5>
       </ion-card-content>
       

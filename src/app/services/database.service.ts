@@ -147,6 +147,13 @@ addHistorialDecompras(uid: string, contenido: any): Promise<any> {
   addsubscription(subscription: any): Promise<any> {
     return this.firestore.collection('suscripciones').add(subscription);
   }
+  CalificacionCurso(ID: string, Calificacion: any): Promise<any> {
+    return this.firestore.collection(`Curso/${ID}/Calificacion`).add(Calificacion);
+  }
+  obtenerCalificacion(ID: string): Observable<any[]> {
+    return this.firestore.collection(`Curso/${ID}/Calificacion`).valueChanges();
+  }
+  
   // ___________________________________________________________
   
 
