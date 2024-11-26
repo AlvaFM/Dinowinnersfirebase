@@ -121,7 +121,7 @@ Calificar: string = 'desactivado'
 
 calificarCurso(Id: string, numCalificacion: number) {
   const calificacioncurso = {
-    calificacion: numCalificacion || null  
+    calificacion: isNaN(numCalificacion) ? null : numCalificacion
   };
 
   this.databaseService.CalificacionCurso(Id, calificacioncurso);
@@ -158,11 +158,6 @@ cerrarContenido() {
         });
       });
     }
-    
-
-
-    
-    
     
 
     async agregarCursoYComentar() {

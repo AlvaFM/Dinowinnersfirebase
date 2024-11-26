@@ -138,8 +138,6 @@ addHistorialDecompras(uid: string, contenido: any): Promise<any> {
       );
   }
   
-  
- 
   getCursoByUser(uid: string): Observable<any[]> {
     return this.firestore.collection('Curso', (ref) => ref.where('uid', '==', uid)).valueChanges();
 
@@ -150,13 +148,22 @@ addHistorialDecompras(uid: string, contenido: any): Promise<any> {
   CalificacionCurso(ID: string, Calificacion: any): Promise<any> {
     return this.firestore.collection(`Curso/${ID}/Calificacion`).add(Calificacion);
   }
+
   obtenerCalificacion(ID: string): Observable<any[]> {
-    return this.firestore.collection(`Curso/${ID}/Calificacion`).valueChanges();
+    return this.firestore.collection(`Curso/${ID}/Calificacion`)
+      .snapshotChanges()
+      .pipe(
+        map(actions => actions.map(a => {
+          const data = a.payload.doc.data();
+          const id = a.payload.doc.id;
+          return { id, ...data || {} }; 
+        }))
+     );
   }
   
-  // ___________________________________________________________
   
 
+  // ___________________________________________________________
   // Metodos relacionados con lacalidades  
   addLocation(location: any): Promise<any> {
     return this.firestore.collection('ubicaciones').add(location);
