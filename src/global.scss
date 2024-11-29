@@ -24,7 +24,7 @@
 }
 
 ion-toolbar {
-    --background: linear-gradient(90deg, #fab371, #fa7171); 
+    --background: linear-gradient(90deg, #f8bd85, #f68b79); 
     color: #ffffff;
 }
 
@@ -36,7 +36,7 @@ ion-toolbar {
 }
 
 ion-button {
-    --background: #fab371;
+    --background: #fbbc80;
     color: white;
     border-radius: 20px;
     width: 80%;
@@ -106,8 +106,9 @@ ion-card {
 
   background: linear-gradient(135deg, #f8e7db 0%, #faf6e8 50%, #ffffff 100%);
   color: rgb(0, 0, 0); 
-  border-radius: 0px; 
+  border-radius: 40px; 
   border: none !important;  
+  box-shadow: 2px, 2px, 2px #777777;
   }
 
 
@@ -148,12 +149,18 @@ ion-card {
 }
 
 .homebadge {
-  font-size: 0.8rem;
-  padding: 0.3rem;
+  font-size: 1rem;
+  padding: 0.5rem;
+  background-color: #fa7171;
+  margin: 1rem;
 }
 
 .homecardcontent {
-  text-align: left;
+  text-align: center;
+  color: #424141;
+  font-size: 0.4rem;
+  margin: 0.5rem;
+  padding: 0.5rem;
 }
 
 .homeimage {
@@ -164,8 +171,6 @@ ion-card {
   margin: 0 auto; 
 }
 
-
-
 .homedescription,
 .homestock {
   font-size: 0.9rem;
@@ -173,11 +178,12 @@ ion-card {
 }
 
 .homeaddtocart {
-  font-size: 0.9rem;
-  color: #3880ff;
+  font-size: 1rem;
+  color: #424141 !important;
   text-align: center;
   cursor: pointer;
   margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 /// Aqui se acaban las clases de productos de home__, 
