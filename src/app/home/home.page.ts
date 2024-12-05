@@ -178,37 +178,58 @@ export class HomePage implements OnInit {
 
 
 
-
-
-calificacion: any[] = []; 
+// IMPORTANTE NO ALTERAR NI BORRAR, CODIGO DE 3 DIAS 
+  calificacion: any[] = []; 
 
   obtenerComentariosForo() {
     this.dbService.getAllCommentsForo().subscribe(comentarios => {
-      comentarios.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());   
+      console.log('Comentarios obtenidos:', comentarios); 
+      comentarios.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
       this.comentariosForo = comentarios;
       comentarios.forEach(comentario => {
-        this.obtenerCalificacionCurso(comentario.uidCursoForo, comentario);
+        if (comentario.uidCursoForo) { 
+          console.log('Procesando comentario con UID:', comentario.uidCursoForo); 
+          this.obtenerCalificacionCurso(comentario.uidCursoForo, comentario);
+        } else {
+          console.warn('Comentario sin UID de curso:', comentario); 
+        }
       });
+    }, error => {
+      console.error('Error al obtener comentarios:', error); 
     });
   }
-
   obtenerCalificacionCurso(uidCursoForo: string, comentario: any) {
+    console.log(`Obteniendo cursos para uidCursoForo: ${uidCursoForo}`); 
     this.dbService.getCurso(uidCursoForo).subscribe((cursos: any[]) => {
-      cursos.forEach(curso => {
-        this.dbService.obtenerCalificacion(curso.id).subscribe((calificaciones: any[]) => {
-          
-          const calificacionesMapeadas = calificaciones.map((calificacion: any) => ({
-            id: calificacion.id,
-            puntaje: calificacion.calificacion,
-          }));
-          
-          const totalPuntaje = calificacionesMapeadas.reduce((total, cal) => total + cal.puntaje, 0);
-          const promedio = calificacionesMapeadas.length > 0 ? totalPuntaje / calificacionesMapeadas.length : 0;
-          comentario.calificacionPromedio = promedio.toFixed(1); 
-  
-          console.log(`Calificación promedio para el curso ${curso.id}:`, comentario.calificacionPromedio);
+      if (cursos && cursos.length > 0) {
+        console.log('Cursos obtenidos:', cursos); 
+        cursos.forEach(curso => {
+          if (curso.uid) { 
+            this.dbService.obtenerCalificacion(curso.uid).subscribe((calificaciones: any[]) => {
+              if (calificaciones && calificaciones.length > 0) {
+                const calificacionesMapeadas = calificaciones.map((calificacion: any) => ({
+                  id: calificacion.id,
+                  puntaje: calificacion.calificacion,
+                }));
+                const totalPuntaje = calificacionesMapeadas.reduce((total, cal) => total + cal.puntaje, 0);
+                const promedio = calificacionesMapeadas.length > 0 ? totalPuntaje / calificacionesMapeadas.length : 0;
+                comentario.calificacionPromedio = promedio.toFixed(1);
+                console.log(`Calificación promedio para el curso ${curso.uid}:`, comentario.calificacionPromedio);
+              } else {
+                console.warn(`No se encontraron calificaciones para el curso ${curso.uid}.`); 
+              }
+            }, error => {
+              console.error(`Error al obtener calificaciones para el curso ${curso.uid}:`, error); 
+            });
+          } else {
+            console.warn('Curso sin UID válido:', curso); 
+          }
         });
-      });
+      } else {
+        console.warn(`No se encontraron cursos para uidCursoForo ${uidCursoForo}.`); 
+      }
+    }, error => {
+      console.error(`Error al obtener cursos para uidCursoForo ${uidCursoForo}:`, error); 
     });
   }
   
