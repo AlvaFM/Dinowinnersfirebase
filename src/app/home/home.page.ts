@@ -19,8 +19,7 @@ export class HomePage implements OnInit {
   nombreUsuario: string = '';
   idUsuarioActual : string ='';
   selectedTab: string = 'productos';
-  mensaje: string = '';
-  tipoMensaje: string = '';
+
 
   constructor(private dbService: DatabaseService, private authService: AuthService, private router: Router) {}
 
@@ -34,44 +33,59 @@ export class HomePage implements OnInit {
     this.selectedTab = tab;
   }
 
+  comentarioPorIdproducto: { [key: string]: any[] } = {}; 
+
   obtenerUsuariosYDatos() {
     this.dbService.getAllUsers().subscribe(users => {
-      this.usuarios = [];  
+      this.usuarios = []; 
   
       users.forEach(usuario => {
         const uid = usuario.uid;
+  
+        // Solo obtenemos los productos si aún no los hemos cargado
         if (!this.productosPorUsuario[uid]) {
           this.dbService.getProductsByUser(uid).subscribe(products => {
             products.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
   
             this.productosPorUsuario[uid] = products.map((producto: any) => {
-              console.log('Producto mapeado:', producto);
+              
+              // Llamamos al servicio para obtener los comentarios del producto
+              this.comentariosdelproducto(producto.id).subscribe(comentarios => {
+                // Guardamos los comentarios en el objeto comentarioPorIdproducto
+                this.comentarioPorIdproducto[producto.id] = comentarios || [];
+                console.log('Comentarios del producto:', this.comentarioPorIdproducto[producto.id]);
+              });
   
               return {
                 ID_DOCUMENTO: producto.id,
-                CreadorProducto: producto.CreadorProducto, 
-                ID_VENTA: producto.ID_VENTA,  
-                descripcion: producto.descripcion,  
+                CreadorProducto: producto.CreadorProducto,
+                ID_VENTA: producto.ID_VENTA,
+                descripcion: producto.descripcion,
                 fecha: producto.fecha,
                 imageUrl: producto.imageUrl,
                 nombre: producto.nombre,
                 precio: producto.precio,
                 stock: producto.stock,
                 uid_DW: producto.uid_DW
+      
               };
             });
   
-            console.log('Productos del usuario:', this.productosPorUsuario[uid]);
             if (products && products.length > 0) {
               this.usuarios.push(usuario);
             }
           });
         }
+  
         this.dbService.getLocationsByUser(uid).subscribe(locations => {
           this.ubicacionesPorUsuario[uid] = locations;
         });
       });
     });
+  }
+  
+  comentariosdelproducto(id_documento: string) {
+    return this.dbService.getComentarioProducto(id_documento);  
   }
   
 
@@ -160,6 +174,11 @@ export class HomePage implements OnInit {
   }
 
 
+
+  
+
+  mensaje: string = '';
+  tipoMensaje: string = '';
   notificacionAccion(mensaje: string, tipomensaje: string): void {
     this.mensaje = mensaje;
     this.tipoMensaje = tipomensaje;

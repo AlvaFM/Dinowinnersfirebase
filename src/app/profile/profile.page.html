@@ -6,6 +6,10 @@
 </ion-header>
 
 <ion-content class="ion-padding" style="overflow-y: auto;">
+  <!-- Notificación -->
+  <div *ngIf="mensaje" [ngClass]="tipoMensaje === 'exito' ? 'mensaje-exito' : 'mensaje-error'">
+    {{ mensaje }}
+  </div> 
 
     
   <ion-card class="SeccionPerfilFija ion-card">
@@ -80,22 +84,31 @@
   </ion-card-header>
   <ion-card-content>
     <div class="historialcontainer">
-      <div *ngFor="let historial of historialCompras; ">
+      <div *ngFor="let historial of historialCompras">
         <div>
           <ul class="historialcompra">
-            <li>
-              <strong>Nombre: </strong>{{ historial.nombre }}
-            </li>
-            <li>
-              <strong>Cantidad: </strong>{{ historial.cantidad }}
-            </li>
-            <li>
-              <strong>Precio Total: </strong>$ {{ historial.precioTotal  }}
-            </li>
+            <li><strong>Nombre: </strong>{{ historial.nombre }}</li>
+            <li><strong>Cantidad: </strong>{{ historial.cantidad }}</li>
+            <li><strong>Precio Total: </strong>$ {{ historial.precioTotal }}</li>
           </ul>
+    
+          <ion-item  *ngIf="VentanaComentar === 'desactivada'">
+            <ion-button  (click)="abrirVentanacomentar(historial)">Comentar</ion-button>
+          </ion-item>
+        </div>
+    
+        <div *ngIf="VentanaComentar === 'activada'">
+          <ion-input [(ngModel)]="comentarioAsubir" placeholder="Escribe tu comentario aquí"></ion-input>
+          <ion-item>
+            <ion-button (click)="agregarComentarioAlproducto(historial.Id_documento)">subir Comentario</ion-button>
+            <h2 style="opacity: 0;" >__</h2>
+          <ion-button (click)="cerrarVentanacomentar()">Cerrar</ion-button>
+          </ion-item>
         </div>
       </div>
     </div>
+    
+    
   </ion-card-content>
 </ion-card>
 <!-- Historial de ventas -->

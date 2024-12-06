@@ -77,7 +77,7 @@
 </section>
 <!-- Sección productos -->
  <section *ngIf="selectedTab === 'productos'" class="section-padding">
-  <h5><strong >PRODUCTOS DINOWINNERS:</strong></h5>
+  <h5><strong>PRODUCTOS DINOWINNERS:</strong></h5>
   <ion-list>
     <div *ngFor="let usuario of usuarios"> 
       <ion-item>
@@ -85,32 +85,55 @@
           {{ usuario.nombre }}
         </ion-label>
       </ion-item>
-      
+  
       <div class="homecontainer">
         <ion-card *ngFor="let producto of productosPorUsuario[usuario.uid]" class="homecard">
           <ion-card-header class="homecardheader">
             <ion-card-title class="homecardtitle">{{ producto.nombre }}</ion-card-title>
             <ion-badge color="primary" class="homebadge">${{ producto.precio }}</ion-badge>
           </ion-card-header>
-      
+  
           <ion-card-content class="homecardcontent">
             <img *ngIf="producto.imageUrl" [src]="producto.imageUrl" alt="Imagen del producto" class="homeimage" />
             <p class="homedescription">Descripción: {{ producto.descripcion }}</p>
             <p class="homestock">Stocks: {{ producto.stock }}</p>
           </ion-card-content>
-      
-          <ion-label 
-            (click)="addCarrito(producto.ID_DOCUMENTO, producto.nombre, producto.precio, producto.CreadorProducto, producto.ID_VENTA, producto.imageUrl, producto.stock, producto.uid_DW)"
-            class="homeaddtocart">
-            Agregar a carrito
-          </ion-label>
-        </ion-card>
+  
+          <ion-button 
+          (click)="addCarrito(producto.ID_DOCUMENTO, producto.nombre, producto.precio, producto.CreadorProducto, producto.ID_VENTA, producto.imageUrl, producto.stock, producto.uid_DW)"
+          class="homeaddtocart">
+          Agregar a carrito
+      </ion-button>
+
+      <h5><strong>Comentarios de {{ producto.nombre }}:</strong></h5>
+
+
+
+      <div *ngIf="comentarioPorIdproducto[producto.ID_DOCUMENTO] && comentarioPorIdproducto[producto.ID_DOCUMENTO].length > 0">
+        <div class="ComentariosDeproductos">
+          <div *ngFor="let comentario of comentarioPorIdproducto[producto.ID_DOCUMENTO]">
+            <ion-item>
+              <p><strong>{{ comentario.AutorComentario }}:</strong> {{ comentario.comentario }}</p>
+            </ion-item>
+          </div>
+        </div>
       </div>
       
+      <div *ngIf="comentarioPorIdproducto[producto.ID_DOCUMENTO] && comentarioPorIdproducto[producto.ID_DOCUMENTO].length === 0">
+        <p>Sin comentarios</p>
+      </div>
       
+
       
+
+          
+          
+        </ion-card>
+      </div>
     </div>
   </ion-list>
+  
+  
 </section>
 
 

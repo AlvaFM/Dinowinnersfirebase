@@ -163,6 +163,7 @@ pago: { numeroTarjeta: string; fechaExpiracion: string; cvv: string }) {
     precioTotal: totalXproducto * cantidadFinal,
     fechaCompra: new Date().toISOString(),
     MetodoDepago: pago,
+    Id_documento: ID_DOCUMENTO
   };
 
   this.databaseService.addHistorialDecompras(this.idUsuarioActual, compra).then(() => {

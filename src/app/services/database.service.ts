@@ -3,6 +3,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { from } from 'rxjs';
+import { ToastController, AlertController } from '@ionic/angular';
 
 
 
@@ -11,15 +12,34 @@ import { from } from 'rxjs';
 })
 export class DatabaseService {
   constructor(
-    private firestore: AngularFirestore, 
+    private firestore: AngularFirestore,
+    private toastController: ToastController,
+    private alertController:AlertController 
   ) {}
 
   //_______________________________________ 
   // Metodos relacionados con Productos 
 
-  addProduct(product: any): Promise<any> {
+addProduct(product: any): Promise<any> {
     return this.firestore.collection('productos').add(product);
-  }
+}
+addComentarioProducto(id: string, contenido: any): Promise<any> {
+  return this.firestore.collection(`productos/${id}/Comentarios`).add(contenido);
+}
+
+getComentarioProducto(id: string): Observable<any[]> {
+  return this.firestore.collection(`productos/${id}/Comentarios`).snapshotChanges().pipe(
+    map(actions =>
+      actions.map(a => {
+        const data = a.payload.doc.data();
+        const id = a.payload.doc.id;
+
+        return { id, ...data|| [] };  
+      })
+    )
+  );
+}
+
 
   updateProduct(productId: string, newData: any): Observable<any> {
     return from(this.firestore.collection('productos').doc(productId).update(newData));
@@ -234,9 +254,13 @@ addHistorialDecompras(uid: string, contenido: any): Promise<any> {
   }
 
 
-
   
 }
+
+
+
+  
+
 
   
   
