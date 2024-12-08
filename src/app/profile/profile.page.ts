@@ -168,19 +168,46 @@
       });
     }
 
+
+    VentanaCalificarC: string ='desactivada'
+      
+    productoSeleccionadoC: any; 
+  
+    
+    abrirVentanacalificarProducto(producto: any) {
+      this.productoSeleccionadoC = producto;
+      this.VentanaCalificarC = 'activada'
+ 
+    }
+    CerrarVentanacalificarProducto() {
+      this.productoSeleccionadoC = null;
+      this.VentanaCalificarC = 'desactivada'
+    }
+
+calificarProducto(ID: string, numCalificacion: number){
+  const calificacioncurso = {
+    calificacion: isNaN(numCalificacion) ? null : numCalificacion
+};
+this.databaseService.CalificacionProducto(ID, calificacioncurso )
+  console.log('calificacion producto enviada')
+  this.notificacionAccion('Calificación producto enviada:', 'exito');
+  this.CerrarVentanacalificarProducto() 
+}
+
     //Codigo importante no borrar ni alterar, tiene que ver con curso
 Calificar: string = 'desactivado'
 
 calificarCurso(Id: string, numCalificacion: number) {
   const calificacioncurso = {
     calificacion: isNaN(numCalificacion) ? null : numCalificacion
-  };
+};
 
   this.databaseService.CalificacionCurso(Id, calificacioncurso);
   console.log('Calificación enviada:', calificacioncurso);
   this.notificacionAccion('Calificación enviada:', 'exito'); 
   this.Calificar = 'desactivado';
 }
+
 contenidocurso:string = 'desactivado';
 cursoSeleccionado: any = null;
 verContenidoCurso(curso: any) {

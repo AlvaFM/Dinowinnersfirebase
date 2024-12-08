@@ -72,6 +72,22 @@ getStockProduct(ID_VENTA: string): Observable<any[]> {
         })
       )
     );
+    
+  }
+  CalificacionProducto(ID: string, Calificacion: any): Promise<any> {
+    return this.firestore.collection(`productos/${ID}/Calificacion`).add(Calificacion);
+  }
+
+  obtenerCalificacionProducto(ID: string): Observable<any[]> {
+    return this.firestore.collection(`productos/${ID}/Calificacion`)
+      .snapshotChanges()
+      .pipe(
+        map(actions => actions.map(a => {
+          const data = a.payload.doc.data();
+          const id = a.payload.doc.id;
+          return { id, ...data || {} }; 
+        }))
+     );
   }
 
   // ________________________________________________________
@@ -164,6 +180,7 @@ addHistorialDecompras(uid: string, contenido: any): Promise<any> {
   addsubscription(subscription: any): Promise<any> {
     return this.firestore.collection('suscripciones').add(subscription);
   }
+
   CalificacionCurso(ID: string, Calificacion: any): Promise<any> {
     return this.firestore.collection(`Curso/${ID}/Calificacion`).add(Calificacion);
   }

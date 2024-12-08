@@ -107,14 +107,16 @@
 // Importante no borrar
 
 .ComentariosDeproductos {
-  max-height: 120px; 
+  max-height: 50px; 
   overflow-y: scroll; 
   margin-bottom: 10px;
 }
 
 .ComentariosDeproductos ion-item {
-  padding: 5px 0;
+  padding: 1px 0;
   margin: 0;
+  border-radius: 100px;
+  background-color:  #FFF5CC;
 }
 
 .ComentariosDeproductos p {

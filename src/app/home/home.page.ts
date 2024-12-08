@@ -42,26 +42,54 @@ export class HomePage implements OnInit {
     }
   }
 
+  calcularPromedio(calificaciones: any[]): number {
+    if (!calificaciones || calificaciones.length === 0) {
+      return 0;
+    }
+    const totalPuntaje = calificaciones.reduce((total, cal) => total + cal.calificacion, 0);
+    return totalPuntaje / calificaciones.length;
+  }
+  
+
+
+
+
   comentarioPorIdproducto: { [key: string]: any[] } = {}; 
+  calificacionesPorProducto: { [key: string]: any[] } = {}; 
 
   obtenerUsuariosYDatos() {
     this.dbService.getAllUsers().subscribe(users => {
-      this.usuarios = []; 
-  
+      this.usuarios = [];
+    
       users.forEach(usuario => {
         const uid = usuario.uid;
-  
-   
+    
         if (!this.productosPorUsuario[uid]) {
           this.dbService.getProductsByUser(uid).subscribe(products => {
             products.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
-  
+    
             this.productosPorUsuario[uid] = products.map((producto: any) => {
+      
               this.comentariosdelproducto(producto.id).subscribe(comentarios => {
                 this.comentarioPorIdproducto[producto.id] = comentarios || [];
                 console.log('Comentarios del producto:', this.comentarioPorIdproducto[producto.id]);
               });
-  
+    
+              this.dbService.obtenerCalificacionProducto(producto.id).subscribe((calificaciones: any[]) => {
+                this.calificacionesPorProducto[producto.id] = calificaciones || [];
+    
+                if (calificaciones && calificaciones.length > 0) {
+                  const totalPuntaje = calificaciones.reduce((total, cal) => total + cal.calificacion, 0);
+                  const promedio = totalPuntaje / calificaciones.length;
+                  producto.calificacionPromedio = promedio.toFixed(1);  // Aseguramos que sea un número con una cifra decimal
+                  console.log(`Promedio de calificaciones para el producto ${producto.id}: ${producto.calificacionPromedio}`);
+                } else {
+                  // Si no hay calificaciones, asignamos 'N/A' o un mensaje similar
+                  producto.calificacionPromedio = 'N/A';
+                  console.warn(`No se encontraron calificaciones para el producto ${producto.id}.`);
+                }
+              });
+    
               return {
                 ID_DOCUMENTO: producto.id,
                 CreadorProducto: producto.CreadorProducto,
@@ -74,16 +102,16 @@ export class HomePage implements OnInit {
                 stock: producto.stock,
                 uid_DW: producto.uid_DW,
                 categoria: producto.categoria,
-      
+                calificacionPromedio: producto.calificacionPromedio,  // Incluimos la calificación promedio
               };
             });
-  
+    
             if (products && products.length > 0) {
               this.usuarios.push(usuario);
             }
           });
         }
-  
+    
         this.dbService.getLocationsByUser(uid).subscribe(locations => {
           this.ubicacionesPorUsuario[uid] = locations;
         });
@@ -91,9 +119,16 @@ export class HomePage implements OnInit {
     });
   }
   
+  
+  
   comentariosdelproducto(id_documento: string) {
     return this.dbService.getComentarioProducto(id_documento);  
   }
+  getComentariosCount(productId: string): number {
+    const comentarios = this.comentarioPorIdproducto[productId];
+    return comentarios ? comentarios.length : 0;
+  }
+  
   
 
   ContenidoDelPerfil() {
@@ -224,6 +259,7 @@ export class HomePage implements OnInit {
       console.error('Error al obtener comentarios:', error); 
     });
   }
+
   obtenerCalificacionCurso(uidCursoForo: string, comentario: any) {
     console.log(`Obteniendo cursos para uidCursoForo: ${uidCursoForo}`); 
     this.dbService.getCurso(uidCursoForo).subscribe((cursos: any[]) => {

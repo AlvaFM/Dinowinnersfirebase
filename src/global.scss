@@ -23,6 +23,7 @@
     font-style: normal;
 }
 
+
 ion-toolbar {
     --background: linear-gradient(90deg, #f8bd85, #f68b79); 
     color: #ffffff;
@@ -49,12 +50,11 @@ ion-button {
     box-shadow: none;
 }
 
-ion-buttons {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
+ion-button {
+  font-size: 12px; 
+  padding:4px 10px; 
 }
+
 body {
   background: linear-gradient(135deg, #f8e7db 0%, #faf6e8 50%, #ffffff 100%);
 }
@@ -106,7 +106,7 @@ ion-card {
 
   background: linear-gradient(135deg, #f8e7db 0%, #faf6e8 50%, #ffffff 100%);
   color: rgb(0, 0, 0); 
-  border-radius: 20px; 
+  border-radius: 5px; 
   border: none !important;  
   box-shadow: 2px, 2px, 2px #777777;
   }
@@ -169,6 +169,7 @@ ion-card {
   object-fit: cover; 
   display: block; 
   margin: 0 auto; 
+  border-radius: 10px;
 }
 
 .homedescription,
@@ -212,4 +213,5 @@ ion-card {
 .mensaje-error {
   background-color: #bc6262;
 }
+
   

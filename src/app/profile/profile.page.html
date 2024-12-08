@@ -92,8 +92,10 @@
             <li><strong>Precio Total: </strong>$ {{ historial.precioTotal }}</li>
           </ul>
     
-          <ion-item  *ngIf="VentanaComentar === 'desactivada'">
+          <ion-item  *ngIf="VentanaComentar === 'desactivada' && VentanaCalificarC ===  'desactivada'">
             <ion-button  (click)="abrirVentanacomentar(historial)">Comentar</ion-button>
+            <ion-button  (click)="abrirVentanacalificarProducto(historial)">calificar</ion-button>
+            
           </ion-item>
         </div>
     
@@ -103,6 +105,29 @@
             <ion-button (click)="agregarComentarioAlproducto(historial.Id_documento)">subir Comentario</ion-button>
             <h2 style="opacity: 0;" >__</h2>
           <ion-button (click)="cerrarVentanacomentar()">Cerrar</ion-button>
+          </ion-item>
+        </div>
+
+        <div *ngIf="VentanaCalificarC === 'activada'">
+          <ion-item>
+            <ion-button fill="clear" (click)="calificarProducto(historial.Id_documento, 1)">1
+              <ion-icon name="star-outline"></ion-icon>
+            </ion-button>
+            <ion-button fill="clear" (click)="calificarProducto(historial.Id_documento, 2)">2
+              <ion-icon name="star-outline"></ion-icon>
+            </ion-button>
+            <ion-button fill="clear" (click)="calificarProducto(historial.Id_documento, 3)">3
+              <ion-icon name="star-outline"></ion-icon>
+            </ion-button>
+            <ion-button fill="clear" (click)="calificarProducto(historial.Id_documento, 4)">4
+              <ion-icon name="star-outline"></ion-icon>
+            </ion-button>
+            <ion-button fill="clear" (click)="calificarProducto(historial.Id_documento, 5)">5
+              <ion-icon name="star-outline"></ion-icon>
+            </ion-button>
+          </ion-item>
+          <ion-item>
+          <ion-button (click)="CerrarVentanacalificarProducto()">Cerrar</ion-button>
           </ion-item>
         </div>
       </div>

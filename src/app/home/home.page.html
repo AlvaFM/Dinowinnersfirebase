@@ -85,54 +85,59 @@
           {{ usuario.nombre }}
         </ion-label>
       </ion-item>
-  
       <div class="homecontainer">
         <ion-card *ngFor="let producto of productosPorUsuario[usuario.uid]" class="homecard">
           <ion-card-header class="homecardheader">
             <ion-card-title class="homecardtitle">{{ producto.nombre }}</ion-card-title>
             <ion-badge color="primary" class="homebadge">${{ producto.precio }}</ion-badge>
           </ion-card-header>
-  
           <ion-card-content class="homecardcontent">
-            <img *ngIf="producto.imageUrl" [src]="producto.imageUrl" alt="Imagen del producto" class="homeimage" />
+            <div *ngIf="calificacionesPorProducto[producto.ID_DOCUMENTO] && calificacionesPorProducto[producto.ID_DOCUMENTO].length > 0; else noCalificaciones">
+              <p>
+                <b>Puntaje</b> 
+                {{ calcularPromedio(calificacionesPorProducto[producto.ID_DOCUMENTO]) | number:'1.1-1' }} de 5
+                <ion-icon name="star"></ion-icon>
+              </p>
+            </div>
+            
+            <ng-template #noCalificaciones>
+              <p> <b>Puntaje</b> 0 <ion-icon name="star-outline"></ion-icon> </p>
+            </ng-template>  
+            <img *ngIf="producto.imageUrl" [src]="producto.imageUrl" alt="Imagen del producto" class="homeimage" />  
             <p class="homedescription">Descripción: {{ producto.descripcion }}</p>
             <p class="homestock">Stocks: {{ producto.stock }}</p>
             <p class="product-category">Categoría: {{producto.categoria|| 'sin categoria'}}</p>
-          </ion-card-content>
-  
-          <ion-button 
-          (click)="addCarrito(producto.ID_DOCUMENTO, producto.nombre, producto.precio, producto.CreadorProducto, producto.ID_VENTA, producto.imageUrl, producto.stock, producto.uid_DW)"
-          class="homeaddtocart">
-          Agregar a carrito
-      </ion-button>
+            <p></p>
+            <ion-button  
+            (click)="addCarrito(producto.ID_DOCUMENTO,
+             producto.nombre, producto.precio,
+              producto.CreadorProducto,
+               producto.ID_VENTA, producto.imageUrl,
+                producto.stock, producto.uid_DW)">
+            Agregar a carrito
+        </ion-button>
+        </ion-card-content>
+        <ion-item>
+          <strong>Comentarios ({{ getComentariosCount(producto.ID_DOCUMENTO) }}) :</strong>
 
-      <h5><strong>Comentarios de {{ producto.nombre }}:</strong></h5>
-
-
-
+        </ion-item>
       <div *ngIf="comentarioPorIdproducto[producto.ID_DOCUMENTO] && comentarioPorIdproducto[producto.ID_DOCUMENTO].length > 0">
         <div class="ComentariosDeproductos">
           <div *ngFor="let comentario of comentarioPorIdproducto[producto.ID_DOCUMENTO]">
             <ion-item>
-              <p><strong>{{ comentario.AutorComentario }}:</strong> {{ comentario.comentario }}</p>
+              <p>{{ comentario.AutorComentario }}: <br> {{ comentario.comentario }}</p>
             </ion-item>
           </div>
         </div>
       </div>
-      
-      <div *ngIf="comentarioPorIdproducto[producto.ID_DOCUMENTO] && comentarioPorIdproducto[producto.ID_DOCUMENTO].length === 0">
-        <p>Sin comentarios</p>
-      </div>
-      
-
-      
-
-          
-          
         </ion-card>
       </div>
     </div>
+
+    
   </ion-list>
+
+  
   
   
 </section>
