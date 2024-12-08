@@ -19,7 +19,8 @@ export class HomePage implements OnInit {
   nombreUsuario: string = '';
   idUsuarioActual : string ='';
   selectedTab: string = 'productos';
-
+  categories: any[] = [];
+  products: any[] = [];
 
   constructor(private dbService: DatabaseService, private authService: AuthService, private router: Router) {}
 
@@ -27,10 +28,18 @@ export class HomePage implements OnInit {
     this.verificarUsuarioAutenticado();
     this.obtenerUsuariosYDatos();
     this.obtenerComentariosForo();
+    this.loadCategories();
   }
 
   changeTab(tab: string) {
     this.selectedTab = tab;
+  }
+  async loadCategories() {
+    try {
+      this.categories = await this.dbService.getAllCategories();  
+    } catch (error) {
+      console.error('Error al cargar las categorías:', error);
+    }
   }
 
   comentarioPorIdproducto: { [key: string]: any[] } = {}; 

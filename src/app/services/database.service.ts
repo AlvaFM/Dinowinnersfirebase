@@ -40,7 +40,6 @@ getComentarioProducto(id: string): Observable<any[]> {
   );
 }
 
-
   updateProduct(productId: string, newData: any): Observable<any> {
     return from(this.firestore.collection('productos').doc(productId).update(newData));
 }
@@ -253,22 +252,56 @@ addHistorialDecompras(uid: string, contenido: any): Promise<any> {
     );
   }
 
+  //Métodos de las categorías
 
+  async initializeDefaultCategories(): Promise<void> {
+    const defaultCategories = [
+      { nombre: 'Electrónica', descripcion: 'Productos tecnológicos' },
+      { nombre: 'Ropa', descripcion: 'Prendas de vestir y accesorios' },
+      { nombre: 'Hogar', descripcion: 'Artículos para el hogar y cocina' },
+      { nombre: 'Libros', descripcion: 'Libros y material educativo' },
+      { nombre: 'Manualidades', descripcion: 'Objetos artesanales' },
+      { nombre: 'Infantil', descripcion: 'Juguetes y objetos infantiles' },
+      { nombre: 'Deportes', descripcion: 'Productos para actividades deportivas' },  
+      { nombre: 'Salud', descripcion: 'Productos para el bienestar y la salud' },    
+      { nombre: 'Jardinería', descripcion: 'Herramientas y productos para jardinería' } 
+    ];
   
-}
-
-
-
+    try {
+      const existingCategories = await this.firestore.collection('categorias').get().toPromise();
   
-
-
+      if (existingCategories?.empty) {
+        const batch = this.firestore.firestore.batch();
   
+        defaultCategories.forEach((category) => {
+          const docRef = this.firestore.collection('categorias').doc().ref;
+          batch.set(docRef, category);
+        });
   
+        await batch.commit();
+        console.log('Categorías predeterminadas inicializadas');
+      }
+    } catch (error) {
+      console.error('Error al inicializar categorías predeterminadas:', error);
+      throw error;
+    }
+  }  
+  getAllCategories(): Promise<any[]> {
+    return this.firestore.collection('categorias').get().toPromise().then((snapshot) => {
+      if (!snapshot || snapshot.empty) {
+        return []; 
+      }
 
-  
-
-
-
-
-
-
+      return snapshot.docs.map((doc) => {
+        const data = doc.data();
+        if (data && typeof data === 'object') {
+          return { id: doc.id, ...data }; 
+        }
+        return { id: doc.id }; 
+      });
+    }).catch(error => {
+      console.error('Error al obtener las categorías:', error);
+      return []; 
+    });
+  }  
+}  

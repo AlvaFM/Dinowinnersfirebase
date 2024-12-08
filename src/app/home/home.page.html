@@ -97,6 +97,7 @@
             <img *ngIf="producto.imageUrl" [src]="producto.imageUrl" alt="Imagen del producto" class="homeimage" />
             <p class="homedescription">Descripción: {{ producto.descripcion }}</p>
             <p class="homestock">Stocks: {{ producto.stock }}</p>
+            <p class="product-category">Categoría: {{producto.categoria || 'Sin categoría'}}</p>
           </ion-card-content>
   
           <ion-button 

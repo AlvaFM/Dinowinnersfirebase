@@ -34,7 +34,9 @@
     contenidoCurso: string = ''; // Contenido del curso
     selectedFile: File | undefined = undefined;
     selectedFilePPHOTO: File | undefined = undefined;
-  
+    categories: any[] = [];
+    selectedCategory: string = '';
+    
 
 
 
@@ -55,7 +57,7 @@
     
 
     async ngOnInit() {
-
+      this.loadCategories();
       this.verificarUsuarioAutenticado();
       this.authService.getUser().subscribe(user => {
         this.user = user;  
@@ -67,6 +69,8 @@
           this.obtenerCursosSuscritos();
           this.getHistorialDecompras();
           this.getHistorialDeventas();
+          this.databaseService.initializeDefaultCategories();
+          this.loadCategories();
         }
       });
     }
@@ -321,7 +325,8 @@ cerrarContenido() {
         stock: this.stockProducto,
         imageUrl, 
         ID_VENTA:ID_VENTA,
-        fecha: new Date().toISOString()
+        fecha: new Date().toISOString(),
+        categoria: this.selectedCategory,
         };
 
     
@@ -412,12 +417,15 @@ cerrarContenido() {
         this.notificacionAccion('Error al añadir la información Sobre mí','error')
       }
     }
-    
-    
 
-    
-    
-
+    async loadCategories() {
+      try {
+        this.categories = await this.databaseService.getAllCategories();
+      } catch (error) {
+        console.error('Error al cargar las categorías:', error);
+      }
+    }
+  
     async logout() {
       await this.authService.logout();
       console.log('Sesión cerrada');

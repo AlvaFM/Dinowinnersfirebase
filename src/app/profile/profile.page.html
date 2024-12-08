@@ -162,6 +162,7 @@
                       <p>${{ product.precio}}</p>
                       <p class="product-description">{{ product.descripcion }}</p>
                       <p class="product-stock">Stocks : {{ product.stock }}</p>
+                      <p class="product-category">Categoría: {{product.categoria}}</p>
                     </ion-label>
                   </ion-item>
                 </div>
@@ -204,10 +205,17 @@
               </ion-item>
 
               <ion-item>
-                <ion-label position="floating">stocks</ion-label>
+                <ion-label position="floating">Stock</ion-label>
                 <ion-input [(ngModel)]="stockProducto" type="number" min="1" step="1"></ion-input>
               </ion-item>
-
+              <ion-item>
+                <ion-label>Categoría</ion-label>
+                <ion-select [(ngModel)]="selectedCategory" placeholder="Selecciona una categoría">
+                  <ion-select-option *ngFor="let category of categories" [value]="category.nombre">
+                    {{ category.nombre }}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>              
               <ion-item>
                 <ion-label position="floating">Selecciona una imagen</ion-label>
               </ion-item>
