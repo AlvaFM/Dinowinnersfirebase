@@ -51,16 +51,13 @@ export class HomePage implements OnInit {
       users.forEach(usuario => {
         const uid = usuario.uid;
   
-        // Solo obtenemos los productos si aún no los hemos cargado
+   
         if (!this.productosPorUsuario[uid]) {
           this.dbService.getProductsByUser(uid).subscribe(products => {
             products.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
   
             this.productosPorUsuario[uid] = products.map((producto: any) => {
-              
-              // Llamamos al servicio para obtener los comentarios del producto
               this.comentariosdelproducto(producto.id).subscribe(comentarios => {
-                // Guardamos los comentarios en el objeto comentarioPorIdproducto
                 this.comentarioPorIdproducto[producto.id] = comentarios || [];
                 console.log('Comentarios del producto:', this.comentarioPorIdproducto[producto.id]);
               });
@@ -75,7 +72,8 @@ export class HomePage implements OnInit {
                 nombre: producto.nombre,
                 precio: producto.precio,
                 stock: producto.stock,
-                uid_DW: producto.uid_DW
+                uid_DW: producto.uid_DW,
+                categoria: producto.categoria,
       
               };
             });
