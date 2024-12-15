@@ -281,48 +281,23 @@
             <ion-card-content>
               <ion-list>
                 <ion-item *ngFor="let location of locations">
-                  {{ location.ciudad }} - {{ location.direccion }}
+                  <p>Dirección: {{ location?.ubicacion?.road }}, {{ location?.ubicacion?.neighbourhood }}</p>
+                  <p>País: {{ location?.ubicacion?.country }}</p>
+                  <p>Estado: {{ location?.ubicacion?.state }}</p>
+                  <p>Provincia: {{ location?.ubicacion?.county }}</p>
+                  <p>Localidad: {{ location?.ubicacion?.town }}</p>
                 </ion-item>
               </ion-list>
             </ion-card-content>
           </ion-card>
 
            <!-- Con este boton alternamos entre la vista de ubicacion y la de agregar ubicacion -->
-           <ion-fab *ngIf="SAubicacion === 'desactivado'" vertical="bottom" 
-           horizontal="end"  (click)="SAubicacion = 'activado'">
-             <ion-fab-button color="warning">
-               Agregar
-             </ion-fab-button>
-           </ion-fab>
-
-
-      
-          <ion-card *ngIf="SAubicacion === 'activado'">
-            <ion-card-header>
-              <ion-card-title>Agregar Ubicación</ion-card-title>
-            </ion-card-header>
-            <ion-card-content>
-              <ion-item>
-                <ion-label position="floating">Ciudad</ion-label>
-                <ion-input [(ngModel)]="city"></ion-input>
-              </ion-item>
-      
-              <ion-item>
-                <ion-label position="floating">Dirección</ion-label>
-                <ion-input [(ngModel)]="address"></ion-input>
-              </ion-item>
-
-              <ion-row>
-                <ion-col>
-                  <ion-button (click)="addLocation()" (click)="SAubicacion = 'desactivado'">Agregar</ion-button>
-                </ion-col>
-                <ion-col>
-                  <ion-button (click)="SAubicacion = 'desactivado'">Cancelar</ion-button>
-                </ion-col>
-              </ion-row>
-      
-            </ion-card-content>
-          </ion-card>
+           <ion-fab  vertical="bottom" horizontal="end" >
+            <ion-fab-button color="warning" routerLink="/location">
+              Agregar
+            </ion-fab-button>
+          </ion-fab>
+          
         </section>
 
         <!-- Sección de cursos -->

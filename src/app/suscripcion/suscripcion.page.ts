@@ -13,8 +13,11 @@ export class SuscripcionPage implements OnInit {
   NameCurso:string='';
   nombreUsuario: string=''
   idUsuario: string = '';
-  numeroTarjeta: string=''
-  codigoDepago: string=''
+  pago = {
+    numeroTarjeta: '',
+    fechaExpiracion: '',
+    cvv: ''
+  };
   NameAutor: string=''  
 
   constructor(private route: ActivatedRoute, private authService:AuthService, private dbservice:DatabaseService) { }
@@ -51,8 +54,7 @@ export class SuscripcionPage implements OnInit {
     idUsuarioSub: this.idUsuario,
     cursoIdSub: this.cursoId,
     nombreCursoSub: this.NameCurso,
-    Tarjeta: this.numeroTarjeta,
-    cod: this.codigoDepago,
+    metododepago: this.pago
   };
 
   this.dbservice.addsubscription(subscription).then(() => {

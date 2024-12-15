@@ -1,0 +1,71 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-icon name="person" routerLink="/profile" *ngIf="nombreUsuario" size="large" slot="start"></ion-icon>
+    <ion-title>{{nombreUsuario}} Ubicación</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="location-ion-content">
+
+  <ion-item>
+
+  </ion-item>
+  
+  <ion-item>
+    <ion-input [(ngModel)]="consultaBusqueda" placeholder="Buscar dirección"></ion-input>
+    <ion-button (click)="buscarDireccion()">Buscar</ion-button>
+  </ion-item>
+
+ 
+  <div id="map" style="height: 400px;"></div>
+
+
+  <ion-item>
+    <strong>Una vez seleccionada la ubicación, aparecerá aquí:</strong>
+  </ion-item>
+
+  
+  <ion-item *ngIf="ubicacionSeleccionada?.direccion?.city &&
+   ubicacionSeleccionada?.direccion?.country && ubicacionSeleccionada?.direccion?.state">
+    <ion-label>Ubicación:</ion-label>
+    <ion-text>{{ ubicacionSeleccionada?.direccion?.city }},
+      {{ ubicacionSeleccionada?.direccion?.country }},<br> 
+      {{ ubicacionSeleccionada?.direccion?.state }} 
+    </ion-text>
+  </ion-item>  
+  <ion-item *ngIf="ubicacionSeleccionada?.direccion?.neighbourhood">
+    <ion-label>Vecindad:</ion-label>
+    <ion-text>{{ ubicacionSeleccionada?.direccion?.neighbourhood }}</ion-text>
+  </ion-item>
+  
+  <ion-item *ngIf="ubicacionSeleccionada?.direccion?.road">
+    <ion-label>Calle:</ion-label>
+    <ion-text>{{ ubicacionSeleccionada?.direccion?.road }}</ion-text>
+  </ion-item>
+  <ion-item *ngIf="ubicacionSeleccionada?.direccion?.town">
+    <ion-label>Pueblo:</ion-label>
+    <ion-text>{{ ubicacionSeleccionada?.direccion?.town }}</ion-text>
+  </ion-item>
+
+  <ion-item *ngIf="ubicacionSeleccionada?.direccion?.county">
+    <ion-label>Provincia:</ion-label>
+    <ion-text>{{ ubicacionSeleccionada?.direccion?.county }}</ion-text>
+  </ion-item>
+  <ion-item>
+    <h5 style="opacity: 0;" >_ <br> -</h5>
+  </ion-item>
+
+
+  <ion-footer class="fixed-footer">
+ 
+      <ion-button *ngIf="ubicacionSeleccionada?.direccion?.country" (click)="guardarUbicacion()" routerLink="/profile">
+        Guardar Ubicación
+      </ion-button>
+  
+
+  </ion-footer>
+  
+  
+  
+  
+</ion-content>

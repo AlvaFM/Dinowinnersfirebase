@@ -138,7 +138,9 @@ stockproducto: number,
 totalXproducto: number, 
 cantidadDeseada: number, 
 uid_DW:string,
-pago: { numeroTarjeta: string; fechaExpiracion: string; cvv: string }) {
+pago: { numeroTarjeta: string; fechaExpiracion: string; cvv: string }
+
+) {
   const cantidadFinal = cantidadDeseada ?? 1;
   const stockProducto =  stockproducto;  
   

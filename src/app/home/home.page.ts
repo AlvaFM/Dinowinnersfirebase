@@ -22,6 +22,8 @@ export class HomePage implements OnInit {
   categories: any[] = [];
   products: any[] = [];
 
+  
+
   constructor(private dbService: DatabaseService, private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
@@ -63,6 +65,12 @@ export class HomePage implements OnInit {
     
       users.forEach(usuario => {
         const uid = usuario.uid;
+
+        this.dbService.getLocationsByUser(uid).subscribe(locations => {
+          
+          this.ubicacionesPorUsuario[uid] = locations;
+
+          console.log(this.ubicacionesPorUsuario[uid])
     
         if (!this.productosPorUsuario[uid]) {
           this.dbService.getProductsByUser(uid).subscribe(products => {
@@ -111,9 +119,7 @@ export class HomePage implements OnInit {
             }
           });
         }
-    
-        this.dbService.getLocationsByUser(uid).subscribe(locations => {
-          this.ubicacionesPorUsuario[uid] = locations;
+  
         });
       });
     });

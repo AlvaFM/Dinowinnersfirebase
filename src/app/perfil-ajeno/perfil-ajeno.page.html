@@ -75,8 +75,8 @@
         <ion-list>
           <ion-item *ngFor="let ubicacion of ubicaciones">
             <ion-label>
-              <h2>{{ ubicacion.ciudad }}</h2>
-              <p>{{ ubicacion.direccion }}</p>
+              <h2>Ciudad: {{ ubicacion?.ubicacion?.city }}</h2>
+              <p>Dirección: {{ ubicacion?.ubicacion?.road }}, {{ ubicacion?.ubicacion?.neighbourhood }}</p>
             </ion-label>
           </ion-item>
         </ion-list>
