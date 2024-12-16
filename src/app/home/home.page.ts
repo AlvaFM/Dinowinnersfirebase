@@ -289,16 +289,10 @@ export class HomePage implements OnInit {
     });
   }
 
+  
   mensajelogo(){
     this.dbService.mensajeNotification('Deja tu huella emprendiendo','exito')
   }
-  
-  
-  
-  
-  
-  
-  
   
 
   async logout() {
