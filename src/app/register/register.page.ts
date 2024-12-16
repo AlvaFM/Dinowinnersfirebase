@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { DatabaseService } from '../services/database.service';
 
 @Component({
   selector: 'app-register',
@@ -12,24 +13,27 @@ export class RegisterPage {
   password: string = '';
   confirmPassword: string = '';
   nombre: string = ''; 
-  errorMessage: string = '';
+  
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router,
+    private databaseService: DatabaseService
+  ) {}
 
   register() {
     if (this.password !== this.confirmPassword) {
-      this.errorMessage = 'Las contraseñas no coinciden';
+      
+      this.databaseService.mensajeNotification('Las contraseñas no coinciden','error');
       return;
     }
 
     this.authService
       .register(this.email, this.password, this.nombre) 
       .then(() => {
-        
+        this.databaseService.mensajeNotification('Las contraseñas no coinciden','error');
         this.router.navigate(['/login']);
       })
       .catch((error) => {
-        this.errorMessage = error.message; 
+        this.databaseService.mensajeNotification( error,'error'); 
       });
   }
 }

@@ -52,7 +52,6 @@ verificarUsuarioAutenticado() {
           this.NombreUsuarioActual = data?.nombre || ''; 
           this.idUsuarioActual = user.uid;
           this.obtenerProductosDelCarrito()
-          console.log('Nombre desde Firestore:', this.NombreUsuarioActual);
 
         }).catch(error => {
           console.error('Error al obtener los datos del usuario:', error);
@@ -67,9 +66,6 @@ verificarUsuarioAutenticado() {
 obtenerProductosDelCarrito() {
     if (this.idUsuarioActual) {
       this.databaseService.getContenidoCarrito(this.idUsuarioActual).subscribe((productos: any) => {
-        console.log('Productos recibidos:', productos);
-  
-      
         this.productosCarrito = productos.map((doc: any) => {
           return {
             ID_DOCUMENTO: doc.ID_DOCUMENTO,
@@ -120,9 +116,7 @@ eliminarProducto(ID_CARRITO: string) {
       console.log('Producto a eliminar:', ID_CARRITO);
       this.databaseService.eliminarProductoDelCarrito(this.idUsuarioActual, ID_CARRITO)
         .then(() => {
-          console.log('Producto eliminado con éxito');
           this.productosCarrito = this.productosCarrito.filter(producto => producto.id !== ID_CARRITO);
-          console.log('Productos en el carrito después de eliminar:', this.productosCarrito);
         })
         .catch((error) => {
           console.error('Error al eliminar el producto:', error);
@@ -145,7 +139,8 @@ pago: { numeroTarjeta: string; fechaExpiracion: string; cvv: string }
   const stockProducto =  stockproducto;  
   
   if (!this.comprobarStockProducto(cantidadDeseada,stockProducto)) {
-    console.log(`La cantidad deseada excede el stock disponible de ${NombreXproducto}`);
+
+    this.databaseService.mensajeNotification(`La cantidad deseada excede el stock disponible de ${NombreXproducto}`, 'error');
 
 
     return;  
@@ -169,7 +164,7 @@ pago: { numeroTarjeta: string; fechaExpiracion: string; cvv: string }
   };
 
   this.databaseService.addHistorialDecompras(this.idUsuarioActual, compra).then(() => {
-    console.log(`Compra de ${NombreXproducto} realizada con éxito`);
+    this.databaseService.mensajeNotification(`Compra de ${NombreXproducto} realizada con éxito`,'exito');
     const venta = {
       ID_venta: idCompra,
       nombre: NombreXproducto,
@@ -193,16 +188,12 @@ pago: { numeroTarjeta: string; fechaExpiracion: string; cvv: string }
 
 comprobarStockProducto(cantidadDeseada: number, cantidadXproducto: number): boolean {
   if (cantidadDeseada === null || cantidadDeseada <= 0) {
-    console.log('Por favor ingrese una cantidad válida');
     return false;
   }
 
   if (cantidadDeseada > cantidadXproducto) {
-    console.log('La cantidad deseada excede el stock disponible.');
     return false;
   }
-
-  console.log('Cantidad disponible suficiente');
   return true;
 }
 

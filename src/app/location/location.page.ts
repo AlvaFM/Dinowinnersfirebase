@@ -63,10 +63,13 @@ export class LocationPage implements OnInit {
   
     this.databaseService.addLocation(ubicacion)
       .then(() => {
+
+        this.databaseService.mensajeNotification('Ubicación guardada correctamente','exito');
        
-        console.log('Ubicación guardada correctamente');
+        console.log
       })
       .catch((error) => {
+        this.databaseService.mensajeNotification('Error al guardar la ubicación:' + error, 'error');
       
         console.error('Error al guardar la ubicación:', error);
       });
@@ -92,7 +95,6 @@ export class LocationPage implements OnInit {
         if (direccion && direccion.address) {
           if (this.ubicacionSeleccionada) {
             this.ubicacionSeleccionada.direccion = direccion.address;
-            console.log('Dirección completa:', this.ubicacionSeleccionada.direccion);
           }
         } else {
          console.log('No se pudo obtener la ubicacion del lugar')
@@ -133,11 +135,11 @@ export class LocationPage implements OnInit {
             }
           });
         } else {
-          alert('No se encontraron resultados');
+          this.databaseService.mensajeNotification('No se encontraron resultados','error');
         }
       });
     } else {
-      alert('Por favor ingrese una dirección');
+      this.databaseService.mensajeNotification('Por favor ingrese una dirección','error');
     }
   }
 }

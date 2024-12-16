@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { DatabaseService } from '../services/database.service';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +13,9 @@ export class LoginPage {
   password: string = '';
   loading: boolean = false; 
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router,
+    private databaseService: DatabaseService
+  ) {}
 
   async login() {
     this.loading = true; 
@@ -28,6 +31,7 @@ export class LoginPage {
       }, 3000); 
 
     } catch (error) {
+      this.databaseService.mensajeNotification('Error al iniciar sesión' + error,'error' )
       console.error('Error al iniciar sesión', error);
       this.loading = false; 
     } 

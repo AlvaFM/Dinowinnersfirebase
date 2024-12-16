@@ -1,0 +1,106 @@
+.contacto-seccion {
+    .contacto-item {
+      .contacto-nombre {
+        font-size: 1.2em;
+        font-weight: bold;
+      }
+      .contacto-email {
+        font-size: 0.9em;
+        color: gray;
+      }
+    }
+  }
+  
+  .perfil-seccion {
+    .perfil-sin-foto,
+    .perfil-con-foto {
+      text-align: center;
+      .foto-perfil {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin: auto;
+      }
+      .mensaje-sin-foto {
+        color: gray;
+        font-style: italic;
+      }
+    }
+  }
+  
+  .informacion-seccion {
+    .informacion-sin-datos,
+    .informacion-con-datos {
+      padding: 16px;
+      .mensaje-sin-datos {
+        color: darkgray;
+        font-size: 1em;
+      }
+      .informacion-identidad {
+        font-size: 1.1em;
+        color: black;
+      }
+    }
+  }
+  
+  .productos-seccion {
+    .productos-card {
+      .producto-item {
+        .producto-nombre {
+          font-weight: bold;
+        }
+        .producto-imagen {
+          width: 100%;
+          border-radius: 8px;
+          margin-top: 8px;
+        }
+        .producto-precio {
+          margin-top: 4px;
+        }
+      }
+    }
+  }
+  
+  .ubicaciones-seccion {
+    .ubicaciones-card {
+      .ubicacion-item {
+        .ubicacion-ciudad {
+          font-size: 1em;
+          font-weight: bold;
+        }
+        .ubicacion-direccion {
+          font-size: 0.9em;
+        }
+      }
+    }
+  }
+  
+  .cursos-seccion {
+    .cursos-card {
+      .curso-item {
+        .curso-nombre {
+          font-weight: bold;
+        }
+        .curso-fecha {
+          margin-top: 4px;
+        }
+      }
+    }
+  }
+  
+  .historial-ventas-seccion {
+    .historial-card {
+      .historial-container {
+        .historial-item {
+          .historial-lista {
+            list-style: none;
+            padding: 0;
+            li {
+              margin-bottom: 8px;
+            }
+          }
+        }
+      }
+    }
+  }
+  

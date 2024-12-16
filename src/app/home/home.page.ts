@@ -89,10 +89,10 @@ export class HomePage implements OnInit {
                 if (calificaciones && calificaciones.length > 0) {
                   const totalPuntaje = calificaciones.reduce((total, cal) => total + cal.calificacion, 0);
                   const promedio = totalPuntaje / calificaciones.length;
-                  producto.calificacionPromedio = promedio.toFixed(1);  // Aseguramos que sea un número con una cifra decimal
+                  producto.calificacionPromedio = promedio.toFixed(1);  
                   console.log(`Promedio de calificaciones para el producto ${producto.id}: ${producto.calificacionPromedio}`);
                 } else {
-                  // Si no hay calificaciones, asignamos 'N/A' o un mensaje similar
+          
                   producto.calificacionPromedio = 'N/A';
                   console.warn(`No se encontraron calificaciones para el producto ${producto.id}.`);
                 }
@@ -110,7 +110,7 @@ export class HomePage implements OnInit {
                 stock: producto.stock,
                 uid_DW: producto.uid_DW,
                 categoria: producto.categoria,
-                calificacionPromedio: producto.calificacionPromedio,  // Incluimos la calificación promedio
+                calificacionPromedio: producto.calificacionPromedio,  
               };
             });
     
@@ -176,11 +176,13 @@ export class HomePage implements OnInit {
     };
   
     this.dbService.addContenidoCarrito(this.idUsuarioActual, contenidoCarrito).then(() => {
-      this.notificacionAccion('Producto añadido al carrito con éxito', 'exito');
+      this.dbService.mensajeNotification('Producto añadido al carrito con éxito', 'exito');
+
       console.log('Producto añadido al carrito con éxito');
     }).catch((error) => {
       console.error('Error al añadir producto al carrito:', error);
-      this.notificacionAccion('Error, no se pudo agregar al carrito', 'error');
+      this.dbService.mensajeNotification('Error, no se pudo agregar al carrito', 'error');
+
     });
   }
   
@@ -210,33 +212,19 @@ export class HomePage implements OnInit {
         fecha: new Date().toISOString()
       };
       this.dbService.addCommentForo(ComentarioForo);
+
+      this.dbService.mensajeNotification('Comentario agregado con éxito', 'exito');
       
-      this.notificacionAccion('Comentario agregado con éxito', 'exito');
 
       this.comentarioForo = '';
     } else {
-      this.notificacionAccion('Error, no se pudo comentar', 'error');
+      this.dbService.mensajeNotification('Error, no se pudo comentar', 'error');
+  
     }
     
  
   }
 
-
-
-  
-
-  mensaje: string = '';
-  tipoMensaje: string = '';
-  notificacionAccion(mensaje: string, tipomensaje: string): void {
-    this.mensaje = mensaje;
-    this.tipoMensaje = tipomensaje;
-    
-    setTimeout(() => {
-      this.mensaje = '';
-      this.tipoMensaje = '';
-    }, 3000);
-  }
-  
 
   irASuscripcion(uidCurso: string, nombreCurso: string, autor: string) {
     this.router.navigate(['/suscripcion', uidCurso, nombreCurso, autor]);
@@ -311,6 +299,7 @@ export class HomePage implements OnInit {
 
   async logout() {
     await this.authService.logout();
+    this.dbService.mensajeNotification('Sesión cerrada','error')
     console.log('Sesión cerrada');
     this.router.navigate(['/home']);
   }

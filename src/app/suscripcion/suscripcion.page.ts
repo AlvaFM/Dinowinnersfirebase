@@ -58,10 +58,11 @@ export class SuscripcionPage implements OnInit {
   };
 
   this.dbservice.addsubscription(subscription).then(() => {
+    this.dbservice.mensajeNotification('¡Suscripción realizada con éxito!','exito')
     alert('¡Suscripción realizada con éxito!');
   }).catch((error) => {
     console.error('Error al suscribirse:', error);
-    alert('Hubo un error al realizar la suscripción.');
+    this.dbservice.mensajeNotification('Hubo un error al realizar la suscripción.','error')
   });
 }
 

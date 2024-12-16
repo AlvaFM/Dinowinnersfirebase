@@ -76,17 +76,7 @@
     }
 
 
-    mensaje: string = '';
-    tipoMensaje: string = '';
-    notificacionAccion(mensaje: string, tipomensaje: string): void {
-      this.mensaje = mensaje;
-      this.tipoMensaje = tipomensaje;
-      
-      setTimeout(() => {
-        this.mensaje = '';
-        this.tipoMensaje = '';
-      }, 3000);
-    }
+ 
 
     ContenidoDelPerfil() {
       this.databaseService.getContenidoPerfil(this.user.uid).subscribe(perfil => {
@@ -132,13 +122,15 @@
           };
       
           this.databaseService.addComentarioProducto(id_documento, comentario).then(() => {
-            this.notificacionAccion('Comentario agregado con éxito', 'exito');
+            this.databaseService.mensajeNotification('Comentario agregado con éxito', 'exito');
+          
             this.comentarioAsubir = '';  
             this.VentanaComentar = 'desactivada'; 
           }).catch(error => {
-            this.notificacionAccion('Error al agregarcomentario', 'error');
+            this.databaseService.mensajeNotification('Error al agregarcomentario'+ error , 'error');
           });
         } else {
+          this.databaseService.mensajeNotification('No se pueden agregar comentarios vacíos' , 'error');
           console.log('No se pueden agregar comentarios vacíos');
         }
       }
@@ -190,7 +182,7 @@ calificarProducto(ID: string, numCalificacion: number){
 };
 this.databaseService.CalificacionProducto(ID, calificacioncurso )
   console.log('calificacion producto enviada')
-  this.notificacionAccion('Calificación producto enviada:', 'exito');
+  this.databaseService.mensajeNotification('Calificación producto enviada:', 'exito');
   this.CerrarVentanacalificarProducto() 
 }
 
@@ -204,7 +196,7 @@ calificarCurso(Id: string, numCalificacion: number) {
 
   this.databaseService.CalificacionCurso(Id, calificacioncurso);
   console.log('Calificación enviada:', calificacioncurso);
-  this.notificacionAccion('Calificación enviada:', 'exito'); 
+  this.databaseService.mensajeNotification('Calificación enviada:', 'exito'); 
   this.Calificar = 'desactivado';
 }
 
@@ -244,8 +236,7 @@ cerrarContenido() {
       
       if (!this.CursoNombre || !this.nombreUsuario || !this.DescripcionCurso || this.CuposCurso === null || this.CuposCurso <= 0) {
           console.error('Todos los campos del curso son obligatorios y los cupos deben ser mayores que 0');
-          alert('Por favor, completa todos los campos del curso antes de continuar.');
-          this.notificacionAccion('Por favor, completa todos los campos del curso antes de continuar.', 'error'); 
+          this.databaseService.mensajeNotification('Por favor, completa todos los campos del curso antes de continuar.', 'error');
           return;
       }
       
@@ -288,14 +279,14 @@ cerrarContenido() {
 
           
           await this.databaseService.addCommentForo(ComentarioForo);
-          this.notificacionAccion('Curso agregado con éxito. Podrás verlo publicado en el foro.)','exito')
+          this.databaseService.mensajeNotification('Curso agregado con éxito. Podrás verlo publicado en el foro.)','exito')
           this.CursoNombre = '';
           this.DescripcionCurso = '';
           this.CuposCurso = null;
 
       } catch (error) {
           console.error('Error: no se pudo agregar el curso o el comentario al foro', error);
-          this.notificacionAccion('Error: no se pudo agregar el curso o el comentario al foro','error')
+          this.databaseService.mensajeNotification('Error: no se pudo agregar el curso o el comentario al foro','error')
       }
   }
 
@@ -331,7 +322,7 @@ cerrarContenido() {
 
   async addProduct() {
     if (!this.selectedFile) {
-      this.notificacionAccion('Por favor, seleccione la imagen del producto','error')
+      this.databaseService.mensajeNotification('Por favor, seleccione la imagen del producto','error')
       return;
     }
 
@@ -358,10 +349,12 @@ cerrarContenido() {
 
     
       await this.databaseService.addProduct(product);
-      this.notificacionAccion('Producto agregado con exito','exito')
+      this.databaseService.mensajeNotification('Producto agregado con exito','exito')
+      
       
     } catch (error) {
-      this.notificacionAccion('Error al agregar producto','error')
+      this.databaseService.mensajeNotification('Error al agregar producto','error')
+     
     }
   }
 
@@ -375,12 +368,14 @@ cerrarContenido() {
 
       try {
         await this.databaseService.addLocation(location);
-        this.notificacionAccion('ubicación agregada con exito','exito')
+        this.databaseService.mensajeNotification('ubicación agregada con exito','exito')
+
         this.city = '';
         this.address = '';
         this.getLocations();
       } catch (error) {
-        this.notificacionAccion('Error al agregar ubicación ','error')
+        this.databaseService.mensajeNotification('Error al agregar ubicación ','error')
+
       }
     }
 
@@ -406,7 +401,7 @@ cerrarContenido() {
 
     async addFotoPerfil() {
       if (!this.selectedFilePPHOTO) {
-        this.notificacionAccion('Por favor selecciona una foto de perfil.)','error')
+        this.databaseService.mensajeNotification('Por favor selecciona una foto de perfil.)','error')
         return;
       }
     
@@ -421,11 +416,11 @@ cerrarContenido() {
         };
     
         await this.databaseService.addContenidoPerfil(this.user.uid, contenido);
-        this.notificacionAccion('Foto de perfil añadida correctamente','exito')
+        this.databaseService.mensajeNotification('Foto de perfil añadida correctamente','exito')
     
         console.log("Foto de perfil añadida correctamente");
       } catch (error) {
-        this.notificacionAccion('Error al añadir la foto de perfil','error')
+        this.databaseService.mensajeNotification('Error al añadir la foto de perfil','error')
         console.error("Error al añadir la foto de perfil:", error);
       }
     }
@@ -437,11 +432,13 @@ cerrarContenido() {
     
       try {
         await this.databaseService.addContenidoPerfil(this.user.uid, Identidad);
-        this.notificacionAccion('Información Sobre mí añadida correctamente.','exito')
+        this.databaseService.mensajeNotification('Información Sobre mí añadida correctamente.','exito')
+   
         console.log("Información 'Sobre mí' añadida correctamente.");
       } catch (error) {
         console.error("Error al añadir la información 'Sobre mí':", error);
-        this.notificacionAccion('Error al añadir la información Sobre mí','error')
+        this.databaseService.mensajeNotification('Error al añadir la información Sobre mí','error')
+
       }
     }
 

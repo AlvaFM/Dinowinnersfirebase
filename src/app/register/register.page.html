@@ -1,11 +1,6 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Registrar</ion-title>
-    <ion-buttons slot="start">
-      <ion-button routerLink="/login">
-        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -36,8 +31,9 @@
       </ion-item>
 
       <ion-button expand="full" (click)="register()">Registrarse</ion-button>
-
-      <ion-text color="danger" *ngIf="errorMessage">{{ errorMessage }}</ion-text>
+      <ion-button id="arrow-back" routerLink="/login">
+        <ion-icon slot="icon-only" name="arrow-back"></ion-icon> Regresar
+      </ion-button>
     </ion-card-content>
   </ion-card>
 

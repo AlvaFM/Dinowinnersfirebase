@@ -73,5 +73,12 @@ export class PerfilAjenoPage implements OnInit {
         this.contactoUser = usercontacto;
       });
   }
+
+  scrollTo(sectionId: string): void {
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
   
 }

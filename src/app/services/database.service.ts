@@ -321,4 +321,31 @@ addHistorialDecompras(uid: string, contenido: any): Promise<any> {
       return []; 
     });
   }  
-}  
+
+
+  // notificaciones generales exito o error
+
+  async mensajeNotification(mensaje: string, suceso: 'exito' | 'error') {
+    if (suceso === 'exito') {
+
+      const toast = await this.toastController.create({
+        message: mensaje,
+        duration: 4000,
+        position: 'top',
+        color: 'warning', 
+      });
+      toast.present();
+    } else if (suceso === 'error') {
+      const alert = await this.alertController.create({
+        header: 'Error',
+        message: mensaje,
+        buttons: ['OK'],
+      });
+      await alert.present();
+    }
+  }
+}
+
+
+  
+

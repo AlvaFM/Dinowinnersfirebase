@@ -6,10 +6,7 @@
 </ion-header>
 
 <ion-content class="ion-padding" style="overflow-y: auto;">
-  <!-- Notificación -->
-  <div *ngIf="mensaje" [ngClass]="tipoMensaje === 'exito' ? 'mensaje-exito' : 'mensaje-error'">
-    {{ mensaje }}
-  </div> 
+ 
 
     
   <ion-card class="SeccionPerfilFija ion-card">
@@ -100,7 +97,7 @@
         </div>
     
         <div *ngIf="VentanaComentar === 'activada'">
-          <ion-input [(ngModel)]="comentarioAsubir" placeholder="Escribe tu comentario aquí"></ion-input>
+          <ion-textarea [(ngModel)]="comentarioAsubir" placeholder="Escribe tu comentario aquí"></ion-textarea>
           <ion-item>
             <ion-button (click)="agregarComentarioAlproducto(historial.Id_documento)">subir Comentario</ion-button>
             <h2 style="opacity: 0;" >__</h2>
@@ -119,6 +116,8 @@
             <ion-button fill="clear" (click)="calificarProducto(historial.Id_documento, 3)">3
               <ion-icon name="star-outline"></ion-icon>
             </ion-button>
+          </ion-item>
+          <ion-item>
             <ion-button fill="clear" (click)="calificarProducto(historial.Id_documento, 4)">4
               <ion-icon name="star-outline"></ion-icon>
             </ion-button>
@@ -200,7 +199,7 @@
 
 
           <!-- Con este boton alternamos entre la vista de productos y la de agregar productos -->
-          <ion-fab *ngIf="SAproducto === 'desactivado'" vertical="bottom" 
+          <ion-fab class="fab-boton"  *ngIf="SAproducto === 'desactivado'" vertical="bottom" 
           horizontal="end"  (click)="SAproducto = 'activado'">
             <ion-fab-button color="warning">
               Agregar
@@ -292,7 +291,7 @@
           </ion-card>
 
            <!-- Con este boton alternamos entre la vista de ubicacion y la de agregar ubicacion -->
-           <ion-fab  vertical="bottom" horizontal="end" >
+           <ion-fab  vertical="bottom" horizontal="end" class="fab-boton" >
             <ion-fab-button color="warning" routerLink="/location">
               Agregar
             </ion-fab-button>
@@ -360,6 +359,9 @@
                 <ion-button fill="clear" (click)="calificarCurso(cursoSeleccionado.id, 3)">3
                   <ion-icon name="star-outline"></ion-icon>
                 </ion-button>
+             
+              </ion-item>
+              <ion-item>
                 <ion-button fill="clear" (click)="calificarCurso(cursoSeleccionado.id, 4)">4
                   <ion-icon name="star-outline"></ion-icon>
                 </ion-button>
@@ -378,11 +380,15 @@
          
         
           <!-- Botón flotante para agregar cursos (No borrar please) -->
-          <ion-fab *ngIf="SAcurso === 'desactivado' && contenidocurso === 'desactivado'" vertical="bottom" horizontal="end" (click)="SAcurso = 'activado'">
-            <ion-fab-button color="warning">
-              Agregar
-            </ion-fab-button>
+          <ion-fab *ngIf="SAcurso === 'desactivado' && contenidocurso === 'desactivado'" 
+          class="fab-boton" 
+          (click)="SAcurso = 'activado'">
+
+           <ion-fab-button color="warning">
+            Agregar
+              </ion-fab-button>
           </ion-fab>
+
     
 
           <ion-card *ngIf="SAcurso === 'activado'">
