@@ -333,11 +333,11 @@ addHistorialDecompras(uid: string, contenido: any): Promise<any> {
         duration: 4000,
         position: 'top',
         color: 'warning', 
+        cssClass: 'center-toast'
       });
       toast.present();
     } else if (suceso === 'error') {
       const alert = await this.alertController.create({
-        header: 'Error',
         message: mensaje,
         buttons: ['OK'],
       });

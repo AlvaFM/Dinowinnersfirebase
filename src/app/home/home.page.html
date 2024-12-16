@@ -13,13 +13,22 @@
   </ion-toolbar>
 </ion-header>
 
+<ion-item *ngIf="selectedTab === 'productos'" class="foro-title" >
+
+  <h1 style="opacity: 0;">_</h1><strong>PRODUCTOS DINOWINNERS:</strong>
+</ion-item>
+
+<ion-item *ngIf="selectedTab === 'foro'" class="foro-title" >
+  <h1 style="opacity: 0;">_</h1><strong>FORO DINOWINNERS:</strong>
+</ion-item>
+
 <ion-content>
 
   
   
  <!-- seccion foro -->
  <section *ngIf="selectedTab === 'foro'" class="foro-container">
-  <h5 class="foro-title"><strong>FORO DINOWINNERS</strong></h5>
+  
   <ion-list >
     <ion-card *ngFor="let comentario of comentariosForo" class="comentariocarta">
 
@@ -74,7 +83,7 @@
 </section>
 <!-- Sección productos -->
  <section *ngIf="selectedTab === 'productos'" class="section-padding">
-  <h5><strong>PRODUCTOS DINOWINNERS:</strong></h5>
+  
 
 
   <ion-list>
@@ -199,6 +208,9 @@
 <!-- Tab Bar en el footer -->
 <ion-footer>
   <ion-tab-bar slot="bottom">
+
+    
+
     <ion-tab-button (click)="selectedTab = 'productos'">
       <ion-icon color="warning" name="home"></ion-icon>
       <ion-label>Inicio</ion-label>
@@ -208,6 +220,8 @@
       <ion-icon name="chatbubbles"></ion-icon>
       <ion-label>Foro</ion-label>
     </ion-tab-button>
+
+    
   
     <ion-tab-button *ngIf="nombreUsuario === ''" routerLink="/login" (click)="selectedTab = 'productos'">
       <ion-icon color="warning" name="log-in"></ion-icon>
@@ -225,9 +239,17 @@
       <ion-label>Perfil</ion-label>
     </ion-tab-button>
   
-    
-    
-  
+
   </ion-tab-bar>
   
-</ion-footer>
+</ion-footer> 
+
+
+<ion-fab *ngIf="selectedTab === 'productos'" class="fab-boton" vertical="bottom" horizontal="end">
+<ion-fab-button (click)="mensajelogo()" color="warning">
+<img class="logo_inicio" id="logo" src="./assets/icon/logo.png" alt="">
+</ion-fab-button>
+</ion-fab>
+
+
+

@@ -452,6 +452,7 @@ cerrarContenido() {
   
     async logout() {
       await this.authService.logout();
+      this.databaseService.mensajeNotification('Sesión cerrada','error')
       console.log('Sesión cerrada');
       this.router.navigate(['/home']);
     }

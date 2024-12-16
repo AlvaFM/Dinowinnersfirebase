@@ -214,4 +214,25 @@ ion-card {
   background-color: #bc6262;
 }
 
+
+ion-tab-button {
+  position: relative;
+  overflow: hidden; 
+  transition: transform 0.2s ease; 
+  border-radius: 5px;
+}
+
+ion-tab-button:active {
+  transform: scale(0.95); 
+  background-color: rgba(0, 0, 0, 0.1); 
+}
+
+.center-toast {
+display: flex;
+justify-content: center;   
+align-items: center;       
+text-align: center;        
+}
+
+
   

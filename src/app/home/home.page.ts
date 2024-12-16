@@ -288,6 +288,10 @@ export class HomePage implements OnInit {
       console.error(`Error al obtener cursos para uidCursoForo ${uidCursoForo}:`, error); 
     });
   }
+
+  mensajelogo(){
+    this.dbService.mensajeNotification('Deja tu huella emprendiendo','exito')
+  }
   
   
   
